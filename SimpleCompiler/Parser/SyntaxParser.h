@@ -4,26 +4,34 @@
 #include "Types/ParserElement.h"
 #include "../Components/EnviromentMap.h"
 #include "../Utilities/Deflatable.h"
-
-enum ParserExpression
-{
-	ParserExpression_None,
-	ParserExpression_TypeDefinition,
-	ParserExpression_ArithmeticOperation,
-	ParserExpression_FunctionCall
-};
+#include "../Components/FileEnviromentMap.h"
 
 class SyntaxParser
 {
+private:
+	enum ParserExpression
+	{
+		ParserExpression_None,
+		ParserExpression_TypeDefinition,
+		ParserExpression_ArithmeticOperation,
+		ParserExpression_FunctionCall
+	};
+
 public:
+	constexpr SyntaxParser()
+	{
+	}
+
 	SyntaxParser(const char* Enviroment);
 
 public:
-	EnviromentMap ParseEnviroment();
+	RefObject<FileEnviromentMap> ParseEnviroment();
 
 private:
 	static ParserExpression ResolveExpressionType(const char* Expression);
+	static RefObject<EnviromentMap> ParseSubEnviroment(const char* Expression, RefObject<Enviroment> Enviroment);
 
+	static List<char> ExtractSubEnviroment(const char* Enviroment);
 	static List<char> DeflateEnviroment(const char* Enviroment);
 
 private:

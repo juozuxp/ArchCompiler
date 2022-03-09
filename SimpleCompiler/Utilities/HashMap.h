@@ -713,12 +713,12 @@ public:
 		return (((unsigned long long)ReserveIndex) << 32) | ((unsigned long long)Index);
 	}
 
-	inline unsigned long long GetIndex(const Key& Key)
+	inline unsigned long long GetIndex(const Key& Key) const
 	{
 		return GetIndex(&Key, 1);
 	}
 
-	inline unsigned long long GetIndex(const Key* Key, unsigned long long Count)
+	inline unsigned long long GetIndex(const Key* Key, unsigned long long Count) const
 	{
 		unsigned long ReserveIndex;
 		unsigned long Index;

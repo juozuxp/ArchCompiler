@@ -17,14 +17,15 @@ void AttemptExecution(List<unsigned char> ShellCode)
 
 int main()
 {
-	const char* Enviroment = "ushort Type = 80;\n"\
-		"uchar Hello = 100;\n"\
-		"ulong Another = 8000;\n"
-		"int Variable = Another - Type + Hello;"
-		"Hello = Hello + Type + Another + Variable";
+	const char* Enviroment = "int main()"\
+		"	ushort Type = 80;\n"\
+		"	uchar Hello = 100;\n"\
+		"	ulong Another = 8000;\n"
+		"	int Variable = Another - Type + Hello;"
+		"	Hello = Hello + Type + Another + Variable";
 
 	SyntaxParser Parser = SyntaxParser(Enviroment);
-	EnviromentMap Map = Parser.ParseEnviroment();
+	RefObject<FileEnviromentMap> Map = Parser.ParseEnviroment();
 	Compiler Compile = Compiler(Map);
 
 	List<unsigned char> Buffer = Compile.Compile();

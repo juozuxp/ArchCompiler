@@ -139,6 +139,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Components\Enviroment.cpp" />
+    <ClCompile Include="Parser\Assignables\AsignVariable.cpp" />
     <ClCompile Include="Parser\Types\Arithmetic.cpp" />
     <ClCompile Include="Compiler\Assembler.cpp" />
     <ClCompile Include="Parser\Assignables\Assignable.cpp" />
@@ -154,9 +156,14 @@
     <ClCompile Include="Parser\SyntaxParser.cpp" />
     <ClCompile Include="Parser\Types\Variable.cpp" />
     <ClCompile Include="GlobalInfo\VariableTypes.cpp" />
+    <ClCompile Include="Parser\Assignables\AsignRegister.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components\Enviroment.h" />
+    <ClInclude Include="Parser\Assignables\AsignVariable.h" />
+    <ClInclude Include="GlobalInfo\RegisterTypes.h" />
     <ClInclude Include="Parser\Types\Arithmetic.h" />
+    <ClInclude Include="Parser\Assignables\AsignRegister.h" />
     <ClInclude Include="Utilities\ArrayBase.h" />
     <ClInclude Include="Compiler\Assembler.h" />
     <ClInclude Include="Parser\Assignables\Assignable.h" />

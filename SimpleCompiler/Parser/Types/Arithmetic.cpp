@@ -3,6 +3,7 @@
 #include "../../Components/CompileMap.h"
 #include "../../Utilities/x86_x64Shell.h"
 #include "Variable.h"
+#include "../Assignables/AsignVariable.h"
 
 List<unsigned char> Arithmetic::Value::Compile(class CompileMap& Enviroment)
 {
@@ -136,7 +137,7 @@ void Arithmetic::Parse(EnviromentMap& Enviroment, const char* Expression)
 			break;
 	}
 
-	AssignTo = Enviroment.GetVariable(Deflate, EqualsIdx);
+	AssignTo = RefObject<AsignVariable>(Enviroment.GetVariable(Deflate, EqualsIdx)).Cast<Assignable>();
 
 	EvaluateArthmetic(Enviroment, Deflate + EqualsIdx + 1);
 }
@@ -159,7 +160,7 @@ List<unsigned char> Arithmetic::Compile(CompileMap& Enviroment)
 {
 	List<unsigned char> Compiled = Origin->Compile(Enviroment);
 
-	Compiled.Add(AssignTo->CompileAssign());
+	Compiled.Add(AssignTo->Compile(Enviroment));
 
 	return Compiled;
 }

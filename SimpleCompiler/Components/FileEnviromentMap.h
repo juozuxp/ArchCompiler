@@ -1,11 +1,17 @@
 #pragma once
 #include "EnviromentMap.h"
+#include "Enviroment.h"
 
-class FileEnviromentMap
+class FileEnviromentMap : Enviroment
 {
 public:
+	inline FileEnviromentMap() : FunctionMaps(List<RefObject<EnviromentMap>>(0))
+	{
+	}
 
+public:
+	void AddEnviroment(RefObject<EnviromentMap> Enviroment);
 
-private:
+public:
 	List<RefObject<EnviromentMap>> FunctionMaps;
 };

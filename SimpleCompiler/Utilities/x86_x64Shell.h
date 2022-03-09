@@ -362,7 +362,7 @@
 #define PFX_CS 0x2E // Redirects to cs segment [Size: 0x1]
 
 #define PFX_REX 0x40 // Enables extended 8-bit (example: ah replaced with spl) [Size: 0x1]
-#define PFX_REXB 0x41 // Enables extended RM (example: eax replaced with r8d) [Size: 0x1]
+#define PFX_REXB 0x41 // Enables extended RM (example: rax replaced with r8) [Size: 0x1]
 #define PFX_REXX 0x42 // Enables extended PR (example: [rax + rax] replaced with [rax + r8]) [Size: 0x1]
 
 #define PFX_REXBX 0x43 // Combines REXB and REXX [Size: 0x1]

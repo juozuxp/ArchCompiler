@@ -99,6 +99,15 @@
     <ClCompile Include="Parser\Assignables\Assignable.cpp">
       <Filter>Source Files\Parser\Assignables</Filter>
     </ClCompile>
+    <ClCompile Include="Parser\Assignables\AsignRegister.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\Assignables\AsignVariable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Enviroment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Parser\SyntaxParser.h">
@@ -166,6 +175,18 @@
     </ClInclude>
     <ClInclude Include="Parser\Types\ParserElement.h">
       <Filter>Header Files\Parser\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\Assignables\AsignRegister.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalInfo\RegisterTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\Assignables\AsignVariable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Enviroment.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,22 +3,22 @@
 #include "../Parser/Types/Variable.h"
 #include "../Parser/Types/ParserElement.h"
 #include "../Utilities/RefObject.h"
+#include "Enviroment.h"
 
-class EnviromentMap
+class EnviromentMap : public Enviroment
 {
 public:
-	inline EnviromentMap() : ParseElements(List<RefObject<ParserElement>>(0)), Variables(HashMap<char, RefObject<Variable>>(0))
+	inline EnviromentMap(RefObject<Enviroment> Parent) : ParseElements(List<RefObject<ParserElement>>(0)), Parent(Parent)
 	{
 	}
-
-public:
-	RefObject<Variable> GetVariable(const char* Name, unsigned long long Length = 0);
 
 public:
 	void AddVariable(RefObject<Variable> Element);
 	void AddParsed(RefObject<ParserElement> Element);
 
+	RefObject<Variable> GetVariable(const char* Name, unsigned long long Length = 0) const;
+
 public:
+	RefObject<Enviroment> Parent;
 	List<RefObject<ParserElement>> ParseElements;
-	HashMap<char, RefObject<Variable>> Variables;
 };

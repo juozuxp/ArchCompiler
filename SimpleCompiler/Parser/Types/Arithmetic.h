@@ -2,6 +2,7 @@
 #include "ParserElement.h"
 #include "../../Utilities/RefObject.h"
 #include "../../Utilities/Deflatable.h"
+#include "../Assignables/Assignable.h"
 
 class OperationDef // this absolutely insists on being defined outside the parent class, holy fuck kms
 {
@@ -165,7 +166,7 @@ private:
 
 private:
 	RefObject<Operand> Origin;
-	RefObject<class Variable> AssignTo;
+	RefObject<Assignable> AssignTo;
 
 private:
 	static constexpr Deflatable Deflater = Deflatable(" \t");

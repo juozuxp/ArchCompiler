@@ -1,35 +1,41 @@
 #include "Compiler.h"
 #include "Assembler.h"
 #include "../Components/CompileMap.h"
+#include "../Components/EnviromentMap.h"
 
-Compiler::Compiler(const EnviromentMap& CompileElements) : Enviroment(CompileElements)
+Compiler::Compiler(RefObject<FileEnviromentMap> CompileElements) : Enviroment(CompileElements)
 {
-	StackSize = EstimateStackSize();
 }
 
 List<unsigned char> Compiler::Compile()
 {
-	Assembler Assembly = Assembler(StackSize);
-	List<unsigned char> Assembled = List<unsigned char>(0);
-
-	Assembled.Add(Assembly.AssembleStart());
-	Assembled.Add(CompileEnviroment());
-	Assembled.Add(Assembly.AssembleEnd());
-
-	return Assembled;
-}
-
-List<unsigned char> Compiler::CompileEnviroment()
-{
-	CompileMap CompilationMap = CompileMap(StackSize);
-	List<unsigned char> Compiled = List<unsigned char>();
-	for (RefObject<ParserElement> Element : Enviroment.ParseElements)
-		Compiled.Add(Element->Compile(CompilationMap));
+	List<unsigned char> Compiled = List<unsigned char>(0);
+	for (RefObject<EnviromentMap> Enviroment : Enviroment->FunctionMaps)
+		Compiled.Add(CompileEnviroment(*Enviroment));
 
 	return Compiled;
 }
 
-unsigned long long Compiler::EstimateStackSize()
+List<unsigned char> Compiler::CompileEnviroment(const EnviromentMap& Enviroment)
+{
+	List<unsigned char> Compiled = List<unsigned char>(0);
+
+	unsigned long long StackSize = EstimateStackSize(Enviroment);
+
+	Assembler Assembly = Assembler(StackSize);
+
+	Compiled.Add(Assembly.AssembleStart());
+
+	CompileMap CompilationMap = CompileMap(StackSize);
+	for (RefObject<ParserElement> Element : Enviroment.ParseElements)
+		Compiled.Add(Element->Compile(CompilationMap));
+
+	Compiled.Add(Assembly.AssembleEnd());
+
+	return Compiled;
+}
+
+unsigned long long Compiler::EstimateStackSize(const EnviromentMap& Enviroment)
 {
 	unsigned long long StackSize = 0;
 	for (RefObject<ParserElement> Element : Enviroment.ParseElements)
