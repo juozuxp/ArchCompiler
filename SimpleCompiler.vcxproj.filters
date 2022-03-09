@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Parser">
+      <UniqueIdentifier>{2cd5c6c2-a264-4911-a8a4-22b455f0b964}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utilities">
+      <UniqueIdentifier>{fcbe703a-e84e-4b03-a50b-8864b2c59292}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Parser\Types">
+      <UniqueIdentifier>{f00da818-9899-41bb-863f-bf96a7197087}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Compiler">
+      <UniqueIdentifier>{cfdc39e3-03f9-4bc3-990a-3740dff6c92b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Compiler">
+      <UniqueIdentifier>{7cd8339e-62b0-4268-89c4-5b75fb60d010}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Parser">
+      <UniqueIdentifier>{f51c1c75-cfd6-4748-a96b-a6150c772339}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Parser\Types">
+      <UniqueIdentifier>{d6639cd2-8304-44ec-a156-fcb9d1b8d300}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{e2da3d27-e683-4f5d-b150-e1a4a3da0e23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components">
+      <UniqueIdentifier>{39eb616c-66c2-40ad-a987-85ff43aeb1fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GlobalInfo">
+      <UniqueIdentifier>{313dfdee-2631-4414-b97a-c26f0ff647c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GlobalInfo">
+      <UniqueIdentifier>{dd0fc3ed-7d95-4069-a0db-a5f521ab2464}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Parser\Assignables">
+      <UniqueIdentifier>{ecf94835-8453-4168-8e98-115b2cdd04db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Parser\Assignables">
+      <UniqueIdentifier>{2859bdac-3eb5-4941-9d03-b66027ca3ca6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\SyntaxParser.cpp">
+      <Filter>Source Files\Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\Types\LocalVariable.cpp">
+      <Filter>Source Files\Parser\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Compiler\Compiler.cpp">
+      <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="Compiler\Assembler.cpp">
+      <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\Types\Arithmetic.cpp">
+      <Filter>Source Files\Parser\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Compiler\Registers.cpp">
+      <Filter>Source Files\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\EnviromentMap.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\Types\Variable.cpp">
+      <Filter>Source Files\Parser\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\CompileMap.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\FileEnviromentMap.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\Types\Function.cpp">
+      <Filter>Source Files\Parser\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalInfo\VariableTypes.cpp">
+      <Filter>Source Files\GlobalInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\Types\ParserElement.cpp">
+      <Filter>Source Files\Parser\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\Assignables\Assignable.cpp">
+      <Filter>Source Files\Parser\Assignables</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Parser\SyntaxParser.h">
+      <Filter>Header Files\Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\List.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\Types\LocalVariable.h">
+      <Filter>Header Files\Parser\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\RefObject.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\SimpleUtilities.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Compiler\Compiler.h">
+      <Filter>Header Files\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="Compiler\Assembler.h">
+      <Filter>Header Files\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\x86_x64Shell.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\Types\Arithmetic.h">
+      <Filter>Header Files\Parser\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\ManObject.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Compiler\Registers.h">
+      <Filter>Header Files\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\EnviromentMap.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\HashMap.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\ArrayBase.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\Types\Variable.h">
+      <Filter>Header Files\Parser\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\CompileMap.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Deflatable.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\FileEnviromentMap.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\Types\Function.h">
+      <Filter>Header Files\Parser\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalInfo\VariableTypes.h">
+      <Filter>Header Files\GlobalInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\Assignables\Assignable.h">
+      <Filter>Header Files\Parser\Assignables</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\Types\ParserElement.h">
+      <Filter>Header Files\Parser\Types</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
