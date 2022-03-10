@@ -18,11 +18,15 @@ RefObject<FileEnviromentMap> SyntaxParser::ParseEnviroment()
 	{
 		if (Function::IsFunctionDefinition(RunDeflate))
 		{
-			RunDeflate += Function::GetDefinitionLength(RunDeflate);
-			Enviroment->AddEnviroment(ParseSubEnviroment(ExtractSubEnviroment(RunDeflate), Enviroment.Cast<::Enviroment>()));
+			unsigned long long SubLength;
 
-			break;
+			RunDeflate += Function::GetDefinitionLength(RunDeflate);
+			Enviroment->AddEnviroment(ParseSubEnviroment(ExtractSubEnviroment(RunDeflate, &SubLength), Enviroment.Cast<::Enviroment>()));
+
+			RunDeflate += SubLength;
 		}
+		else
+			break;
 	}
 
 	return Enviroment;
@@ -92,29 +96,30 @@ List<char> SyntaxParser::DeflateEnviroment(const char* Enviroment)
 	return Deflated;
 }
 
-List<char> SyntaxParser::ExtractSubEnviroment(const char* Enviroment)
+List<char> SyntaxParser::ExtractSubEnviroment(const char* Enviroment, unsigned long long* Length)
 {
 	List<char> Evaluated = List<char>(0);
 
-	while (*Enviroment)
+	const char* RunEnviroment = Enviroment;
+	while (*RunEnviroment)
 	{
-		if (*Enviroment != '\t')
+		if (*RunEnviroment != '\t')
 			break;
 
-		const char* Start = Enviroment + 1;
+		const char* Start = RunEnviroment + 1;
 
 		unsigned long long Length = 0;
-		for (Enviroment++; *Enviroment; Enviroment++, Length++)
+		for (RunEnviroment++; *RunEnviroment; RunEnviroment++, Length++)
 		{
-			if (*Enviroment != '\t')
+			if (*RunEnviroment != '\t')
 				break;
 		}
 
-		for (; *Enviroment && *Enviroment != '\t'; Enviroment++, Length++)
+		for (; *RunEnviroment && *RunEnviroment != '\t'; RunEnviroment++, Length++)
 		{
-			if (*Enviroment == ';')
+			if (*RunEnviroment == ';')
 			{
-				Enviroment++;
+				RunEnviroment++;
 				Length++;
 				break;
 			}
@@ -122,6 +127,9 @@ List<char> SyntaxParser::ExtractSubEnviroment(const char* Enviroment)
 
 		Evaluated.Add(Start, Length);
 	}
+
+	if (Length)
+		*Length = RunEnviroment - Enviroment;
 
 	Evaluated.Add('\0');
 	return Evaluated;

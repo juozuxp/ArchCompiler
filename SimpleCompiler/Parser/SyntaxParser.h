@@ -31,8 +31,8 @@ private:
 	static ParserExpression ResolveExpressionType(const char* Expression);
 	static RefObject<EnviromentMap> ParseSubEnviroment(const char* Expression, RefObject<Enviroment> Enviroment);
 
-	static List<char> ExtractSubEnviroment(const char* Enviroment);
 	static List<char> DeflateEnviroment(const char* Enviroment);
+	static List<char> ExtractSubEnviroment(const char* Enviroment, unsigned long long* Length);
 
 private:
 	List<char> DeflatedEnv;
