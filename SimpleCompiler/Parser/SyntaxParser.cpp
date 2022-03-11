@@ -1,10 +1,12 @@
 #include "SyntaxParser.h"
 #include "Types/ParserElement.h"
 #include "../Utilities/RefObject.h"
+#include "../Utilities/StrTok.h"
 #include "Types/Variable.h"
 #include "Types/LocalVariable.h"
 #include "Types/Arithmetic.h"
 #include "Types/Function.h"
+#include "Types/FunctionCall.h"
 
 SyntaxParser::SyntaxParser(const char* Enviroment)
 {
@@ -18,10 +20,14 @@ RefObject<FileEnviromentMap> SyntaxParser::ParseEnviroment()
 	{
 		if (Function::IsFunctionDefinition(RunDeflate))
 		{
+			RefObject<Function> Function;
 			unsigned long long SubLength;
 
+			Function = RefObject<::Function>(::Function(RunDeflate));
+			Enviroment->AddFunction(Function);
+
 			RunDeflate += Function::GetDefinitionLength(RunDeflate);
-			Enviroment->AddEnviroment(ParseSubEnviroment(ExtractSubEnviroment(RunDeflate, &SubLength), Enviroment.Cast<::Enviroment>()));
+			Function->BindEnviroment(ParseSubEnviroment(ExtractSubEnviroment(RunDeflate, &SubLength), Enviroment.Cast<::Enviroment>()));
 
 			RunDeflate += SubLength;
 		}
@@ -35,10 +41,8 @@ RefObject<FileEnviromentMap> SyntaxParser::ParseEnviroment()
 RefObject<EnviromentMap> SyntaxParser::ParseSubEnviroment(const char* Expression, RefObject<Enviroment> Parent)
 {
 	RefObject<EnviromentMap> Enviroment = RefObject<EnviromentMap>(EnviromentMap(Parent.Cast<::Enviroment>()));
-	List<char> EnviromentCopy = List<char>(0);
 
-	EnviromentCopy.Add(Expression, strlen(Expression) + 1);
-	for (char* Token = strtok(EnviromentCopy, ";"); Token; Token = strtok(0, ";"))
+	for (char* Token : StrTok(Expression, ";"))
 	{
 		RefObject<ParserElement> Object;
 
@@ -59,7 +63,15 @@ RefObject<EnviromentMap> SyntaxParser::ParseSubEnviroment(const char* Expression
 			Enviroment->AddParsed(Expression.Cast<ParserElement>());
 
 			Expression->Parse(*Enviroment, Token);
-		};
+		} break;
+		case ParserExpression_FunctionCall:
+		{
+			RefObject<FunctionCall> Expression = RefObject<FunctionCall>(FunctionCall());
+
+			Enviroment->AddParsed(Expression.Cast<ParserElement>());
+
+			Expression->Parse(*Enviroment, Token);
+		} break;
 		};
 	}
 
@@ -73,6 +85,9 @@ SyntaxParser::ParserExpression SyntaxParser::ResolveExpressionType(const char* E
 
 	if (Arithmetic::IsArtimetic(Expression))
 		return ParserExpression_ArithmeticOperation;
+
+	if (FunctionCall::IsFunctionCall(Expression))
+		return ParserExpression_FunctionCall;
 
 	return ParserExpression_None;
 }

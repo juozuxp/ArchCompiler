@@ -14,9 +14,8 @@ public:
 		return 0;
 	}
 
-	virtual List<unsigned char> Compile(class CompileMap& Enviroment)
+	virtual void Compile(class CompileMap& Enviroment)
 	{
-		return List<unsigned char>();
 	}
 
 	virtual void Parse(class EnviromentMap& Enviroment, const char* Expression)

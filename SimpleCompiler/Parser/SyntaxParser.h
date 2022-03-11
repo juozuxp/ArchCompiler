@@ -2,9 +2,9 @@
 #include "../Utilities/List.h"
 #include "../Utilities/RefObject.h"
 #include "Types/ParserElement.h"
-#include "../Components/EnviromentMap.h"
+#include "../Compiler/Enviroments/EnviromentMap.h"
 #include "../Utilities/Deflatable.h"
-#include "../Components/FileEnviromentMap.h"
+#include "../Compiler/Enviroments/FileEnviromentMap.h"
 
 class SyntaxParser
 {

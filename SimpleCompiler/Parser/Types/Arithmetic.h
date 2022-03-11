@@ -57,9 +57,8 @@ private:
 		}
 
 	public:
-		virtual List<unsigned char> Compile(class CompileMap& Enviroment)
+		virtual void Compile(class CompileMap& Enviroment)
 		{
-			return List<unsigned char>();
 		}
 	};
 
@@ -75,7 +74,7 @@ private:
 		}
 
 	public:
-		List<unsigned char> Compile(class CompileMap& Enviroment);
+		void Compile(class CompileMap& Enviroment);
 
 	private:
 		RefObject<class Variable> Origin;
@@ -93,7 +92,7 @@ private:
 		}
 
 	public:
-		List<unsigned char> Compile(class CompileMap& Enviroment);
+		void Compile(class CompileMap& Enviroment);
 
 	private:
 		unsigned long long Definition = 0;
@@ -128,7 +127,7 @@ private:
 		}
 
 	public:
-		List<unsigned char> Compile(class CompileMap& Enviroment);
+		void Compile(class CompileMap& Enviroment);
 	};
 
 	class Subtraction : Operation
@@ -143,7 +142,7 @@ private:
 		}
 
 	public:
-		List<unsigned char> Compile(class CompileMap& Enviroment);
+		void Compile(class CompileMap& Enviroment);
 	};
 
 public:
@@ -155,8 +154,10 @@ public:
 	static bool IsArtimetic(const char* Expression);
 
 public:
-	List<unsigned char> Compile(class CompileMap& Enviroment);
+	void Compile(class CompileMap& Enviroment);
+
 	void Parse(class EnviromentMap& Enviroment, const char* Expression);
+	void Parse(class EnviromentMap& Enviroment, const char* Expression, RefObject<Assignable> AssignTo);
 
 private:
 	void EvaluateArthmetic(class EnviromentMap& Enviroment, const char* Expression);

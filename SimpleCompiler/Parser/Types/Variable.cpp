@@ -1,6 +1,6 @@
 #include "Variable.h"
 #include "../../Utilities/SimpleUtilities.h"
-#include "../../Components/EnviromentMap.h"
+#include "../../Compiler/Enviroments/EnviromentMap.h"
 #include "Arithmetic.h"
 #include "../../GlobalInfo/VariableTypes.h"
 
@@ -18,11 +18,8 @@ void Variable::Parse(EnviromentMap& Enviroment, const char* Expression)
 	if (!Arithmetic::IsArtimetic(Expression))
 		return;
 
-	RefObject<Arithmetic> Aritmatic = RefObject<Arithmetic>(Arithmetic());
-
-	Enviroment.AddParsed(Aritmatic.Cast<ParserElement>());
-
-	Aritmatic->Parse(Enviroment, PostDefExpression);
+	Assigner = RefObject<Arithmetic>(Arithmetic());
+	Assigner->Parse(Enviroment, PostDefExpression);
 }
 
 List<char> Variable::ExtractName(const char* Expression)
@@ -31,8 +28,8 @@ List<char> Variable::ExtractName(const char* Expression)
 
 	const char* RunName = Expression;
 
-	for (; *RunName == ' '; RunName++);
-	for (; *RunName != ' '; RunName++)
+	for (; !IsNameChar(*RunName); RunName++);
+	for (; IsNameChar(*RunName); RunName++)
 		Name.Add(*RunName);
 
 	Name.Add('\0');

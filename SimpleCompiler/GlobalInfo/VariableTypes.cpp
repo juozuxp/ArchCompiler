@@ -4,6 +4,12 @@
 
 const VariableType* VariableTypes::RetrieveType(const char* Expression)
 {
+	for (; *Expression; Expression++)
+	{
+		if (!IsIgnorable(*Expression))
+			break;
+	}
+
 	for (unsigned long long i = 0; i < ARRAY_COUNT(Types); i++)
 	{
 		unsigned long TypeLength = strlen(Types[i].GetName());

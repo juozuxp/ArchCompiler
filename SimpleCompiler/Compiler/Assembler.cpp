@@ -1,30 +1,28 @@
 #include "Assembler.h"
 #include "../Utilities/x86_x64Shell.h"
+#include "CompileMap.h"
 
-List<unsigned char> Assembler::AssembleStart()
+void Assembler::AssembleStart(CompileMap& Enviroment)
 {
-	return CreateStackAlloc();
+	CreateStackAlloc(Enviroment);
 }
 
-List<unsigned char> Assembler::AssembleEnd()
+void Assembler::AssembleEnd(CompileMap& Enviroment)
 {
-	List<unsigned char> Code = CreateStackDealloc();
+	CreateStackDealloc(Enviroment);
 
 	unsigned char Return[] =
 	{
 		RETN
 	};
 
-	Code.Add(Return, sizeof(Return));
-	return Code;
+	Enviroment.AddCode(Return, sizeof(Return));
 }
 
-List<unsigned char> Assembler::CreateStackAlloc()
+void Assembler::CreateStackAlloc(CompileMap& Enviroment)
 {
-	List<unsigned char> Stacker = List<unsigned char>(0);
-
 	if (!EnvStackSize)
-		return Stacker;
+		return;
 
 	if (EnvStackSize > 0x7F)
 	{
@@ -33,7 +31,7 @@ List<unsigned char> Assembler::CreateStackAlloc()
 			PFX_REXW, SUB_RM_D(LR(RSP), EnvStackSize)
 		};
 
-		Stacker.Add(Shell, sizeof(Shell));
+		Enviroment.AddCode(Shell, sizeof(Shell));
 	}
 	else
 	{
@@ -42,18 +40,14 @@ List<unsigned char> Assembler::CreateStackAlloc()
 			PFX_REXW, SUBD_RM_B(LR(RSP), EnvStackSize)
 		};
 
-		Stacker.Add(Shell, sizeof(Shell));
+		Enviroment.AddCode(Shell, sizeof(Shell));
 	}
-
-	return Stacker;
 }
 
-List<unsigned char> Assembler::CreateStackDealloc()
+void Assembler::CreateStackDealloc(CompileMap& Enviroment)
 {
-	List<unsigned char> Stacker = List<unsigned char>(0);
-
 	if (!EnvStackSize)
-		return Stacker;
+		return;
 
 	if (EnvStackSize > 0x7F)
 	{
@@ -62,7 +56,7 @@ List<unsigned char> Assembler::CreateStackDealloc()
 			PFX_REXW, ADD_RM_D(LR(RSP), EnvStackSize)
 		};
 
-		Stacker.Add(Shell, sizeof(Shell));
+		Enviroment.AddCode(Shell, sizeof(Shell));
 	}
 	else
 	{
@@ -71,8 +65,6 @@ List<unsigned char> Assembler::CreateStackDealloc()
 			PFX_REXW, ADDD_RM_B(LR(RSP), EnvStackSize)
 		};
 
-		Stacker.Add(Shell, sizeof(Shell));
+		Enviroment.AddCode(Shell, sizeof(Shell));
 	}
-
-	return Stacker;
 }

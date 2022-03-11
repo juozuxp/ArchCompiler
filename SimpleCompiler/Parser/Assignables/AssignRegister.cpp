@@ -1,11 +1,11 @@
-#include "AsignRegister.h"
+#include "AssignRegister.h"
+#include "../../Compiler/CompileMap.h"
 
-List<unsigned char> AsignRegister::Compile(class CompileMap& Enviroment)
+void AssignRegister::Compile(CompileMap& Enviroment)
 {
 	if (Register == RegisterType_RAX)
-		return List<unsigned char>();
+		return;
 
-	List<unsigned char> Compiled = List<unsigned char>(0);
 	if (Register & RegisterType_x64Extend)
 	{
 		unsigned char Shell[] =
@@ -13,7 +13,7 @@ List<unsigned char> AsignRegister::Compile(class CompileMap& Enviroment)
 			PFX_REXWB, MOVD_RM_R(LR_R(Register & (RegisterType_x64Extend - 1), RAX))
 		};
 
-		Compiled.Add(Shell, sizeof(Shell));
+		Enviroment.AddCode(Shell, sizeof(Shell));
 	}
 	else
 	{
@@ -22,8 +22,6 @@ List<unsigned char> AsignRegister::Compile(class CompileMap& Enviroment)
 			PFX_REXW, MOVD_RM_R(LR_R(Register, RAX))
 		};
 
-		Compiled.Add(Shell, sizeof(Shell));
+		Enviroment.AddCode(Shell, sizeof(Shell));
 	}
-
-	return Compiled;
 }

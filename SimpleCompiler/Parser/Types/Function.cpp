@@ -1,9 +1,45 @@
 #include "Function.h"
 #include "../../GlobalInfo/VariableTypes.h"
+#include "../../Utilities/StrTok.h"
+#include "../../Compiler/Enviroments/EnviromentMap.h"
+#include "../../Compiler/CompileMap.h"
 
-Function::Function(const char* Expression)
+#define SHELL_RELATIVITY MainRelativity
+#include "../../Utilities/x86_x64Shell.h"
+
+Function::Function(const char* Expression) : Variable(Expression)
 {
+	ExtractArguments(Expression);
+}
 
+void Function::ExtractArguments(const char* Expression)
+{
+	List<char> IsolateExpression;
+	const char* LocatedEnd;
+
+	Expression = strstr(Expression, "(") + 1;
+	if (!Expression)
+		return;
+
+	LocatedEnd = strstr(Expression, ")");
+	if (!LocatedEnd)
+		return;
+
+	IsolateExpression.Add(Expression, LocatedEnd - Expression);
+	IsolateExpression.Add('\0');
+
+	for (char* Token : StrTok(IsolateExpression, ","))
+		Arguments.Add(RefObject<Variable>(Variable(Token)));
+}
+
+void Function::BindEnviroment(RefObject<EnviromentMap> Enviroment)
+{
+	this->Enviroment = Enviroment;
+}
+
+void Function::Compile(CompileMap& Enviroment)
+{
+	this->Enviroment->Compile(Enviroment);
 }
 
 bool Function::IsFunctionDefinition(const char* Expression)
@@ -33,17 +69,15 @@ unsigned long long Function::GetDefinitionLength(const char* Expression)
 	return 0;
 }
 
-List<char> Function::ExtractName(const char* Expression)
+void Function::CompileCall(CompileMap& Enviroment)
 {
-	List<char> Name = List<char>(10);
+	unsigned long long MainRelativity;
 
-	const char* RunName = Expression;
+	MainRelativity = 0;
+	unsigned char Shell[] =
+	{
+		CALL_RD(this->Enviroment->RelativeLocation - (Enviroment.GetRelativeLocation() + MainRelativity))
+	};
 
-	for (; IsIgnorable(*RunName); RunName++);
-	for (; !IsIgnorable(*RunName); RunName++)
-		Name.Add(*RunName);
-
-	Name.Add('\0');
-
-	return Name;
+	Enviroment.AddCode(Shell, sizeof(Shell));
 }

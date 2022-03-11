@@ -9,8 +9,7 @@ public:
 	}
 
 public:
-	virtual List<unsigned char> Compile(class CompileMap& Enviroment)
+	virtual void Compile(class CompileMap& Enviroment)
 	{
-		return List<unsigned char>();
 	}
 };

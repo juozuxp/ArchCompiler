@@ -63,9 +63,6 @@
     <ClCompile Include="Parser\Types\LocalVariable.cpp">
       <Filter>Source Files\Parser\Types</Filter>
     </ClCompile>
-    <ClCompile Include="Compiler\Compiler.cpp">
-      <Filter>Source Files\Compiler</Filter>
-    </ClCompile>
     <ClCompile Include="Compiler\Assembler.cpp">
       <Filter>Source Files\Compiler</Filter>
     </ClCompile>
@@ -75,16 +72,16 @@
     <ClCompile Include="Compiler\Registers.cpp">
       <Filter>Source Files\Compiler</Filter>
     </ClCompile>
-    <ClCompile Include="Components\EnviromentMap.cpp">
+    <ClCompile Include="Compiler\Enviroments\EnviromentMap.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Parser\Types\Variable.cpp">
       <Filter>Source Files\Parser\Types</Filter>
     </ClCompile>
-    <ClCompile Include="Components\CompileMap.cpp">
+    <ClCompile Include="Compiler\CompileMap.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Components\FileEnviromentMap.cpp">
+    <ClCompile Include="Compiler\Enviroments\FileEnviromentMap.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Parser\Types\Function.cpp">
@@ -99,13 +96,25 @@
     <ClCompile Include="Parser\Assignables\Assignable.cpp">
       <Filter>Source Files\Parser\Assignables</Filter>
     </ClCompile>
-    <ClCompile Include="Parser\Assignables\AsignRegister.cpp">
+    <ClCompile Include="Parser\Assignables\AssignRegister.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Parser\Assignables\AsignVariable.cpp">
+    <ClCompile Include="Parser\Assignables\AssignVariable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Components\Enviroment.cpp">
+    <ClCompile Include="Compiler\Enviroments\Enviroment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\Types\FunctionCall.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\Assignables\AssignStack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Compiler\Compiler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\Types\Argument.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -125,9 +134,6 @@
     <ClInclude Include="Utilities\SimpleUtilities.h">
       <Filter>Header Files\Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="Compiler\Compiler.h">
-      <Filter>Header Files\Compiler</Filter>
-    </ClInclude>
     <ClInclude Include="Compiler\Assembler.h">
       <Filter>Header Files\Compiler</Filter>
     </ClInclude>
@@ -143,7 +149,7 @@
     <ClInclude Include="Compiler\Registers.h">
       <Filter>Header Files\Compiler</Filter>
     </ClInclude>
-    <ClInclude Include="Components\EnviromentMap.h">
+    <ClInclude Include="Compiler\Enviroments\EnviromentMap.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Utilities\HashMap.h">
@@ -155,13 +161,13 @@
     <ClInclude Include="Parser\Types\Variable.h">
       <Filter>Header Files\Parser\Types</Filter>
     </ClInclude>
-    <ClInclude Include="Components\CompileMap.h">
+    <ClInclude Include="Compiler\CompileMap.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Utilities\Deflatable.h">
       <Filter>Header Files\Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="Components\FileEnviromentMap.h">
+    <ClInclude Include="Compiler\Enviroments\FileEnviromentMap.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Parser\Types\Function.h">
@@ -176,16 +182,31 @@
     <ClInclude Include="Parser\Types\ParserElement.h">
       <Filter>Header Files\Parser\Types</Filter>
     </ClInclude>
-    <ClInclude Include="Parser\Assignables\AsignRegister.h">
+    <ClInclude Include="Parser\Assignables\AssignRegister.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GlobalInfo\RegisterTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Parser\Assignables\AsignVariable.h">
+    <ClInclude Include="Parser\Assignables\AssignVariable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Components\Enviroment.h">
+    <ClInclude Include="Compiler\Enviroments\Enviroment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\StrTok.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\Types\FunctionCall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\Assignables\AssignStack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compiler\Compiler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\Types\Argument.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

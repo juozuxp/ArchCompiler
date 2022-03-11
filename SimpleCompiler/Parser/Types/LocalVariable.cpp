@@ -1,12 +1,12 @@
 #include "LocalVariable.h"
 #include "../../Utilities/SimpleUtilities.h"
-#include "../../Components/EnviromentMap.h"
-#include "../../Components/CompileMap.h"
+#include "../../Compiler/Enviroments/EnviromentMap.h"
+#include "../../Compiler/CompileMap.h"
 #include "../../Utilities/x86_x64Shell.h"
+#include "Arithmetic.h"
 
-List<unsigned char> LocalVariable::CompileAssign()
+void LocalVariable::CompileAssign(CompileMap& Enviroment)
 {
-	List<unsigned char> Compiled = List<unsigned char>(0);
 	switch (VariableSize)
 	{
 	case 1:
@@ -18,7 +18,7 @@ List<unsigned char> LocalVariable::CompileAssign()
 				MOVB_RM_R(MRSP_BO_R(AL, StackPosition)),
 			};
 
-			Compiled.Add(Shell, sizeof(Shell));
+			Enviroment.AddCode(Shell, sizeof(Shell));
 		}
 		else
 		{
@@ -27,7 +27,7 @@ List<unsigned char> LocalVariable::CompileAssign()
 				MOVB_RM_R(MRSP_BO_R(AL, StackPosition)),
 			};
 
-			Compiled.Add(Shell, sizeof(Shell));
+			Enviroment.AddCode(Shell, sizeof(Shell));
 		}
 	} break;
 	case 2:
@@ -39,7 +39,7 @@ List<unsigned char> LocalVariable::CompileAssign()
 				PFX_WORD, MOVD_RM_R(MRSP_BO_R(AX, StackPosition)),
 			};
 
-			Compiled.Add(Shell, sizeof(Shell));
+			Enviroment.AddCode(Shell, sizeof(Shell));
 		}
 		else
 		{
@@ -48,7 +48,7 @@ List<unsigned char> LocalVariable::CompileAssign()
 				PFX_WORD, MOVD_RM_R(MRSP_BO_R(AX, StackPosition)),
 			};
 
-			Compiled.Add(Shell, sizeof(Shell));
+			Enviroment.AddCode(Shell, sizeof(Shell));
 		}
 	} break;
 	case 4:
@@ -60,7 +60,7 @@ List<unsigned char> LocalVariable::CompileAssign()
 				MOVD_RM_R(MRSP_BO_R(EAX, StackPosition)),
 			};
 
-			Compiled.Add(Shell, sizeof(Shell));
+			Enviroment.AddCode(Shell, sizeof(Shell));
 		}
 		else
 		{
@@ -69,7 +69,7 @@ List<unsigned char> LocalVariable::CompileAssign()
 				MOVD_RM_R(MRSP_BO_R(EAX, StackPosition)),
 			};
 
-			Compiled.Add(Shell, sizeof(Shell));
+			Enviroment.AddCode(Shell, sizeof(Shell));
 		}
 	} break;
 	case 8:
@@ -81,7 +81,7 @@ List<unsigned char> LocalVariable::CompileAssign()
 				PFX_REXW, MOVD_RM_R(MRSP_BO_R(RAX, StackPosition)),
 			};
 
-			Compiled.Add(Shell, sizeof(Shell));
+			Enviroment.AddCode(Shell, sizeof(Shell));
 		}
 		else
 		{
@@ -90,17 +90,14 @@ List<unsigned char> LocalVariable::CompileAssign()
 				PFX_REXW, MOVD_RM_R(MRSP_BO_R(RAX, StackPosition)),
 			};
 
-			Compiled.Add(Shell, sizeof(Shell));
+			Enviroment.AddCode(Shell, sizeof(Shell));
 		}
 	} break;
 	}
-
-	return Compiled;
 }
 
-List<unsigned char> LocalVariable::CompileRetrieve()
+void LocalVariable::CompileRetrieve(CompileMap& Enviroment)
 {
-	List<unsigned char> Compiled = List<unsigned char>(0);
 	switch (VariableSize)
 	{
 	case 1:
@@ -113,7 +110,7 @@ List<unsigned char> LocalVariable::CompileRetrieve()
 				MOVB_R_RM(R_MRSP_BO(AL, StackPosition)),
 			};
 
-			Compiled.Add(Shell, sizeof(Shell));
+			Enviroment.AddCode(Shell, sizeof(Shell));
 		}
 		else
 		{
@@ -123,7 +120,7 @@ List<unsigned char> LocalVariable::CompileRetrieve()
 				MOVB_R_RM(R_MRSP_DO(AL, StackPosition)),
 			};
 
-			Compiled.Add(Shell, sizeof(Shell));
+			Enviroment.AddCode(Shell, sizeof(Shell));
 		}
 	} break;
 	case 2:
@@ -136,7 +133,7 @@ List<unsigned char> LocalVariable::CompileRetrieve()
 				PFX_WORD, MOVD_R_RM(R_MRSP_BO(AX, StackPosition)),
 			};
 
-			Compiled.Add(Shell, sizeof(Shell));
+			Enviroment.AddCode(Shell, sizeof(Shell));
 		}
 		else
 		{
@@ -146,7 +143,7 @@ List<unsigned char> LocalVariable::CompileRetrieve()
 				PFX_WORD, MOVD_R_RM(R_MRSP_DO(AX, StackPosition)),
 			};
 
-			Compiled.Add(Shell, sizeof(Shell));
+			Enviroment.AddCode(Shell, sizeof(Shell));
 		}
 	} break;
 	case 4:
@@ -158,7 +155,7 @@ List<unsigned char> LocalVariable::CompileRetrieve()
 				MOVD_R_RM(R_MRSP_BO(EAX, StackPosition)),
 			};
 
-			Compiled.Add(Shell, sizeof(Shell));
+			Enviroment.AddCode(Shell, sizeof(Shell));
 		}
 		else
 		{
@@ -167,7 +164,7 @@ List<unsigned char> LocalVariable::CompileRetrieve()
 				MOVD_R_RM(R_MRSP_DO(EAX, StackPosition)),
 			};
 
-			Compiled.Add(Shell, sizeof(Shell));
+			Enviroment.AddCode(Shell, sizeof(Shell));
 		}
 	} break;
 	case 8:
@@ -179,7 +176,7 @@ List<unsigned char> LocalVariable::CompileRetrieve()
 				PFX_REXW, MOVD_R_RM(R_MRSP_BO(RAX, StackPosition)),
 			};
 
-			Compiled.Add(Shell, sizeof(Shell));
+			Enviroment.AddCode(Shell, sizeof(Shell));
 		}
 		else
 		{
@@ -188,16 +185,15 @@ List<unsigned char> LocalVariable::CompileRetrieve()
 				PFX_REXW, MOVD_R_RM(R_MRSP_DO(RAX, StackPosition)),
 			};
 
-			Compiled.Add(Shell, sizeof(Shell));
+			Enviroment.AddCode(Shell, sizeof(Shell));
 		}
 	} break;
 	}
-
-	return Compiled;
 }
 
-List<unsigned char> LocalVariable::Compile(CompileMap& Enviroment)
+void LocalVariable::Compile(CompileMap& Enviroment)
 {
 	StackPosition = Enviroment.AllocateLocalVariable(VariableSize);
-	return List<unsigned char>();
+	if (this->Assigner)
+		this->Assigner->Compile(Enviroment);
 }

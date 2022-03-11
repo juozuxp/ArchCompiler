@@ -1,13 +1,12 @@
 #include "Arithmetic.h"
-#include "../../Components/EnviromentMap.h"
-#include "../../Components/CompileMap.h"
+#include "../../Compiler/Enviroments/EnviromentMap.h"
+#include "../../Compiler/CompileMap.h"
 #include "../../Utilities/x86_x64Shell.h"
 #include "Variable.h"
-#include "../Assignables/AsignVariable.h"
+#include "../Assignables/AssignVariable.h"
 
-List<unsigned char> Arithmetic::Value::Compile(class CompileMap& Enviroment)
+void Arithmetic::Value::Compile(CompileMap& Enviroment)
 {
-	List<unsigned char> Compiled = List<unsigned char>(0);
 	if (Definition < 0xFF)
 	{
 		if (Definition == 0)
@@ -17,7 +16,8 @@ List<unsigned char> Arithmetic::Value::Compile(class CompileMap& Enviroment)
 				PFX_REXW, XORD_RM_R(LR_R(EAX, EAX), Definition)
 			};
 
-			Compiled.Add(Shell, sizeof(Shell));
+			Enviroment.AddCode(Shell, sizeof(Shell));
+			return;
 		}
 		else
 		{
@@ -27,10 +27,9 @@ List<unsigned char> Arithmetic::Value::Compile(class CompileMap& Enviroment)
 				MOV_R_B(AL, Definition)
 			};
 
-			Compiled.Add(Shell, sizeof(Shell));
+			Enviroment.AddCode(Shell, sizeof(Shell));
+			return;
 		}
-
-		return Compiled;
 	}
 
 
@@ -42,9 +41,8 @@ List<unsigned char> Arithmetic::Value::Compile(class CompileMap& Enviroment)
 			MOV_R_W(AX, Definition)
 		};
 
-		Compiled.Add(Shell, sizeof(Shell));
-
-		return Compiled;
+		Enviroment.AddCode(Shell, sizeof(Shell));
+		return;
 	}
 
 
@@ -55,9 +53,8 @@ List<unsigned char> Arithmetic::Value::Compile(class CompileMap& Enviroment)
 			MOV_R_D(EAX, Definition)
 		};
 
-		Compiled.Add(Shell, sizeof(Shell));
-
-		return Compiled;
+		Enviroment.AddCode(Shell, sizeof(Shell));
+		return;
 	}
 
 	unsigned char Shell[] =
@@ -65,50 +62,42 @@ List<unsigned char> Arithmetic::Value::Compile(class CompileMap& Enviroment)
 		MOV_R_Q(RAX, Definition)
 	};
 
-	Compiled.Add(Shell, sizeof(Shell));
-
-	return Compiled;
+	Enviroment.AddCode(Shell, sizeof(Shell));
 }
 
-List<unsigned char> Arithmetic::Addition::Compile(class CompileMap& Enviroment)
+void Arithmetic::Addition::Compile(CompileMap& Enviroment)
 {
-	List<unsigned char> Compiled = List<unsigned char>(0);
-
-	Compiled.Add(Left->Compile(Enviroment));
+	Left->Compile(Enviroment);
 	
 	unsigned char Preserve[] =
 	{
 		PFX_REXW, MOVD_R_RM(R_LR(RCX, RAX))
 	};
 
-	Compiled.Add(Preserve, sizeof(Preserve));
+	Enviroment.AddCode(Preserve, sizeof(Preserve));
 
-	Compiled.Add(Right->Compile(Enviroment));
+	Right->Compile(Enviroment);
 
 	unsigned char Operation[] =
 	{
 		PFX_REXW, ADDD_R_RM(R_LR(RAX, RCX))
 	};
 
-	Compiled.Add(Operation, sizeof(Operation));
-
-	return Compiled;
+	Enviroment.AddCode(Operation, sizeof(Operation));
 }
 
-List<unsigned char> Arithmetic::Subtraction::Compile(class CompileMap& Enviroment)
+void Arithmetic::Subtraction::Compile(CompileMap& Enviroment)
 {
-	List<unsigned char> Compiled = List<unsigned char>(0);
-
-	Compiled.Add(Left->Compile(Enviroment));
+	Left->Compile(Enviroment);
 
 	unsigned char Preserve[] =
 	{
 		PFX_REXW, MOVD_R_RM(R_LR(RCX, RAX))
 	};
 
-	Compiled.Add(Preserve, sizeof(Preserve));
+	Enviroment.AddCode(Preserve, sizeof(Preserve));
 
-	Compiled.Add(Right->Compile(Enviroment));
+	Right->Compile(Enviroment);
 
 	unsigned char Operation[] =
 	{
@@ -116,14 +105,12 @@ List<unsigned char> Arithmetic::Subtraction::Compile(class CompileMap& Enviromen
 		PFX_REXW, MOVD_R_RM(R_LR(RAX, RCX))
 	};
 
-	Compiled.Add(Operation, sizeof(Operation));
-
-	return Compiled;
+	Enviroment.AddCode(Operation, sizeof(Operation));
 }
 
-List<unsigned char> Arithmetic::AVariable::Compile(class CompileMap& Enviroment)
+void Arithmetic::AVariable::Compile(class CompileMap& Enviroment)
 {
-	return Origin->CompileRetrieve();
+	Origin->CompileRetrieve(Enviroment);
 }
 
 void Arithmetic::Parse(EnviromentMap& Enviroment, const char* Expression)
@@ -137,9 +124,15 @@ void Arithmetic::Parse(EnviromentMap& Enviroment, const char* Expression)
 			break;
 	}
 
-	AssignTo = RefObject<AsignVariable>(Enviroment.GetVariable(Deflate, EqualsIdx)).Cast<Assignable>();
+	AssignTo = RefObject<AssignVariable>(Enviroment.GetVariable(Deflate, EqualsIdx)).Cast<Assignable>();
 
 	EvaluateArthmetic(Enviroment, Deflate + EqualsIdx + 1);
+}
+
+void Arithmetic::Parse(class EnviromentMap& Enviroment, const char* Expression, RefObject<Assignable> AssignTo)
+{
+	this->AssignTo = AssignTo;
+	EvaluateArthmetic(Enviroment, Deflater.Deflate(Expression));
 }
 
 bool Arithmetic::IsArtimetic(const char* Expression)
@@ -156,13 +149,10 @@ bool Arithmetic::IsArtimetic(const char* Expression)
 	return false;
 }
 
-List<unsigned char> Arithmetic::Compile(CompileMap& Enviroment)
+void Arithmetic::Compile(CompileMap& Enviroment)
 {
-	List<unsigned char> Compiled = Origin->Compile(Enviroment);
-
-	Compiled.Add(AssignTo->Compile(Enviroment));
-
-	return Compiled;
+	Origin->Compile(Enviroment);
+	AssignTo->Compile(Enviroment);
 }
 
 const char* Arithmetic::LocateOperation(const char* Expression, const OperationDef** OperationDescription)

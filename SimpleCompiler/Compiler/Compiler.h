@@ -1,24 +1,16 @@
 #pragma once
-#include "../Parser/Types/ParserElement.h"
-#include "../Utilities/RefObject.h"
-#include "../Components/FileEnviromentMap.h"
+#include "Enviroments/FileEnviromentMap.h"
 
 class Compiler
 {
 public:
-	Compiler()
+	inline Compiler(RefObject<FileEnviromentMap> Enviroment) : BaseEnviroment(Enviroment)
 	{
 	}
-
-	Compiler(RefObject<FileEnviromentMap> CompileElements);
 
 public:
 	List<unsigned char> Compile();
 
 private:
-	static List<unsigned char> CompileEnviroment(const EnviromentMap& Enviroment);
-	static unsigned long long EstimateStackSize(const EnviromentMap& Enviroment);
-
-private:
-	RefObject<FileEnviromentMap> Enviroment;
+	RefObject<FileEnviromentMap> BaseEnviroment;
 };

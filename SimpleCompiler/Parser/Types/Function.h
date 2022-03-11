@@ -1,8 +1,8 @@
 #pragma once
-#include "ParserElement.h"
+#include "Variable.h"
 #include "../../Utilities/RefObject.h"
 
-class Function : ParserElement
+class Function : Variable
 {
 public:
 	constexpr Function()
@@ -12,11 +12,15 @@ public:
 	Function(const char* Expression);
 
 public:
+	void ExtractArguments(const char* Expression);
+	void BindEnviroment(RefObject<EnviromentMap> Enviroment);
+
+	void Compile(class CompileMap& Enviroment);
+	void CompileCall(class CompileMap& Enviroment);
+
+public:
 	static bool IsFunctionDefinition(const char* Expression);
 	static unsigned long long GetDefinitionLength(const char* Expression);
-
-private:
-	List<char> ExtractName(const char* Expression);
 
 private:
 	static constexpr bool IsIgnorable(char Character)
@@ -31,7 +35,8 @@ private:
 	}
 
 private:
-	List<char> FunctionName;
+	RefObject<EnviromentMap> Enviroment;
+	List<RefObject<Variable>> Arguments;
 
 private:
 	static constexpr const char* Ignorable = " \t";

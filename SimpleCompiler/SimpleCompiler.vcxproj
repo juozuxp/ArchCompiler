@@ -139,15 +139,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Components\Enviroment.cpp" />
-    <ClCompile Include="Parser\Assignables\AsignVariable.cpp" />
+    <ClCompile Include="Parser\Types\Argument.cpp" />
+    <ClCompile Include="Compiler\Compiler.cpp" />
+    <ClCompile Include="Parser\Assignables\AssignStack.cpp" />
+    <ClCompile Include="Compiler\Enviroments\Enviroment.cpp" />
+    <ClCompile Include="Parser\Types\FunctionCall.cpp" />
+    <ClCompile Include="Parser\Assignables\AssignVariable.cpp" />
     <ClCompile Include="Parser\Types\Arithmetic.cpp" />
     <ClCompile Include="Compiler\Assembler.cpp" />
     <ClCompile Include="Parser\Assignables\Assignable.cpp" />
-    <ClCompile Include="Components\CompileMap.cpp" />
-    <ClCompile Include="Compiler\Compiler.cpp" />
-    <ClCompile Include="Components\EnviromentMap.cpp" />
-    <ClCompile Include="Components\FileEnviromentMap.cpp" />
+    <ClCompile Include="Compiler\CompileMap.cpp" />
+    <ClCompile Include="Compiler\Enviroments\EnviromentMap.cpp" />
+    <ClCompile Include="Compiler\Enviroments\FileEnviromentMap.cpp" />
     <ClCompile Include="Parser\Types\Function.cpp" />
     <ClCompile Include="Parser\Types\LocalVariable.cpp" />
     <ClCompile Include="main.cpp" />
@@ -156,22 +159,25 @@
     <ClCompile Include="Parser\SyntaxParser.cpp" />
     <ClCompile Include="Parser\Types\Variable.cpp" />
     <ClCompile Include="GlobalInfo\VariableTypes.cpp" />
-    <ClCompile Include="Parser\Assignables\AsignRegister.cpp" />
+    <ClCompile Include="Parser\Assignables\AssignRegister.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Components\Enviroment.h" />
-    <ClInclude Include="Parser\Assignables\AsignVariable.h" />
+    <ClInclude Include="Parser\Types\Argument.h" />
+    <ClInclude Include="Compiler\Compiler.h" />
+    <ClInclude Include="Parser\Assignables\AssignStack.h" />
+    <ClInclude Include="Compiler\Enviroments\Enviroment.h" />
+    <ClInclude Include="Parser\Types\FunctionCall.h" />
+    <ClInclude Include="Parser\Assignables\AssignVariable.h" />
     <ClInclude Include="GlobalInfo\RegisterTypes.h" />
     <ClInclude Include="Parser\Types\Arithmetic.h" />
-    <ClInclude Include="Parser\Assignables\AsignRegister.h" />
+    <ClInclude Include="Parser\Assignables\AssignRegister.h" />
     <ClInclude Include="Utilities\ArrayBase.h" />
     <ClInclude Include="Compiler\Assembler.h" />
     <ClInclude Include="Parser\Assignables\Assignable.h" />
-    <ClInclude Include="Components\CompileMap.h" />
-    <ClInclude Include="Compiler\Compiler.h" />
+    <ClInclude Include="Compiler\CompileMap.h" />
     <ClInclude Include="Utilities\Deflatable.h" />
-    <ClInclude Include="Components\EnviromentMap.h" />
-    <ClInclude Include="Components\FileEnviromentMap.h" />
+    <ClInclude Include="Compiler\Enviroments\EnviromentMap.h" />
+    <ClInclude Include="Compiler\Enviroments\FileEnviromentMap.h" />
     <ClInclude Include="Parser\Types\Function.h" />
     <ClInclude Include="Utilities\HashMap.h" />
     <ClInclude Include="Utilities\List.h" />
@@ -184,6 +190,7 @@
     <ClInclude Include="Parser\SyntaxParser.h" />
     <ClInclude Include="Parser\Types\Variable.h" />
     <ClInclude Include="GlobalInfo\VariableTypes.h" />
+    <ClInclude Include="Utilities\StrTok.h" />
     <ClInclude Include="Utilities\x86_x64Shell.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

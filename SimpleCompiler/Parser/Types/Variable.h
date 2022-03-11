@@ -1,5 +1,6 @@
 #pragma once
 #include "ParserElement.h"
+#include "Arithmetic.h"
 
 class Variable : public ParserElement
 {
@@ -20,14 +21,16 @@ public:
 	void Parse(class EnviromentMap& Enviroment, const char* Expression);
 
 public:
-	virtual List<unsigned char> CompileAssign()
+	virtual void CompileAssign(class CompileMap& Enviroment)
 	{
-		return List<unsigned char>();
 	}
 
-	virtual List<unsigned char> CompileRetrieve()
+	virtual void CompileRetrieve(class CompileMap& Enviroment)
 	{
-		return List<unsigned char>();
+	}
+
+	virtual void CompileCall(class CompileMap& Enviroment)
+	{
 	}
 
 public:
@@ -38,5 +41,22 @@ protected:
 
 protected:
 	List<char> VariableName;
+	RefObject<Arithmetic> Assigner;
+
 	unsigned long long VariableSize = 0;
+
+private:
+	static constexpr bool IsNameChar(char Character)
+	{
+		for (const char* RunNonChar = NonNameChar; *RunNonChar; RunNonChar++)
+		{
+			if (Character == *RunNonChar)
+				return false;
+		}
+
+		return true;
+	}
+
+private:
+	static constexpr const char* NonNameChar = " \t=()";
 };

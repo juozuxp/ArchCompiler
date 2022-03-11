@@ -13,12 +13,12 @@ public:
 	}
 
 public:
-	List<unsigned char> AssembleStart();
-	List<unsigned char> AssembleEnd();
+	void AssembleEnd(class CompileMap& Enviroment);
+	void AssembleStart(class CompileMap& Enviroment);
 
 private:
-	List<unsigned char> CreateStackAlloc();
-	List<unsigned char> CreateStackDealloc();
+	void CreateStackAlloc(class CompileMap& Enviroment);
+	void CreateStackDealloc(class CompileMap& Enviroment);
 
 private:
 	unsigned long long EnvStackSize = 0;

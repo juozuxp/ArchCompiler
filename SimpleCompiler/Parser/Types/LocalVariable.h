@@ -19,11 +19,11 @@ public:
 	}
 
 public:
-	List<unsigned char> CompileAssign();
-	List<unsigned char> CompileRetrieve();
+	void CompileAssign(class CompileMap& Enviroment);
+	void CompileRetrieve(class CompileMap& Enviroment);
 
 public:
-	List<unsigned char> Compile(class CompileMap& Enviroment);
+	void Compile(class CompileMap& Enviroment);
 
 private:
 	unsigned long long StackPosition = 0;

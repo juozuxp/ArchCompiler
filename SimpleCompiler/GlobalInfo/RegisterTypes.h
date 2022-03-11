@@ -4,7 +4,7 @@
 enum RegisterType
 {
 	RegisterType_RAX = RAX,
-	RegitserType_RCX = RCX,
+	RegisterType_RCX = RCX,
 	RegisterType_RDX = RDX,
 	RegisterType_RBX = RBX,
 	RegisterType_RSP = RSP, // Just a bad idea to specify anywhere, you'll most likely end up corrupting the execution
@@ -15,7 +15,7 @@ enum RegisterType
 	RegisterType_x64Extend = (1 << 3),
 
 	RegisterType_R8 = R8 | (1 << 3),
-	RegitserType_R9 = R9 | (1 << 3),
+	RegisterType_R9 = R9 | (1 << 3),
 	RegisterType_R10 = R10 | (1 << 3),
 	RegisterType_R11 = R11 | (1 << 3),
 	RegisterType_R12 = R12 | (1 << 3), // Increadibly volatile with dereferencing, requires multiple bytes to use, not recomended
