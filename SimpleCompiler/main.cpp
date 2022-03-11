@@ -24,12 +24,11 @@ int main()
 							 "	int Variable = Another - Type + Hello;"
 							 "	Hello = Hello + Type + Another + Variable;"
 							 "\n"
-							 "int Test(int Hello, int World)"
+							 "int Test(int Hello, int World, int Test, int Yes)"
 							 "	int This_was_a_test = 10;"
-							 "	main(This_was_a_test, 10);";
+							 "	main(This_was_a_test, 10, 50, 80, 100, Yes);";
 
-	SyntaxParser Parser = SyntaxParser(Enviroment);
-	RefObject<FileEnviromentMap> Map = Parser.ParseEnviroment();
+	RefObject<FileEnviromentMap> Map = SyntaxParser::Parse(Enviroment);
 
 	List<unsigned char> Buffer = Compiler(Map).Compile();
 

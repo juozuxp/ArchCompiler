@@ -6,7 +6,14 @@
 
 Variable::Variable(const char* Expression) : ParserElement()
 {
-	const VariableType* Variable = VariableTypes::RetrieveType(Expression);
+	const VariableType* Variable;
+	for (; *Expression; Expression++)
+	{
+		if (!IsIgnorable(*Expression))
+			break;
+	}
+
+	Variable = VariableTypes::RetrieveType(Expression);
 
 	VariableSize = Variable->GetSize();
 	VariableName = ExtractName(Expression + strlen(Variable->GetName()));

@@ -15,3 +15,42 @@ void Enviroment::AddVariable(RefObject<Variable> Element)
 	VarName = Element->GetVariableName();
 	Variables.Add(VarName, strlen(VarName), Element);
 }
+
+List<char> Enviroment::ExtractSubEnviroment(const char* Enviroment, unsigned long long* Length)
+{
+	List<char> Evaluated = List<char>(0);
+
+	const char* RunEnviroment = Enviroment;
+	while (*RunEnviroment)
+	{
+		if (*RunEnviroment != '\t')
+			break;
+
+		const char* Start = RunEnviroment + 1;
+
+		unsigned long long Length = 0;
+		for (RunEnviroment++; *RunEnviroment; RunEnviroment++, Length++)
+		{
+			if (*RunEnviroment != '\t')
+				break;
+		}
+
+		for (; *RunEnviroment && *RunEnviroment != '\t'; RunEnviroment++, Length++)
+		{
+			if (*RunEnviroment == ';')
+			{
+				RunEnviroment++;
+				Length++;
+				break;
+			}
+		}
+
+		Evaluated.Add(Start, Length);
+	}
+
+	if (Length)
+		*Length = RunEnviroment - Enviroment;
+
+	Evaluated.Add('\0');
+	return Evaluated;
+}

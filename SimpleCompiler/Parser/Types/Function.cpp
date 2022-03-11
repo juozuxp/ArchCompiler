@@ -3,6 +3,7 @@
 #include "../../Utilities/StrTok.h"
 #include "../../Compiler/Enviroments/EnviromentMap.h"
 #include "../../Compiler/CompileMap.h"
+#include "Argument.h"
 
 #define SHELL_RELATIVITY MainRelativity
 #include "../../Utilities/x86_x64Shell.h"
@@ -29,17 +30,23 @@ void Function::ExtractArguments(const char* Expression)
 	IsolateExpression.Add('\0');
 
 	for (char* Token : StrTok(IsolateExpression, ","))
-		Arguments.Add(RefObject<Variable>(Variable(Token)));
+		Arguments.Add(RefObject<Argument>(Argument(Token, Arguments.GetCount())));
 }
 
 void Function::BindEnviroment(RefObject<EnviromentMap> Enviroment)
 {
 	this->Enviroment = Enviroment;
+	for (RefObject<Argument> Argument : Arguments)
+		Enviroment->AddVariableNoCompile(Argument.Cast<Variable>());
 }
 
 void Function::Compile(CompileMap& Enviroment)
 {
+	Enviroment.SetStack(this->Enviroment->EstimateStackSize());
+
+	CreateEntry(Enviroment);
 	this->Enviroment->Compile(Enviroment);
+	CreateExit(Enviroment);
 }
 
 bool Function::IsFunctionDefinition(const char* Expression)
@@ -80,4 +87,59 @@ void Function::CompileCall(CompileMap& Enviroment)
 	};
 
 	Enviroment.AddCode(Shell, sizeof(Shell));
+}
+
+void Function::CreateEntry(CompileMap& Enviroment)
+{
+	unsigned long long MainRelativity;
+
+	for (RefObject<Argument> Argument : Arguments)
+		Argument->Compile(Enviroment);
+
+	MainRelativity = 0;
+	if (Enviroment.GetStackSize() > 0x7F)
+	{
+		unsigned char Shell[] =
+		{
+			PFX_REXW, SUB_RM_D(LR(RSP), Enviroment.GetStackSize())
+		};
+
+		Enviroment.AddCode(Shell, sizeof(Shell));
+	}
+	else
+	{
+		unsigned char Shell[] =
+		{
+			PFX_REXW, SUBD_RM_B(LR(RSP), Enviroment.GetStackSize())
+		};
+
+		Enviroment.AddCode(Shell, sizeof(Shell));
+	}
+}
+
+void Function::CreateExit(CompileMap& Enviroment)
+{
+	unsigned long long MainRelativity;
+
+	MainRelativity = 0;
+	if (Enviroment.GetStackSize() > 0x7F)
+	{
+		unsigned char Shell[] =
+		{
+			PFX_REXW, ADD_RM_D(LR(RSP), Enviroment.GetStackSize()),
+			RETN
+		};
+
+		Enviroment.AddCode(Shell, sizeof(Shell));
+	}
+	else
+	{
+		unsigned char Shell[] =
+		{
+			PFX_REXW, ADDD_RM_B(LR(RSP), Enviroment.GetStackSize()),
+			RETN
+		};
+
+		Enviroment.AddCode(Shell, sizeof(Shell));
+	}
 }

@@ -1,5 +1,5 @@
 #pragma once
-#include "Variable.h"
+#include "Argument.h"
 #include "../../Utilities/RefObject.h"
 
 class Function : Variable
@@ -17,6 +17,8 @@ public:
 
 	void Compile(class CompileMap& Enviroment);
 	void CompileCall(class CompileMap& Enviroment);
+	void CreateEntry(class CompileMap& Enviroment);
+	void CreateExit(class CompileMap& Enviroment);
 
 public:
 	static bool IsFunctionDefinition(const char* Expression);
@@ -36,7 +38,7 @@ private:
 
 private:
 	RefObject<EnviromentMap> Enviroment;
-	List<RefObject<Variable>> Arguments;
+	List<RefObject<Argument>> Arguments;
 
 private:
 	static constexpr const char* Ignorable = " \t";

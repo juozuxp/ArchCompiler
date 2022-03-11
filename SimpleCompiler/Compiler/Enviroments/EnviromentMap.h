@@ -14,9 +14,11 @@ public:
 
 public:
 	void Compile(class CompileMap& Enviroment);
+	void Parse(const char* Expression, RefObject<Enviroment> Current);
 
 	void AddVariable(RefObject<Variable> Element);
 	void AddParsed(RefObject<ParserElement> Element);
+	void AddVariableNoCompile(RefObject<Variable> Element);
 
 	RefObject<Variable> GetVariable(const char* Name, unsigned long long Length = 0) const;
 
@@ -26,7 +28,7 @@ public:
 		return RelativeLocation;
 	}
 
-private:
+public:
 	unsigned long long EstimateStackSize() const;
 
 public:

@@ -14,6 +14,11 @@ public:
 		return 0;
 	}
 
+	virtual unsigned long long GetCallingStackSize()
+	{
+		return 0;
+	}
+
 	virtual void Compile(class CompileMap& Enviroment)
 	{
 	}

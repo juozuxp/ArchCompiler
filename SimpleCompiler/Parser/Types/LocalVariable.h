@@ -8,7 +8,7 @@ public:
 	{
 	}
 
-	LocalVariable(const char* Expression) : Variable(Expression)
+	inline LocalVariable(const char* Expression) : Variable(Expression)
 	{
 	}
 
@@ -25,6 +25,6 @@ public:
 public:
 	void Compile(class CompileMap& Enviroment);
 
-private:
+protected:
 	unsigned long long StackPosition = 0;
 };

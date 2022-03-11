@@ -146,7 +146,6 @@
     <ClCompile Include="Parser\Types\FunctionCall.cpp" />
     <ClCompile Include="Parser\Assignables\AssignVariable.cpp" />
     <ClCompile Include="Parser\Types\Arithmetic.cpp" />
-    <ClCompile Include="Compiler\Assembler.cpp" />
     <ClCompile Include="Parser\Assignables\Assignable.cpp" />
     <ClCompile Include="Compiler\CompileMap.cpp" />
     <ClCompile Include="Compiler\Enviroments\EnviromentMap.cpp" />
@@ -156,10 +155,10 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Parser\Types\ParserElement.cpp" />
     <ClCompile Include="Compiler\Registers.cpp" />
-    <ClCompile Include="Parser\SyntaxParser.cpp" />
     <ClCompile Include="Parser\Types\Variable.cpp" />
     <ClCompile Include="GlobalInfo\VariableTypes.cpp" />
     <ClCompile Include="Parser\Assignables\AssignRegister.cpp" />
+    <ClCompile Include="Parser\SyntaxParser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Parser\Types\Argument.h" />
@@ -171,8 +170,8 @@
     <ClInclude Include="GlobalInfo\RegisterTypes.h" />
     <ClInclude Include="Parser\Types\Arithmetic.h" />
     <ClInclude Include="Parser\Assignables\AssignRegister.h" />
+    <ClInclude Include="Parser\SyntaxParser.h" />
     <ClInclude Include="Utilities\ArrayBase.h" />
-    <ClInclude Include="Compiler\Assembler.h" />
     <ClInclude Include="Parser\Assignables\Assignable.h" />
     <ClInclude Include="Compiler\CompileMap.h" />
     <ClInclude Include="Utilities\Deflatable.h" />
@@ -187,7 +186,6 @@
     <ClInclude Include="Utilities\RefObject.h" />
     <ClInclude Include="Compiler\Registers.h" />
     <ClInclude Include="Utilities\SimpleUtilities.h" />
-    <ClInclude Include="Parser\SyntaxParser.h" />
     <ClInclude Include="Parser\Types\Variable.h" />
     <ClInclude Include="GlobalInfo\VariableTypes.h" />
     <ClInclude Include="Utilities\StrTok.h" />

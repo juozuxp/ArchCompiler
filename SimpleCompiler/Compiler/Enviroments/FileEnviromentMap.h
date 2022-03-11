@@ -12,6 +12,7 @@ public:
 
 public:
 	void Compile(class CompileMap& Enviroment);
+	void Parse(const char* Expression, RefObject<Enviroment> Current);
 
 	void AddFunction(RefObject<Function> Function);
 

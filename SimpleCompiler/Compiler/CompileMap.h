@@ -27,12 +27,18 @@ public:
 public:
 	constexpr void SetStack(unsigned long long Size)
 	{
-		StackSize = Size;
+		DynamicSize = Size;
+		AllocatedStack = Size;
 	}
 
 	constexpr unsigned long long AllocateLocalVariable(unsigned long long Size)
 	{
-		return StackSize -= Size;
+		return DynamicSize -= Size;
+	}
+
+	constexpr unsigned long long GetStackSize()
+	{
+		return AllocatedStack;
 	}
 
 	constexpr unsigned long long GetRelativeLocation()
@@ -43,5 +49,6 @@ public:
 private:
 	List<unsigned char> CompiledCode;
 
-	unsigned long long StackSize = 0;
+	unsigned long long DynamicSize = 0;
+	unsigned long long AllocatedStack = 0;
 };

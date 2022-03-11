@@ -57,6 +57,18 @@ private:
 		return true;
 	}
 
+	static constexpr bool IsIgnorable(char Character)
+	{
+		for (const char* RunIgnorable = Ignorables; *RunIgnorable; RunIgnorable++)
+		{
+			if (Character == *RunIgnorable)
+				return true;
+		}
+
+		return false;
+	}
+
 private:
 	static constexpr const char* NonNameChar = " \t=()";
+	static constexpr const char* Ignorables = " \t";
 };

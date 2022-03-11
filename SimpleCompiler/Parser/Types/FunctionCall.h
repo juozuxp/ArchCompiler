@@ -12,6 +12,7 @@ public:
 	}
 
 public:
+	unsigned long long GetCallingStackSize();
 	void Compile(class CompileMap& Enviroment);
 	void Parse(class EnviromentMap& Enviroment, const char* Expression);
 

@@ -57,14 +57,8 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Parser\SyntaxParser.cpp">
-      <Filter>Source Files\Parser</Filter>
-    </ClCompile>
     <ClCompile Include="Parser\Types\LocalVariable.cpp">
       <Filter>Source Files\Parser\Types</Filter>
-    </ClCompile>
-    <ClCompile Include="Compiler\Assembler.cpp">
-      <Filter>Source Files\Compiler</Filter>
     </ClCompile>
     <ClCompile Include="Parser\Types\Arithmetic.cpp">
       <Filter>Source Files\Parser\Types</Filter>
@@ -117,11 +111,11 @@
     <ClCompile Include="Parser\Types\Argument.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Parser\SyntaxParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Parser\SyntaxParser.h">
-      <Filter>Header Files\Parser</Filter>
-    </ClInclude>
     <ClInclude Include="Utilities\List.h">
       <Filter>Header Files\Utilities</Filter>
     </ClInclude>
@@ -133,9 +127,6 @@
     </ClInclude>
     <ClInclude Include="Utilities\SimpleUtilities.h">
       <Filter>Header Files\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="Compiler\Assembler.h">
-      <Filter>Header Files\Compiler</Filter>
     </ClInclude>
     <ClInclude Include="Utilities\x86_x64Shell.h">
       <Filter>Header Files\Utilities</Filter>
@@ -207,6 +198,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Parser\Types\Argument.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\SyntaxParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
