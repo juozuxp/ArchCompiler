@@ -9,6 +9,11 @@ public:
 	}
 
 public:
+	virtual unsigned short GetRegisterMask()
+	{
+		return 0;
+	}
+
 	virtual unsigned long long GetStackSize()
 	{
 		return 0;

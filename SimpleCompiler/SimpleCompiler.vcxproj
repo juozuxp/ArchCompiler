@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Parser\Assignables\AssignDynStack.cpp" />
     <ClCompile Include="Parser\Types\Argument.cpp" />
     <ClCompile Include="Compiler\Compiler.cpp" />
     <ClCompile Include="Parser\Assignables\AssignStack.cpp" />
@@ -159,8 +160,12 @@
     <ClCompile Include="GlobalInfo\VariableTypes.cpp" />
     <ClCompile Include="Parser\Assignables\AssignRegister.cpp" />
     <ClCompile Include="Parser\SyntaxParser.cpp" />
+    <ClCompile Include="Compiler\TempVariableMap.cpp" />
+    <ClCompile Include="Parser\Transitionable\Transition.cpp" />
+    <ClCompile Include="Parser\Transitionable\TransRegToReg.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Parser\Assignables\AssignDynStack.h" />
     <ClInclude Include="Parser\Types\Argument.h" />
     <ClInclude Include="Compiler\Compiler.h" />
     <ClInclude Include="Parser\Assignables\AssignStack.h" />
@@ -171,6 +176,9 @@
     <ClInclude Include="Parser\Types\Arithmetic.h" />
     <ClInclude Include="Parser\Assignables\AssignRegister.h" />
     <ClInclude Include="Parser\SyntaxParser.h" />
+    <ClInclude Include="Compiler\TempVariableMap.h" />
+    <ClInclude Include="Parser\Transitionable\Transition.h" />
+    <ClInclude Include="Parser\Transitionable\TransRegToReg.h" />
     <ClInclude Include="Utilities\ArrayBase.h" />
     <ClInclude Include="Parser\Assignables\Assignable.h" />
     <ClInclude Include="Compiler\CompileMap.h" />

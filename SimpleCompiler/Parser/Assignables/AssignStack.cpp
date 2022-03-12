@@ -1,6 +1,6 @@
 #include "AssignStack.h"
-#include "../../Utilities/x86_x64Shell.h"
 #include "../../Compiler/CompileMap.h"
+#include "../../Utilities/x86_x64Shell.h"
 
 void AssignStack::Compile(CompileMap& Enviroment)
 {

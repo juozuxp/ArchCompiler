@@ -18,7 +18,7 @@ void AttemptExecution(List<unsigned char> ShellCode)
 int main()
 {
 	const char* Enviroment = "int main()"
-							 "	ushort Type = 80;\n"
+							 "	ushort Type = ((80 + 1) + (80 + 90));\n"
 							 "	uchar Hello = 100;\n"
 							 "	ulong Another = 8000;\n"
 							 "	int Variable = Another - Type + Hello;"

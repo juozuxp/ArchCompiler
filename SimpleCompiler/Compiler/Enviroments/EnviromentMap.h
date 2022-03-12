@@ -29,6 +29,7 @@ public:
 	}
 
 public:
+	unsigned short EstimateRegisterUsage() const;
 	unsigned long long EstimateStackSize() const;
 
 public:

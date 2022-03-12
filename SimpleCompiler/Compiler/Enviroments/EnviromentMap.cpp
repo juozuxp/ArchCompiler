@@ -76,6 +76,15 @@ void EnviromentMap::Compile(CompileMap& Enviroment)
 		Element->Compile(Enviroment);
 }
 
+unsigned short EnviromentMap::EstimateRegisterUsage() const
+{
+	unsigned short Mask = 0;
+	for (RefObject<ParserElement> Element : ParseElements)
+		Mask |= Element->GetRegisterMask();
+
+	return Mask;
+}
+
 unsigned long long EnviromentMap::EstimateStackSize() const
 {
 	unsigned long long StackSize = 0;
@@ -92,8 +101,6 @@ unsigned long long EnviromentMap::EstimateStackSize() const
 	}
 
 	StackSize += CallingStackSize;
-	StackSize = (StackSize + ((1 << 3) - 1)) & ~((1 << 3) - 1); // Stack alignment, making sure that it's 8 byte alligned
-	StackSize |= (1 << 3); // Stack alignment, making sure the 16 byte missalignment is fixed
 
 	return StackSize;
 }

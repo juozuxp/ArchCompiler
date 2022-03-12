@@ -15,6 +15,7 @@ public:
 
 public:
 	void Compile(class CompileMap& Enviroment);
+	void CompileRetrieve(class CompileMap& Enviroment);
 
 private:
 	RegisterType Register = RegisterType_None;

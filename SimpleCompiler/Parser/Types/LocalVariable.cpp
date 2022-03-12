@@ -2,8 +2,8 @@
 #include "../../Utilities/SimpleUtilities.h"
 #include "../../Compiler/Enviroments/EnviromentMap.h"
 #include "../../Compiler/CompileMap.h"
-#include "../../Utilities/x86_x64Shell.h"
 #include "Arithmetic.h"
+#include "../../Utilities/x86_x64Shell.h"
 
 void LocalVariable::CompileAssign(CompileMap& Enviroment)
 {

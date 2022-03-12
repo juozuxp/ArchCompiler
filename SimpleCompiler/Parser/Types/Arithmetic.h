@@ -3,6 +3,7 @@
 #include "../../Utilities/RefObject.h"
 #include "../../Utilities/Deflatable.h"
 #include "../Assignables/Assignable.h"
+#include "../../Compiler/TempVariableMap.h"
 
 class OperationDef // this absolutely insists on being defined outside the parent class, holy fuck kms
 {
@@ -106,13 +107,14 @@ private:
 		}
 
 	protected:
-		inline Operation(RefObject<Operand> Left, RefObject<Operand> Right) : Left(Left), Right(Right)
+		inline Operation(RefObject<Operand> Left, RefObject<Operand> Right, RefObject<Assignable> TransitionSpace) : Left(Left), Right(Right), TransitionSpace(TransitionSpace)
 		{
 		}
 
 	protected:
 		RefObject<Operand> Left;
 		RefObject<Operand> Right;
+		RefObject<Assignable> TransitionSpace;
 	};
 
 	class Addition : Operation
@@ -122,7 +124,7 @@ private:
 		{
 		}
 
-		inline Addition(RefObject<Operand> Left, RefObject<Operand> Right) : Operation(Left, Right)
+		inline Addition(RefObject<Operand> Left, RefObject<Operand> Right, RefObject<Assignable> TransitionSpace) : Operation(Left, Right, TransitionSpace)
 		{
 		}
 
@@ -137,7 +139,7 @@ private:
 		{
 		}
 
-		inline Subtraction(RefObject<Operand> Left, RefObject<Operand> Right) : Operation(Left, Right)
+		inline Subtraction(RefObject<Operand> Left, RefObject<Operand> Right, RefObject<Assignable> TransitionSpace) : Operation(Left, Right, TransitionSpace)
 		{
 		}
 
@@ -154,20 +156,26 @@ public:
 	static bool IsArtimetic(const char* Expression);
 
 public:
+	unsigned short GetRegisterMask();
+	unsigned long long GetStackSize();
+
 	void Compile(class CompileMap& Enviroment);
 
 	void Parse(class EnviromentMap& Enviroment, const char* Expression);
 	void Parse(class EnviromentMap& Enviroment, const char* Expression, RefObject<Assignable> AssignTo);
 
 private:
-	void EvaluateArthmetic(class EnviromentMap& Enviroment, const char* Expression);
+	RefObject<Operand> EvaluateArthmetic(class EnviromentMap& Enviroment, const char* Expression);
 
 private:
+	static const char* HuntEnclosure(const char* Expression);
+	static List<char> ExtractEnclosure(const char* Expression);
 	static const char* LocateOperation(const char* Expression, const OperationDef** OperationDescription);
 
 private:
 	RefObject<Operand> Origin;
 	RefObject<Assignable> AssignTo;
+	TempVariableMap TemporarySpace = TempVariableMap(1, 0); // due to the harsh circumstances this is necessary for now
 
 private:
 	static constexpr Deflatable Deflater = Deflatable(" \t");

@@ -42,11 +42,30 @@ void Function::BindEnviroment(RefObject<EnviromentMap> Enviroment)
 
 void Function::Compile(CompileMap& Enviroment)
 {
-	Enviroment.SetStack(this->Enviroment->EstimateStackSize());
+	unsigned long long StackSize;
+	unsigned short RegisterMask;
+	bool ShouldAlign;
 
-	CreateEntry(Enviroment);
+	StackSize = this->Enviroment->EstimateStackSize();
+	RegisterMask = this->Enviroment->EstimateRegisterUsage();
+
+	StackSize = (StackSize + ((1 << 3) - 1)) & ~((1 << 3) - 1); // Stack alignment, making sure that it's 8 byte alligned
+
+	ShouldAlign = true;
+	for (unsigned short i = 0; i < 16; i++)
+	{
+		if (RegisterMask & (1 << i))
+			ShouldAlign != ShouldAlign;
+	}
+
+	if (ShouldAlign)
+		StackSize |= (1 << 3); // Stack alignment, making sure the 16 byte missalignment is fixed
+
+	Enviroment.SetStack(StackSize);
+
+	CreateEntry(Enviroment, RegisterMask);
 	this->Enviroment->Compile(Enviroment);
-	CreateExit(Enviroment);
+	CreateExit(Enviroment, RegisterMask);
 }
 
 bool Function::IsFunctionDefinition(const char* Expression)
@@ -89,9 +108,80 @@ void Function::CompileCall(CompileMap& Enviroment)
 	Enviroment.AddCode(Shell, sizeof(Shell));
 }
 
-void Function::CreateEntry(CompileMap& Enviroment)
+void Function::CompileRegisterBackups(class CompileMap& Enviroment, unsigned short Mask)
 {
 	unsigned long long MainRelativity;
+
+	MainRelativity = 0;
+	for (unsigned short i = 0; i < 16; i++)
+	{
+		if (!(Mask & (1 << i)))
+			continue;
+
+		if (i & (1 << 3))
+		{
+			unsigned char Shell[] =
+			{
+				PFX_REXB, PUSHQ_R(i)
+			};
+
+			Enviroment.AddCode(Shell, sizeof(Shell));
+			continue;
+		}
+
+		unsigned char Shell[] =
+		{
+			PUSHQ_R(i)
+		};
+
+		Enviroment.AddCode(Shell, sizeof(Shell));
+	}
+}
+
+void Function::CompileRegisterRestores(class CompileMap& Enviroment, unsigned short Mask)
+{
+	unsigned long long MainRelativity;
+
+	MainRelativity = 0;
+	for (unsigned short i = 15;; i--)
+	{
+		if (!(Mask & (1 << i)))
+		{
+			if (i == 0)
+				break;
+
+			continue;
+		}
+
+		if (i & (1 << 3))
+		{
+			unsigned char Shell[] =
+			{
+				PFX_REXB, POPQ_R(i)
+			};
+
+			Enviroment.AddCode(Shell, sizeof(Shell));
+		}
+		else
+		{
+			unsigned char Shell[] =
+			{
+				POPQ_R(i)
+			};
+
+			Enviroment.AddCode(Shell, sizeof(Shell));
+		}
+
+		if (i == 0)
+			break;
+	}
+}
+
+void Function::CreateEntry(CompileMap& Enviroment, unsigned short RegisterMask)
+{
+	unsigned long long MainRelativity;
+
+	CompileRegisterBackups(Enviroment, RegisterMask);
 
 	for (RefObject<Argument> Argument : Arguments)
 		Argument->Compile(Enviroment);
@@ -117,7 +207,7 @@ void Function::CreateEntry(CompileMap& Enviroment)
 	}
 }
 
-void Function::CreateExit(CompileMap& Enviroment)
+void Function::CreateExit(CompileMap& Enviroment, unsigned short RegisterMask)
 {
 	unsigned long long MainRelativity;
 
@@ -126,8 +216,7 @@ void Function::CreateExit(CompileMap& Enviroment)
 	{
 		unsigned char Shell[] =
 		{
-			PFX_REXW, ADD_RM_D(LR(RSP), Enviroment.GetStackSize()),
-			RETN
+			PFX_REXW, ADD_RM_D(LR(RSP), Enviroment.GetStackSize())
 		};
 
 		Enviroment.AddCode(Shell, sizeof(Shell));
@@ -136,10 +225,12 @@ void Function::CreateExit(CompileMap& Enviroment)
 	{
 		unsigned char Shell[] =
 		{
-			PFX_REXW, ADDD_RM_B(LR(RSP), Enviroment.GetStackSize()),
-			RETN
+			PFX_REXW, ADDD_RM_B(LR(RSP), Enviroment.GetStackSize())
 		};
 
 		Enviroment.AddCode(Shell, sizeof(Shell));
 	}
+
+	CompileRegisterRestores(Enviroment, RegisterMask);
+	Enviroment.AddCode(RETN);
 }

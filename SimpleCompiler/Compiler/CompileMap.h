@@ -9,6 +9,11 @@ public:
 	}
 
 public:
+	inline void AddCode(unsigned char Code)
+	{
+		CompiledCode.Add(Code);
+	}
+
 	inline void AddCode(List<unsigned char> Code)
 	{
 		CompiledCode.Add(Code);

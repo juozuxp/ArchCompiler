@@ -1,9 +1,9 @@
 #include "Arithmetic.h"
 #include "../../Compiler/Enviroments/EnviromentMap.h"
 #include "../../Compiler/CompileMap.h"
-#include "../../Utilities/x86_x64Shell.h"
 #include "Variable.h"
 #include "../Assignables/AssignVariable.h"
+#include "../../Utilities/x86_x64Shell.h"
 
 void Arithmetic::Value::Compile(CompileMap& Enviroment)
 {
@@ -68,19 +68,23 @@ void Arithmetic::Value::Compile(CompileMap& Enviroment)
 void Arithmetic::Addition::Compile(CompileMap& Enviroment)
 {
 	Left->Compile(Enviroment);
-	
+
+	TransitionSpace->Compile(Enviroment);
+
+	Right->Compile(Enviroment);
+
 	unsigned char Preserve[] =
 	{
-		PFX_REXW, MOVD_R_RM(R_LR(RCX, RAX))
+		PFX_REXW, MOVD_R_RM(R_LR(RBX, RAX)),
 	};
 
 	Enviroment.AddCode(Preserve, sizeof(Preserve));
 
-	Right->Compile(Enviroment);
+	TransitionSpace->CompileRetrieve(Enviroment);
 
 	unsigned char Operation[] =
 	{
-		PFX_REXW, ADDD_R_RM(R_LR(RAX, RCX))
+		PFX_REXW, ADDD_R_RM(R_LR(RAX, RBX)),
 	};
 
 	Enviroment.AddCode(Operation, sizeof(Operation));
@@ -90,19 +94,22 @@ void Arithmetic::Subtraction::Compile(CompileMap& Enviroment)
 {
 	Left->Compile(Enviroment);
 
+	TransitionSpace->Compile(Enviroment);
+
+	Right->Compile(Enviroment);
+
 	unsigned char Preserve[] =
 	{
-		PFX_REXW, MOVD_R_RM(R_LR(RCX, RAX))
+		PFX_REXW, MOVD_R_RM(R_LR(RBX, RAX)),
 	};
 
 	Enviroment.AddCode(Preserve, sizeof(Preserve));
 
-	Right->Compile(Enviroment);
+	TransitionSpace->CompileRetrieve(Enviroment);
 
 	unsigned char Operation[] =
 	{
-		PFX_REXW, SUBD_R_RM(R_LR(RCX, RAX)),
-		PFX_REXW, MOVD_R_RM(R_LR(RAX, RCX))
+		PFX_REXW, SUBD_R_RM(R_LR(RAX, RBX))
 	};
 
 	Enviroment.AddCode(Operation, sizeof(Operation));
@@ -126,13 +133,13 @@ void Arithmetic::Parse(EnviromentMap& Enviroment, const char* Expression)
 
 	AssignTo = RefObject<AssignVariable>(Enviroment.GetVariable(Deflate, EqualsIdx)).Cast<Assignable>();
 
-	EvaluateArthmetic(Enviroment, Deflate + EqualsIdx + 1);
+	Origin = EvaluateArthmetic(Enviroment, Deflate + EqualsIdx + 1);
 }
 
 void Arithmetic::Parse(class EnviromentMap& Enviroment, const char* Expression, RefObject<Assignable> AssignTo)
 {
 	this->AssignTo = AssignTo;
-	EvaluateArthmetic(Enviroment, Deflater.Deflate(Expression));
+	this->Origin = EvaluateArthmetic(Enviroment, Deflater.Deflate(Expression));
 }
 
 bool Arithmetic::IsArtimetic(const char* Expression)
@@ -147,6 +154,16 @@ bool Arithmetic::IsArtimetic(const char* Expression)
 		return true;
 
 	return false;
+}
+
+unsigned short Arithmetic::GetRegisterMask()
+{
+	return TemporarySpace.RetrieveRegisterMask();
+}
+
+unsigned long long Arithmetic::GetStackSize()
+{
+	return TemporarySpace.RetrieveStackAllocation();
 }
 
 void Arithmetic::Compile(CompileMap& Enviroment)
@@ -174,57 +191,103 @@ const char* Arithmetic::LocateOperation(const char* Expression, const OperationD
 	return 0;
 }
 
-void Arithmetic::EvaluateArthmetic(EnviromentMap& Enviroment, const char* Expression)
+const char* Arithmetic::HuntEnclosure(const char* Expression)
+{
+	Expression++;
+	for (; *Expression; Expression++)
+	{
+		if (*Expression == '(')
+			Expression = HuntEnclosure(Expression);
+
+		if (*Expression == ')')
+			break;
+	}
+
+	return Expression + 1;
+}
+
+List<char> Arithmetic::ExtractEnclosure(const char* Expression)
+{
+	List<char> Result;
+
+	Result.Add(Expression + 1, (HuntEnclosure(Expression) - 1) - (Expression + 1));
+	Result.Add('\0');
+
+	return Result;
+}
+
+RefObject<Arithmetic::Operand> Arithmetic::EvaluateArthmetic(EnviromentMap& Enviroment, const char* Expression)
 {
 	const OperationDef* OperationType;
 
 	RefObject<Operand> First;
 	RefObject<Operand> Second;
 
-	const char* LocOperation = LocateOperation(Expression, &OperationType);
-	if (IS_NUMBER(Expression))
-		First = RefObject<Value>(Value(strtoull(Expression, 0, 10))).Cast<Operand>();
+	const char* LocOperation;
+
+	if (*Expression == '(')
+	{
+		List<char> Enclosure = ExtractEnclosure(Expression);
+		First = EvaluateArthmetic(Enviroment, Enclosure);
+
+		Expression += Enclosure.GetCount() - 1 + 2;
+		LocOperation = LocateOperation(Expression, &OperationType);
+	}
 	else
 	{
-		unsigned long long Length = 0;
-		if (LocOperation)
-			Length = LocOperation - Expression;
-
-		First = RefObject<AVariable>(AVariable(Enviroment.GetVariable(Expression, Length))).Cast<Operand>();
-	}
-
-	if (!LocOperation)
-	{
-		Origin = First;
-		return;
-	}
-
-	Expression = LocOperation + 1;
-	while (true)
-	{
-		const OperationDef* NextOperation;
-
-		LocOperation = LocateOperation(Expression, &NextOperation);
+		LocOperation = LocateOperation(Expression, &OperationType);
 		if (IS_NUMBER(Expression))
-			Second = RefObject<Value>(Value(strtoull(Expression, 0, 10))).Cast<Operand>();
+			First = RefObject<Value>(Value(strtoull(Expression, 0, 10))).Cast<Operand>();
 		else
 		{
 			unsigned long long Length = 0;
 			if (LocOperation)
 				Length = LocOperation - Expression;
 
-			Second = RefObject<AVariable>(AVariable(Enviroment.GetVariable(Expression, Length))).Cast<Operand>();
+			First = RefObject<AVariable>(AVariable(Enviroment.GetVariable(Expression, Length))).Cast<Operand>();
+		}
+	}
+
+	if (!LocOperation)
+		return First;
+
+	Expression = LocOperation + 1;
+	while (true)
+	{
+		const OperationDef* NextOperation;
+
+		if (*Expression == '(')
+		{
+			List<char> Enclosure = ExtractEnclosure(Expression);
+			Second = EvaluateArthmetic(Enviroment, Enclosure);
+
+			Expression += Enclosure.GetCount() - 1 + 2;
+			LocOperation = LocateOperation(Expression, &NextOperation);
+		}
+		else
+		{
+			LocOperation = LocateOperation(Expression, &NextOperation);
+			if (IS_NUMBER(Expression))
+				Second = RefObject<Value>(Value(strtoull(Expression, 0, 10))).Cast<Operand>();
+			else
+			{
+				unsigned long long Length = 0;
+				if (LocOperation)
+					Length = LocOperation - Expression;
+
+				Second = RefObject<AVariable>(AVariable(Enviroment.GetVariable(Expression, Length))).Cast<Operand>();
+			}
 		}
 
 		switch (OperationType->GetType())
 		{
 		case OperationDef::OperationType_Addition:
 		{
-			First = RefObject<Addition>(Addition(First, Second)).Cast<Operand>();
+			First = RefObject<Addition>(Addition(First, Second, TemporarySpace.CreateAssignable())).Cast<Operand>();
 		} break;
 		case OperationDef::OperationType_Subtraction:
 		{
-			First = RefObject<Subtraction>(Subtraction(First, Second)).Cast<Operand>();
+			First = RefObject<Subtraction>(Subtraction(First, Second, TemporarySpace.CreateAssignable())).Cast<Operand>();
 		} break;
 		}
 
@@ -235,5 +298,5 @@ void Arithmetic::EvaluateArthmetic(EnviromentMap& Enviroment, const char* Expres
 		Expression = LocOperation + 1;
 	}
 
-	Origin = First;
+	return First;
 }

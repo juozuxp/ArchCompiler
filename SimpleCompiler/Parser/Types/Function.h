@@ -17,12 +17,16 @@ public:
 
 	void Compile(class CompileMap& Enviroment);
 	void CompileCall(class CompileMap& Enviroment);
-	void CreateEntry(class CompileMap& Enviroment);
-	void CreateExit(class CompileMap& Enviroment);
 
 public:
 	static bool IsFunctionDefinition(const char* Expression);
 	static unsigned long long GetDefinitionLength(const char* Expression);
+
+private:
+	void CreateExit(class CompileMap& Enviroment, unsigned short RegisterMask);
+	void CreateEntry(class CompileMap& Enviroment, unsigned short RegisterMask);
+	void CompileRegisterBackups(class CompileMap& Enviroment, unsigned short Mask);
+	void CompileRegisterRestores(class CompileMap& Enviroment, unsigned short Mask);
 
 private:
 	static constexpr bool IsIgnorable(char Character)
