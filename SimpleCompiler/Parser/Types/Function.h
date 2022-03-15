@@ -17,6 +17,7 @@ public:
 
 	void Compile(class CompileMap& Enviroment);
 	void CompileCall(class CompileMap& Enviroment);
+	void CompileRetrieve(class CompileMap& Enviroment, RegisterType Source);
 
 public:
 	static bool IsFunctionDefinition(const char* Expression);

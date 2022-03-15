@@ -19,6 +19,14 @@ Variable::Variable(const char* Expression) : ParserElement()
 	VariableName = ExtractName(Expression + strlen(Variable->GetName()));
 }
 
+unsigned short Variable::GetRegisterMask()
+{
+	if (!Assigner)
+		return 0;
+
+	return Assigner->GetRegisterMask();
+}
+
 void Variable::Parse(EnviromentMap& Enviroment, const char* Expression)
 {
 	const char* PostDefExpression = strstr(Expression, VariableName);

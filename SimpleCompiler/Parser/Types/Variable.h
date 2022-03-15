@@ -18,18 +18,20 @@ public:
 	}
 
 public:
+	unsigned short GetRegisterMask();
+
 	void Parse(class EnviromentMap& Enviroment, const char* Expression);
 
 public:
-	virtual void CompileAssign(class CompileMap& Enviroment)
-	{
-	}
-
-	virtual void CompileRetrieve(class CompileMap& Enviroment)
-	{
-	}
-
 	virtual void CompileCall(class CompileMap& Enviroment)
+	{
+	}
+
+	virtual void CompileAssign(class CompileMap& Enviroment, RegisterType Source)
+	{
+	}
+
+	virtual void CompileRetrieve(class CompileMap& Enviroment, RegisterType Source)
 	{
 	}
 

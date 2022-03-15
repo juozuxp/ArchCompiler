@@ -139,15 +139,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Parser\Assignables\AssignDynStack.cpp" />
+    <ClCompile Include="Parser\Transferable\TransferDynStack.cpp" />
     <ClCompile Include="Parser\Types\Argument.cpp" />
     <ClCompile Include="Compiler\Compiler.cpp" />
-    <ClCompile Include="Parser\Assignables\AssignStack.cpp" />
+    <ClCompile Include="Parser\Transferable\TransferStack.cpp" />
     <ClCompile Include="Compiler\Enviroments\Enviroment.cpp" />
     <ClCompile Include="Parser\Types\FunctionCall.cpp" />
-    <ClCompile Include="Parser\Assignables\AssignVariable.cpp" />
+    <ClCompile Include="Parser\Transferable\TransferVariable.cpp" />
     <ClCompile Include="Parser\Types\Arithmetic.cpp" />
-    <ClCompile Include="Parser\Assignables\Assignable.cpp" />
+    <ClCompile Include="Parser\Transferable\Transferable.cpp" />
     <ClCompile Include="Compiler\CompileMap.cpp" />
     <ClCompile Include="Compiler\Enviroments\EnviromentMap.cpp" />
     <ClCompile Include="Compiler\Enviroments\FileEnviromentMap.cpp" />
@@ -158,29 +158,27 @@
     <ClCompile Include="Compiler\Registers.cpp" />
     <ClCompile Include="Parser\Types\Variable.cpp" />
     <ClCompile Include="GlobalInfo\VariableTypes.cpp" />
-    <ClCompile Include="Parser\Assignables\AssignRegister.cpp" />
+    <ClCompile Include="Parser\Transferable\TransferRegister.cpp" />
     <ClCompile Include="Parser\SyntaxParser.cpp" />
     <ClCompile Include="Compiler\TempVariableMap.cpp" />
-    <ClCompile Include="Parser\Transitionable\Transition.cpp" />
-    <ClCompile Include="Parser\Transitionable\TransRegToReg.cpp" />
+    <ClCompile Include="Parser\Transferable\TransferValue.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Parser\Assignables\AssignDynStack.h" />
+    <ClInclude Include="Parser\Transferable\TransferDynStack.h" />
     <ClInclude Include="Parser\Types\Argument.h" />
     <ClInclude Include="Compiler\Compiler.h" />
-    <ClInclude Include="Parser\Assignables\AssignStack.h" />
+    <ClInclude Include="Parser\Transferable\TransferStack.h" />
     <ClInclude Include="Compiler\Enviroments\Enviroment.h" />
     <ClInclude Include="Parser\Types\FunctionCall.h" />
-    <ClInclude Include="Parser\Assignables\AssignVariable.h" />
+    <ClInclude Include="Parser\Transferable\TransferVariable.h" />
     <ClInclude Include="GlobalInfo\RegisterTypes.h" />
     <ClInclude Include="Parser\Types\Arithmetic.h" />
-    <ClInclude Include="Parser\Assignables\AssignRegister.h" />
+    <ClInclude Include="Parser\Transferable\TransferRegister.h" />
     <ClInclude Include="Parser\SyntaxParser.h" />
     <ClInclude Include="Compiler\TempVariableMap.h" />
-    <ClInclude Include="Parser\Transitionable\Transition.h" />
-    <ClInclude Include="Parser\Transitionable\TransRegToReg.h" />
+    <ClInclude Include="Parser\Transferable\TransferValue.h" />
     <ClInclude Include="Utilities\ArrayBase.h" />
-    <ClInclude Include="Parser\Assignables\Assignable.h" />
+    <ClInclude Include="Parser\Transferable\Transferable.h" />
     <ClInclude Include="Compiler\CompileMap.h" />
     <ClInclude Include="Utilities\Deflatable.h" />
     <ClInclude Include="Compiler\Enviroments\EnviromentMap.h" />

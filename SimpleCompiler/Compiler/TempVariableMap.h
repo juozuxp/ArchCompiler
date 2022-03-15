@@ -1,6 +1,6 @@
 #pragma once
 #include "../GlobalInfo/RegisterTypes.h"
-#include "../Parser/Assignables/Assignable.h"
+#include "../Parser/Transferable/Transferable.h"
 #include "../Utilities/RefObject.h"
 
 class TempVariableMap
@@ -10,12 +10,11 @@ public:
 	{
 	}
 
-	constexpr TempVariableMap(unsigned char StartMask, unsigned long long StartStack) : RegisterUseMask(StartMask), StackAllocation(StartStack)
-	{
-	}
-
 public:
-	RefObject<Assignable> CreateAssignable();
+	constexpr RegisterType GetRegister()
+	{
+		return VolatileRegisters[RegisterUseMask++];
+	}
 
 public:
 	constexpr unsigned short RetrieveRegisterMask()
@@ -26,17 +25,11 @@ public:
 		return VolatileRegisterMasks[RegisterUseMask - 1];
 	}
 
-	constexpr unsigned long long RetrieveStackAllocation()
-	{
-		return StackAllocation;
-	}
-
 private:
 	unsigned char RegisterUseMask = 0;
-	unsigned long long StackAllocation = 0;
 
 private:
-	static constexpr RegisterType VolatileRegisters[] = { RegisterType_RBX, RegisterType_RSI, RegisterType_RDI, RegisterType_RBP, RegisterType_R10, RegisterType_R11, RegisterType_R12, RegisterType_R13, RegisterType_R14, RegisterType_R15 };
+	static constexpr RegisterType VolatileRegisters[] = { RegisterType::RBX, RegisterType::RSI, RegisterType::RDI, RegisterType::RBP, RegisterType::R10, RegisterType::R11, RegisterType::R12, RegisterType::R13, RegisterType::R14, RegisterType::R15 };
 	static constexpr unsigned short VolatileRegisterMasks[] = { RegisterMask_RBX, 
 																RegisterMask_RBX | RegisterMask_RSI, 
 																RegisterMask_RBX | RegisterMask_RSI | RegisterMask_RDI,

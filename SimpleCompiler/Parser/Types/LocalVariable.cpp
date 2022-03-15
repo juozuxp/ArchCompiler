@@ -5,7 +5,7 @@
 #include "Arithmetic.h"
 #include "../../Utilities/x86_x64Shell.h"
 
-void LocalVariable::CompileAssign(CompileMap& Enviroment)
+void LocalVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source)
 {
 	switch (VariableSize)
 	{
@@ -13,90 +13,193 @@ void LocalVariable::CompileAssign(CompileMap& Enviroment)
 	{
 		if (StackPosition < 0x7F)
 		{
-			unsigned char Shell[] =
+			if (Source.IsExtended())
 			{
-				MOVB_RM_R(MRSP_BO_R(AL, StackPosition)),
-			};
+				unsigned char Shell[] =
+				{
+					PFX_REXR, MOVB_RM_R(MRSP_BO_R(Source, StackPosition)),
+				};
 
-			Enviroment.AddCode(Shell, sizeof(Shell));
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
+			else
+			{
+				unsigned char Shell[] =
+				{
+					MOVB_RM_R(MRSP_BO_R(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
 		}
 		else
 		{
-			unsigned char Shell[] =
+			if (Source.IsExtended())
 			{
-				MOVB_RM_R(MRSP_BO_R(AL, StackPosition)),
-			};
 
-			Enviroment.AddCode(Shell, sizeof(Shell));
+				unsigned char Shell[] =
+				{
+					PFX_REXR, MOVB_RM_R(MRSP_DO_R(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
+			else
+			{
+				unsigned char Shell[] =
+				{
+					MOVB_RM_R(MRSP_DO_R(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
 		}
 	} break;
 	case 2:
 	{
 		if (StackPosition < 0x7F)
 		{
-			unsigned char Shell[] =
+			if (Source.IsExtended())
 			{
-				PFX_WORD, MOVD_RM_R(MRSP_BO_R(AX, StackPosition)),
-			};
 
-			Enviroment.AddCode(Shell, sizeof(Shell));
+				unsigned char Shell[] =
+				{
+					PFX_WORD, PFX_REXR, MOVD_RM_R(MRSP_BO_R(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
+			else
+			{
+				unsigned char Shell[] =
+				{
+					PFX_WORD, MOVD_RM_R(MRSP_BO_R(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
 		}
 		else
 		{
-			unsigned char Shell[] =
+			if (Source.IsExtended())
 			{
-				PFX_WORD, MOVD_RM_R(MRSP_BO_R(AX, StackPosition)),
-			};
 
-			Enviroment.AddCode(Shell, sizeof(Shell));
+				unsigned char Shell[] =
+				{
+					PFX_WORD, PFX_REXR, MOVD_RM_R(MRSP_DO_R(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
+			else
+			{
+				unsigned char Shell[] =
+				{
+					PFX_WORD, MOVD_RM_R(MRSP_DO_R(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
 		}
 	} break;
 	case 4:
 	{
 		if (StackPosition < 0x7F)
 		{
-			unsigned char Shell[] =
+			if (Source.IsExtended())
 			{
-				MOVD_RM_R(MRSP_BO_R(EAX, StackPosition)),
-			};
 
-			Enviroment.AddCode(Shell, sizeof(Shell));
+				unsigned char Shell[] =
+				{
+					PFX_REXR, MOVD_RM_R(MRSP_BO_R(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
+			else
+			{
+				unsigned char Shell[] =
+				{
+					MOVD_RM_R(MRSP_BO_R(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
 		}
 		else
 		{
-			unsigned char Shell[] =
+			if (Source.IsExtended())
 			{
-				MOVD_RM_R(MRSP_BO_R(EAX, StackPosition)),
-			};
 
-			Enviroment.AddCode(Shell, sizeof(Shell));
+				unsigned char Shell[] =
+				{
+					PFX_REXR, MOVD_RM_R(MRSP_DO_R(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
+			else
+			{
+				unsigned char Shell[] =
+				{
+					MOVD_RM_R(MRSP_DO_R(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
 		}
 	} break;
 	case 8:
 	{
 		if (StackPosition < 0x7F)
 		{
-			unsigned char Shell[] =
+			if (Source.IsExtended())
 			{
-				PFX_REXW, MOVD_RM_R(MRSP_BO_R(RAX, StackPosition)),
-			};
 
-			Enviroment.AddCode(Shell, sizeof(Shell));
+				unsigned char Shell[] =
+				{
+					PFX_REXWR, MOVD_RM_R(MRSP_BO_R(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
+			else
+			{
+				unsigned char Shell[] =
+				{
+					PFX_REXW, MOVD_RM_R(MRSP_BO_R(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
 		}
 		else
 		{
-			unsigned char Shell[] =
+			if (Source.IsExtended())
 			{
-				PFX_REXW, MOVD_RM_R(MRSP_BO_R(RAX, StackPosition)),
-			};
 
-			Enviroment.AddCode(Shell, sizeof(Shell));
+				unsigned char Shell[] =
+				{
+					PFX_REXWR, MOVD_RM_R(MRSP_DO_R(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
+			else
+			{
+				unsigned char Shell[] =
+				{
+					PFX_REXW, MOVD_RM_R(MRSP_DO_R(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
 		}
 	} break;
 	}
 }
 
-void LocalVariable::CompileRetrieve(CompileMap& Enviroment)
+void LocalVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source)
 {
 	switch (VariableSize)
 	{
@@ -104,88 +207,194 @@ void LocalVariable::CompileRetrieve(CompileMap& Enviroment)
 	{
 		if (StackPosition < 0x7F)
 		{
-			unsigned char Shell[] =
+			if (Source.IsExtended())
 			{
-				PFX_REXW, XORD_RM_R(LR_R(RAX, RAX)),
-				MOVB_R_RM(R_MRSP_BO(AL, StackPosition)),
-			};
+				unsigned char Shell[] =
+				{
+					PFX_REXWBR, XORD_RM_R(LR_R(Source, Source)),
+					PFX_REXR, MOVB_R_RM(R_MRSP_BO(Source, StackPosition)),
+				};
 
-			Enviroment.AddCode(Shell, sizeof(Shell));
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
+			else
+			{
+				unsigned char Shell[] =
+				{
+					PFX_REXW, XORD_RM_R(LR_R(Source, Source)),
+					MOVB_R_RM(R_MRSP_BO(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
 		}
 		else
 		{
-			unsigned char Shell[] =
+			if (Source.IsExtended())
 			{
-				PFX_REXW, XORD_RM_R(LR_R(RAX, RAX)),
-				MOVB_R_RM(R_MRSP_DO(AL, StackPosition)),
-			};
+				unsigned char Shell[] =
+				{
+					PFX_REXWBR, XORD_RM_R(LR_R(Source, Source)),
+					PFX_REXR, MOVB_R_RM(R_MRSP_DO(Source, StackPosition)),
+				};
 
-			Enviroment.AddCode(Shell, sizeof(Shell));
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
+			else
+			{
+				unsigned char Shell[] =
+				{
+					PFX_REXW, XORD_RM_R(LR_R(Source, Source)),
+					MOVB_R_RM(R_MRSP_DO(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
 		}
 	} break;
 	case 2:
 	{
 		if (StackPosition < 0x7F)
 		{
-			unsigned char Shell[] =
+			if (Source.IsExtended())
 			{
-				PFX_REXW, XORD_RM_R(LR_R(RAX, RAX)),
-				PFX_WORD, MOVD_R_RM(R_MRSP_BO(AX, StackPosition)),
-			};
 
-			Enviroment.AddCode(Shell, sizeof(Shell));
+				unsigned char Shell[] =
+				{
+					PFX_REXWBR, XORD_RM_R(LR_R(Source, Source)),
+					PFX_WORD, PFX_REXR, MOVD_R_RM(R_MRSP_BO(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
+			else
+			{
+				unsigned char Shell[] =
+				{
+					PFX_REXW, XORD_RM_R(LR_R(Source, Source)),
+					PFX_WORD, MOVD_R_RM(R_MRSP_BO(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
 		}
 		else
 		{
-			unsigned char Shell[] =
+			if (Source.IsExtended())
 			{
-				PFX_REXW, XORD_RM_R(LR_R(RAX, RAX)),
-				PFX_WORD, MOVD_R_RM(R_MRSP_DO(AX, StackPosition)),
-			};
 
-			Enviroment.AddCode(Shell, sizeof(Shell));
+				unsigned char Shell[] =
+				{
+					PFX_REXWBR, XORD_RM_R(LR_R(Source, Source)),
+					PFX_WORD, PFX_REXR, MOVD_R_RM(R_MRSP_DO(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
+			else
+			{
+				unsigned char Shell[] =
+				{
+					PFX_REXW, XORD_RM_R(LR_R(Source, Source)),
+					PFX_WORD, MOVD_R_RM(R_MRSP_DO(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
 		}
 	} break;
 	case 4:
 	{
 		if (StackPosition < 0x7F)
 		{
-			unsigned char Shell[] =
+			if (Source.IsExtended())
 			{
-				MOVD_R_RM(R_MRSP_BO(EAX, StackPosition)),
-			};
 
-			Enviroment.AddCode(Shell, sizeof(Shell));
+				unsigned char Shell[] =
+				{
+					PFX_REXR, MOVD_R_RM(R_MRSP_BO(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
+			else
+			{
+				unsigned char Shell[] =
+				{
+					MOVD_R_RM(R_MRSP_BO(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
 		}
 		else
 		{
-			unsigned char Shell[] =
+			if (Source.IsExtended())
 			{
-				MOVD_R_RM(R_MRSP_DO(EAX, StackPosition)),
-			};
 
-			Enviroment.AddCode(Shell, sizeof(Shell));
+				unsigned char Shell[] =
+				{
+					PFX_REXR, MOVD_R_RM(R_MRSP_DO(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
+			else
+			{
+				unsigned char Shell[] =
+				{
+					MOVD_R_RM(R_MRSP_DO(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
 		}
 	} break;
 	case 8:
 	{
 		if (StackPosition < 0x7F)
 		{
-			unsigned char Shell[] =
+			if (Source.IsExtended())
 			{
-				PFX_REXW, MOVD_R_RM(R_MRSP_BO(RAX, StackPosition)),
-			};
 
-			Enviroment.AddCode(Shell, sizeof(Shell));
+				unsigned char Shell[] =
+				{
+					PFX_REXWR, MOVD_R_RM(R_MRSP_BO(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
+			else
+			{
+				unsigned char Shell[] =
+				{
+					PFX_REXW, MOVD_R_RM(R_MRSP_BO(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
 		}
 		else
 		{
-			unsigned char Shell[] =
+			if (Source.IsExtended())
 			{
-				PFX_REXW, MOVD_R_RM(R_MRSP_DO(RAX, StackPosition)),
-			};
 
-			Enviroment.AddCode(Shell, sizeof(Shell));
+				unsigned char Shell[] =
+				{
+					PFX_REXWR, MOVD_R_RM(R_MRSP_DO(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
+			else
+			{
+				unsigned char Shell[] =
+				{
+					PFX_REXW, MOVD_R_RM(R_MRSP_DO(Source, StackPosition)),
+				};
+
+				Enviroment.AddCode(Shell, sizeof(Shell));
+			}
 		}
 	} break;
 	}
@@ -196,4 +405,26 @@ void LocalVariable::Compile(CompileMap& Enviroment)
 	StackPosition = Enviroment.AllocateLocalVariable(VariableSize);
 	if (this->Assigner)
 		this->Assigner->Compile(Enviroment);
+}
+
+void LocalVariable::CompileCall(CompileMap& Enviroment)
+{
+	if (StackPosition < 0x7F)
+	{
+		unsigned char Shell[] =
+		{
+			CALLQ_RM(MRSP_BO(StackPosition))
+		};
+
+		Enviroment.AddCode(Shell, sizeof(Shell));
+	}
+	else
+	{
+		unsigned char Shell[] =
+		{
+			CALLQ_RM(MRSP_DO(StackPosition))
+		};
+
+		Enviroment.AddCode(Shell, sizeof(Shell));
+	}
 }

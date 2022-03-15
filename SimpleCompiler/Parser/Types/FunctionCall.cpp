@@ -1,10 +1,10 @@
 #include "FunctionCall.h"
 #include "../../Compiler/Enviroments/EnviromentMap.h"
 #include "../../Utilities/StrTok.h"
-#include "../Assignables/Assignable.h"
+#include "../Transferable/Transferable.h"
 #include "../../GlobalInfo/RegisterTypes.h"
-#include "../Assignables/AssignRegister.h"
-#include "../Assignables/AssignStack.h"
+#include "../Transferable/TransferRegister.h"
+#include "../Transferable/TransferStack.h"
 #include "Arithmetic.h"
 
 void FunctionCall::Compile(class CompileMap& Enviroment)
@@ -63,13 +63,13 @@ bool FunctionCall::IsFunctionCall(const char* Expression)
 	return true;
 }
 
-RefObject<Assignable> FunctionCall::GetAssignable(unsigned long long Argument)
+RefObject<Transferable> FunctionCall::GetAssignable(unsigned long long Argument)
 {
 	if (Argument < 4)
 	{
-		constexpr RegisterType Registers[] = { RegisterType_RCX, RegisterType_RDX, RegisterType_R8, RegisterType_R9 };
-		return RefObject<AssignRegister>(AssignRegister(Registers[Argument])).Cast<Assignable>();
+		constexpr RegisterType Registers[] = { RegisterType::RCX, RegisterType::RDX, RegisterType::R8, RegisterType::R9 };
+		return RefObject<TransferRegister>(TransferRegister(Registers[Argument])).Cast<Transferable>();
 	}
 
-	return RefObject<AssignStack>(AssignStack(Argument * 0x8)).Cast<Assignable>();
+	return RefObject<TransferStack>(TransferStack(Argument * 0x8)).Cast<Transferable>();
 }

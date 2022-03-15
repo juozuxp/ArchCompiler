@@ -87,13 +87,13 @@
     <ClCompile Include="Parser\Types\ParserElement.cpp">
       <Filter>Source Files\Parser\Types</Filter>
     </ClCompile>
-    <ClCompile Include="Parser\Assignables\Assignable.cpp">
+    <ClCompile Include="Parser\Transferable\Transferable.cpp">
       <Filter>Source Files\Parser\Assignables</Filter>
     </ClCompile>
-    <ClCompile Include="Parser\Assignables\AssignRegister.cpp">
+    <ClCompile Include="Parser\Transferable\TransferRegister.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Parser\Assignables\AssignVariable.cpp">
+    <ClCompile Include="Parser\Transferable\TransferVariable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Compiler\Enviroments\Enviroment.cpp">
@@ -102,7 +102,7 @@
     <ClCompile Include="Parser\Types\FunctionCall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Parser\Assignables\AssignStack.cpp">
+    <ClCompile Include="Parser\Transferable\TransferStack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Compiler\Compiler.cpp">
@@ -117,13 +117,10 @@
     <ClCompile Include="Compiler\TempVariableMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Parser\Assignables\AssignDynStack.cpp">
+    <ClCompile Include="Parser\Transferable\TransferDynStack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Parser\Transitionable\Transition.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Parser\Transitionable\TransRegToReg.cpp">
+    <ClCompile Include="Parser\Transferable\TransferValue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -179,19 +176,19 @@
     <ClInclude Include="GlobalInfo\VariableTypes.h">
       <Filter>Header Files\GlobalInfo</Filter>
     </ClInclude>
-    <ClInclude Include="Parser\Assignables\Assignable.h">
+    <ClInclude Include="Parser\Transferable\Transferable.h">
       <Filter>Header Files\Parser\Assignables</Filter>
     </ClInclude>
     <ClInclude Include="Parser\Types\ParserElement.h">
       <Filter>Header Files\Parser\Types</Filter>
     </ClInclude>
-    <ClInclude Include="Parser\Assignables\AssignRegister.h">
+    <ClInclude Include="Parser\Transferable\TransferRegister.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GlobalInfo\RegisterTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Parser\Assignables\AssignVariable.h">
+    <ClInclude Include="Parser\Transferable\TransferVariable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Compiler\Enviroments\Enviroment.h">
@@ -203,7 +200,7 @@
     <ClInclude Include="Parser\Types\FunctionCall.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Parser\Assignables\AssignStack.h">
+    <ClInclude Include="Parser\Transferable\TransferStack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Compiler\Compiler.h">
@@ -218,13 +215,10 @@
     <ClInclude Include="Compiler\TempVariableMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Parser\Assignables\AssignDynStack.h">
+    <ClInclude Include="Parser\Transferable\TransferDynStack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Parser\Transitionable\Transition.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Parser\Transitionable\TransRegToReg.h">
+    <ClInclude Include="Parser\Transferable\TransferValue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

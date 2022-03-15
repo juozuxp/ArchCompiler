@@ -37,6 +37,6 @@ private:
 
 private:
 	constexpr static const char* Ignorables = "* ;=";
-	constexpr static VariableType Types[] = { VariableType("void", 0), VariableType("uchar", 1), VariableType("ushort", 2), VariableType("int", 4), VariableType("ulong", 8)};
+	constexpr static VariableType Types[] = { VariableType("void", 0), VariableType("uchar", 1), VariableType("ushort", 2), VariableType("uint", 4), VariableType("ulong", 8) };
 };
 

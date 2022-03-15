@@ -1,6 +1,6 @@
 #pragma once
 #include "ParserElement.h"
-#include "../Assignables/Assignable.h"
+#include "../Transferable/Transferable.h"
 #include "Arithmetic.h"
 #include "Variable.h"
 
@@ -32,7 +32,7 @@ private:
 	}
 
 private:
-	static RefObject<Assignable> GetAssignable(unsigned long long Argument);
+	static RefObject<Transferable> GetAssignable(unsigned long long Argument);
 
 private:
 	RefObject<Variable> Function;

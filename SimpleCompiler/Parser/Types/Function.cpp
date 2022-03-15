@@ -108,6 +108,32 @@ void Function::CompileCall(CompileMap& Enviroment)
 	Enviroment.AddCode(Shell, sizeof(Shell));
 }
 
+void Function::CompileRetrieve(CompileMap& Enviroment, RegisterType Source)
+{
+	unsigned long long MainRelativity;
+
+	if (Source.IsExtended())
+	{
+		MainRelativity = 0;
+		unsigned char Shell[] =
+		{
+			PFX_REXWR, LEAD_R_M(R_REL_DO(Source, this->Enviroment->RelativeLocation - (Enviroment.GetRelativeLocation() + MainRelativity)))
+		};
+
+		Enviroment.AddCode(Shell, sizeof(Shell));
+	}
+	else
+	{
+		MainRelativity = 0;
+		unsigned char Shell[] =
+		{
+			PFX_REXW, LEAD_R_M(R_REL_DO(Source, this->Enviroment->RelativeLocation - (Enviroment.GetRelativeLocation() + MainRelativity)))
+		};
+
+		Enviroment.AddCode(Shell, sizeof(Shell));
+	}
+}
+
 void Function::CompileRegisterBackups(class CompileMap& Enviroment, unsigned short Mask)
 {
 	unsigned long long MainRelativity;
@@ -122,7 +148,7 @@ void Function::CompileRegisterBackups(class CompileMap& Enviroment, unsigned sho
 		{
 			unsigned char Shell[] =
 			{
-				PFX_REXB, PUSHQ_R(i)
+				PFX_REXB, PUSHQ_R(i & ((1 << 3) - 1))
 			};
 
 			Enviroment.AddCode(Shell, sizeof(Shell));
@@ -157,7 +183,7 @@ void Function::CompileRegisterRestores(class CompileMap& Enviroment, unsigned sh
 		{
 			unsigned char Shell[] =
 			{
-				PFX_REXB, POPQ_R(i)
+				PFX_REXB, POPQ_R(i & ((1 << 3) - 1))
 			};
 
 			Enviroment.AddCode(Shell, sizeof(Shell));

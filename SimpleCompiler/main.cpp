@@ -17,16 +17,19 @@ void AttemptExecution(List<unsigned char> ShellCode)
 
 int main()
 {
-	const char* Enviroment = "int main()"
-							 "	ushort Type = ((80 + 1) + (80 + 90));\n"
-							 "	uchar Hello = 100;\n"
-							 "	ulong Another = 8000;\n"
-							 "	int Variable = Another - Type + Hello;"
+	const char* Enviroment = "uint main()"
+							 "	ushort Type = ((80 + 1) + (80 + (90 + 100 + (100 + 80 + (70 + 90)))));\n"
+							 "	uint Hello = true;\n"
+							 "	ulong Shlong = main + 10;"
+							 "	Shlong(10, false, Type);"
+							 "	ulong Another = 10000000000000;\n"
+							 "	uint Variable = Another - Type + Hello;"
 							 "	Hello = Hello + Type + Another + Variable;"
 							 "\n"
-							 "int Test(int Hello, int World, int Test, int Yes)"
-							 "	int This_was_a_test = 10;"
-							 "	main(This_was_a_test, 10, 50, 80, 100, Yes);";
+							 "uint Test(uint Hello, uint World, uint Test, uint Yes)"
+							 "	uint This_was_a_test = 10;"
+							 "	main(This_was_a_test, 10, 50, 80, 100, Yes);"
+							 "uint FuckOff()";
 
 	RefObject<FileEnviromentMap> Map = SyntaxParser::Parse(Enviroment);
 
