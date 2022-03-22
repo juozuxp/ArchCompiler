@@ -3,6 +3,7 @@
 #include "../../Utilities/StrTok.h"
 #include "../../Parser/Types/FunctionCall.h"
 #include "../../Parser/Types/LocalVariable.h"
+#include "../../Parser/Types/Conditional.h"
 
 void EnviromentMap::AddVariable(RefObject<Variable> Element)
 {
@@ -39,33 +40,38 @@ void EnviromentMap::AddParsed(RefObject<ParserElement> Element)
 
 void EnviromentMap::Parse(const char* Expression, RefObject<Enviroment> Current)
 {
-	for (char* Token : StrTok(Expression, ";"))
+	for (StrTok::CommmitIterator::Commitable Token : StrTok(Expression, ";").GetCommitable())
 	{
 		RefObject<ParserElement> Object;
 
-		if (Variable::IsVariable(Token))
+		if (Conditional::IsConditional(Token.GetToken()))
+			continue;
+
+		Token.CommitToken();
+
+		if (Variable::IsVariable(Token.GetToken()))
 		{
-			RefObject<LocalVariable> Variable = RefObject<LocalVariable>(LocalVariable(Token));
+			RefObject<LocalVariable> Variable = RefObject<LocalVariable>(LocalVariable(Token.GetToken()));
 
 			AddVariable(Variable.Cast<::Variable>());
 
-			Variable->Parse(*this, Token);
+			Variable->Parse(*this, Token.GetToken());
 		}
-		else if (Arithmetic::IsArtimetic(Token))
+		else if (Arithmetic::IsArtimetic(Token.GetToken()))
 		{
 			RefObject<Arithmetic> Expression = RefObject<Arithmetic>(Arithmetic());
 
 			AddParsed(Expression.Cast<ParserElement>());
 
-			Expression->Parse(*this, Token);
+			Expression->Parse(*this, Token.GetToken());
 		}
-		else if (FunctionCall::IsFunctionCall(Token))
+		else if (FunctionCall::IsFunctionCall(Token.GetToken()))
 		{
 			RefObject<FunctionCall> Expression = RefObject<FunctionCall>(FunctionCall());
 
 			AddParsed(Expression.Cast<ParserElement>());
 
-			Expression->Parse(*this, Token);
+			Expression->Parse(*this, Token.GetToken());
 		}
 	}
 }

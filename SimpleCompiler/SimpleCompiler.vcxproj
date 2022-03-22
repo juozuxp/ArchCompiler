@@ -139,6 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Compiler\Instructions\InstructionBuilder.cpp" />
+    <ClCompile Include="Compiler\Instructions\Instruction.cpp" />
+    <ClCompile Include="Compiler\Instructions\Operands\Operand.cpp" />
+    <ClCompile Include="Compiler\Instructions\Operands\Memory.cpp" />
+    <ClCompile Include="Parser\Types\Conditional.cpp" />
     <ClCompile Include="Parser\Transferable\TransferDynStack.cpp" />
     <ClCompile Include="Parser\Types\Argument.cpp" />
     <ClCompile Include="Compiler\Compiler.cpp" />
@@ -162,8 +167,14 @@
     <ClCompile Include="Parser\SyntaxParser.cpp" />
     <ClCompile Include="Compiler\TempVariableMap.cpp" />
     <ClCompile Include="Parser\Transferable\TransferValue.cpp" />
+    <ClCompile Include="Compiler\Instructions\Operands\Register.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Compiler\Instructions\InstructionBuilder.h" />
+    <ClInclude Include="Compiler\Instructions\Instruction.h" />
+    <ClInclude Include="Compiler\Instructions\Operands\Operand.h" />
+    <ClInclude Include="Compiler\Instructions\Operands\Memory.h" />
+    <ClInclude Include="Parser\Types\Conditional.h" />
     <ClInclude Include="Parser\Transferable\TransferDynStack.h" />
     <ClInclude Include="Parser\Types\Argument.h" />
     <ClInclude Include="Compiler\Compiler.h" />
@@ -177,6 +188,7 @@
     <ClInclude Include="Parser\SyntaxParser.h" />
     <ClInclude Include="Compiler\TempVariableMap.h" />
     <ClInclude Include="Parser\Transferable\TransferValue.h" />
+    <ClInclude Include="Compiler\Instructions\Operands\Register.h" />
     <ClInclude Include="Utilities\ArrayBase.h" />
     <ClInclude Include="Parser\Transferable\Transferable.h" />
     <ClInclude Include="Compiler\CompileMap.h" />
@@ -194,6 +206,7 @@
     <ClInclude Include="Utilities\SimpleUtilities.h" />
     <ClInclude Include="Parser\Types\Variable.h" />
     <ClInclude Include="GlobalInfo\VariableTypes.h" />
+    <ClInclude Include="Utilities\Skippable.h" />
     <ClInclude Include="Utilities\StrTok.h" />
     <ClInclude Include="Utilities\x86_x64Shell.h" />
   </ItemGroup>

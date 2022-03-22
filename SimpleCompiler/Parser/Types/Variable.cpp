@@ -7,12 +7,8 @@
 Variable::Variable(const char* Expression) : ParserElement()
 {
 	const VariableType* Variable;
-	for (; *Expression; Expression++)
-	{
-		if (!IsIgnorable(*Expression))
-			break;
-	}
-
+	
+	Expression = Ignorables.Skip(Expression);
 	Variable = VariableTypes::RetrieveType(Expression);
 
 	VariableSize = Variable->GetSize();
@@ -41,11 +37,9 @@ List<char> Variable::ExtractName(const char* Expression)
 {
 	List<char> Name = List<char>(10);
 
-	const char* RunName = Expression;
-
-	for (; !IsNameChar(*RunName); RunName++);
-	for (; IsNameChar(*RunName); RunName++)
-		Name.Add(*RunName);
+	Expression = NonNameChar.Skip(Expression);
+	for (; NonNameChar.IsSkippable(*Expression); Expression++)
+		Name.Add(*Expression);
 
 	Name.Add('\0');
 

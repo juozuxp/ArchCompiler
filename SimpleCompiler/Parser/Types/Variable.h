@@ -1,6 +1,7 @@
 #pragma once
 #include "ParserElement.h"
 #include "Arithmetic.h"
+#include "../../Utilities/Skippable.h"
 
 class Variable : public ParserElement
 {
@@ -48,29 +49,6 @@ protected:
 	unsigned long long VariableSize = 0;
 
 private:
-	static constexpr bool IsNameChar(char Character)
-	{
-		for (const char* RunNonChar = NonNameChar; *RunNonChar; RunNonChar++)
-		{
-			if (Character == *RunNonChar)
-				return false;
-		}
-
-		return true;
-	}
-
-	static constexpr bool IsIgnorable(char Character)
-	{
-		for (const char* RunIgnorable = Ignorables; *RunIgnorable; RunIgnorable++)
-		{
-			if (Character == *RunIgnorable)
-				return true;
-		}
-
-		return false;
-	}
-
-private:
-	static constexpr const char* NonNameChar = " \t=()";
-	static constexpr const char* Ignorables = " \t";
+	static constexpr Skippable NonNameChar = Skippable(" \t=()");
+	static constexpr Skippable Ignorables = Skippable(" \t");
 };

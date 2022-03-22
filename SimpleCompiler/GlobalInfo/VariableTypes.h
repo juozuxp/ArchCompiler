@@ -1,4 +1,5 @@
 #pragma once
+#include "../Utilities/Skippable.h"
 
 class VariableType
 {
@@ -33,10 +34,7 @@ public:
 	static const VariableType* RetrieveType(const char* Expression);
 
 private:
-	static bool IsIgnorable(char Character);
-
-private:
-	constexpr static const char* Ignorables = "* ;=";
+	constexpr static Skippable Ignorables = Skippable("* ;=");
 	constexpr static VariableType Types[] = { VariableType("void", 0), VariableType("uchar", 1), VariableType("ushort", 2), VariableType("uint", 4), VariableType("ulong", 8) };
 };
 

@@ -74,8 +74,8 @@ bool Function::IsFunctionDefinition(const char* Expression)
 	if (!Type)
 		return false;
 
-	for (Expression += strlen(Type->GetName()); IsIgnorable(*Expression); Expression++);
-	for (; *Expression && !IsIgnorable(*Expression); Expression++)
+	Expression = Ignorable.Skip(Expression + strlen(Type->GetName()));
+	for (; *Expression && !Ignorable.IsSkippable(*Expression); Expression++)
 	{
 		if (*Expression == '(')
 			return true;

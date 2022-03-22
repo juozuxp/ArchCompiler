@@ -8,6 +8,11 @@ public:
 	{
 	}
 
+private:
+	constexpr CompileMap(unsigned long long DynamicSize, unsigned long long AllocatedStack) : DynamicSize(DynamicSize), AllocatedStack(AllocatedStack)
+	{
+	}
+
 public:
 	inline void AddCode(unsigned char Code)
 	{
@@ -27,6 +32,11 @@ public:
 	inline List<unsigned char> GetCode()
 	{
 		return CompiledCode;
+	}
+
+	inline CompileMap CreateSubMap()
+	{
+		return CompileMap(DynamicSize, AllocatedStack);
 	}
 
 public:

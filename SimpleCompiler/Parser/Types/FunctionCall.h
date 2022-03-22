@@ -3,6 +3,7 @@
 #include "../Transferable/Transferable.h"
 #include "Arithmetic.h"
 #include "Variable.h"
+#include "../../Utilities/Skippable.h"
 
 class FunctionCall : ParserElement
 {
@@ -20,18 +21,6 @@ public:
 	static bool IsFunctionCall(const char* Expression);
 
 private:
-	static constexpr bool IsIgnorable(char Character)
-	{
-		for (const char* RunIgnore = Ignorables; *RunIgnore; RunIgnore++)
-		{
-			if (*RunIgnore == Character)
-				return true;
-		}
-
-		return false;
-	}
-
-private:
 	static RefObject<Transferable> GetAssignable(unsigned long long Argument);
 
 private:
@@ -39,5 +28,5 @@ private:
 	List<RefObject<Arithmetic>> Arguments;
 
 private:
-	static constexpr const char* Ignorables = "\t ";
+	static constexpr Skippable Ignorables = Skippable("\t ");
 };

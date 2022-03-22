@@ -25,11 +25,7 @@ void FunctionCall::Parse(EnviromentMap& Enviroment, const char* Expression)
 	const char* Opening;
 	const char* Closing;
 
-	for (; *Expression; Expression++)
-	{
-		if (!IsIgnorable(*Expression))
-			break;
-	}
+	Expression = Ignorables.Skip(Expression);
 
 	Opening = strchr(Expression, '(');
 	Closing = strrchr(Opening, ')');
