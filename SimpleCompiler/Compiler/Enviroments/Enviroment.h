@@ -22,6 +22,9 @@ public:
 	virtual void AddVariable(RefObject<Variable> Element);
 	virtual RefObject<Variable> GetVariable(const char* Name, unsigned long long Length = 0) const;
 
+public:
+	static unsigned long EstimateSubEnviromentSize(const char* Expression);
+
 protected:
 	static List<char> ExtractSubEnviroment(const char* Enviroment, unsigned long long* Length);
 

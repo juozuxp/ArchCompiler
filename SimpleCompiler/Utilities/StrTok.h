@@ -97,7 +97,7 @@ public:
 			{
 			}
 
-			constexpr Commitable(const CommmitIterator* Parent) : Parent(Parent)
+			constexpr Commitable(CommmitIterator* Parent) : Parent(Parent)
 			{
 			}
 
@@ -112,8 +112,13 @@ public:
 				Parent->CommitToken();
 			}
 
+			constexpr void SkipFor(unsigned long long Length) const
+			{
+				Parent->SkipLength(Length);
+			}
+
 		private:
-			const CommmitIterator* Parent = 0;
+			CommmitIterator* Parent = 0;
 
 		private:
 			friend class CommmitIterator;
@@ -136,7 +141,7 @@ public:
 			return operator++();
 		}
 
-		Commitable operator*() const
+		Commitable operator*()
 		{
 			return Commitable(this);
 		}
@@ -152,9 +157,15 @@ public:
 		}
 
 	private:
-		constexpr void CommitToken() const
+		constexpr void CommitToken()
 		{
 			*(LastToken - 1) = '\0';
+		}
+
+		constexpr void SkipLength(unsigned long long Length)
+		{
+			Token += Length;
+			LastToken = 0;
 		}
 
 		inline void ExtractNextToken()

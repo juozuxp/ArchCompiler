@@ -45,7 +45,10 @@ void EnviromentMap::Parse(const char* Expression, RefObject<Enviroment> Current)
 		RefObject<ParserElement> Object;
 
 		if (Conditional::IsConditional(Token.GetToken()))
+		{
+			Token.SkipFor(Conditional::ExpressionSize(Token.GetToken()));
 			continue;
+		}
 
 		Token.CommitToken();
 

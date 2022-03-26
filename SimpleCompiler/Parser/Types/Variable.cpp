@@ -38,7 +38,7 @@ List<char> Variable::ExtractName(const char* Expression)
 	List<char> Name = List<char>(10);
 
 	Expression = NonNameChar.Skip(Expression);
-	for (; NonNameChar.IsSkippable(*Expression); Expression++)
+	for (; !NonNameChar.IsSkippable(*Expression); Expression++)
 		Name.Add(*Expression);
 
 	Name.Add('\0');

@@ -16,6 +16,33 @@ void Enviroment::AddVariable(RefObject<Variable> Element)
 	Variables.Add(VarName, strlen(VarName), Element);
 }
 
+unsigned long Enviroment::EstimateSubEnviromentSize(const char* Expression)
+{
+	const char* RunEnviroment = Expression;
+	while (*RunEnviroment)
+	{
+		if (*RunEnviroment != '\t')
+			break;
+
+		for (RunEnviroment++; *RunEnviroment; RunEnviroment++)
+		{
+			if (*RunEnviroment != '\t')
+				break;
+		}
+
+		for (; *RunEnviroment; RunEnviroment++)
+		{
+			if (*RunEnviroment == ';' || *RunEnviroment == '\t')
+			{
+				RunEnviroment++;
+				break;
+			}
+		}
+	}
+
+	return RunEnviroment - Expression;
+}
+
 List<char> Enviroment::ExtractSubEnviroment(const char* Enviroment, unsigned long long* Length)
 {
 	List<char> Evaluated = List<char>(0);

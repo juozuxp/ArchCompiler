@@ -25,7 +25,7 @@ int main()
 							 "	ulong Another = 10000000000000;\n"
 							 "	uint Variable = Another - Type + Hello;"
 							 "	if (nope)"
-							 "	Hello = Hello + Type + Another + Variable;"
+							 "		Hello = Hello + Type + Another + Variable;"
 							 "\n"
 							 "uint Test(uint Hello, uint World, uint Test, uint Yes)"
 							 "	uint This_was_a_test = 10;"
