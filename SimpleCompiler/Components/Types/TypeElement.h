@@ -1,5 +1,6 @@
 #pragma once
 #include "../../Utilities/List.h"
+#include "../../Utilities/RefObject.h"
 
 class TypeElement
 {
@@ -28,8 +29,5 @@ public:
 	{
 	}
 
-	virtual unsigned long long Parse(class EnviromentMap& Enviroment, const char* Expression)
-	{
-		return 0;
-	}
+	virtual unsigned long long Parse(RefObject<class EnviromentMap> Enviroment, const char* Expression);
 };

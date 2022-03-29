@@ -1,10 +1,10 @@
 #include "Variable.h"
 #include "../../Utilities/SimpleUtilities.h"
-#include "../../Compiler/Enviroments/EnviromentMap.h"
+#include "../Enviroments/EnviromentMap.h"
 #include "Arithmetic.h"
 #include "../../GlobalInfo/VariableTypes.h"
 
-Variable::Variable(const char* Expression) : ParserElement()
+Variable::Variable(const char* Expression) : TypeElement()
 {
 	const VariableType* Variable;
 	

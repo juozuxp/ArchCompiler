@@ -1,7 +1,7 @@
 #include "Function.h"
 #include "../../GlobalInfo/VariableTypes.h"
 #include "../../Utilities/StrTok.h"
-#include "../../Compiler/Enviroments/EnviromentMap.h"
+#include "../Enviroments/EnviromentMap.h"
 #include "../../Compiler/CompileMap.h"
 #include "Argument.h"
 

@@ -171,8 +171,8 @@ public:
 
 	void Compile(class CompileMap& Enviroment);
 
-	unsigned long long Parse(class EnviromentMap& Enviroment, const char* Expression);
-	unsigned long long Parse(class EnviromentMap& Enviroment, const char* Expression, RefObject<Transferable> AssignTo);
+	unsigned long long Parse(RefObject<EnviromentMap> Enviroment, const char* Expression);
+	unsigned long long Parse(RefObject<EnviromentMap> Enviroment, const char* Expression, RefObject<Transferable> AssignTo);
 
 private:
 	RefObject<Operand> EvaluateArthmetic(class EnviromentMap& Enviroment, const char* Expression);

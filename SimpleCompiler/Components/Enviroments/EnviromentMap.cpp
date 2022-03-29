@@ -1,14 +1,14 @@
 #include "EnviromentMap.h"
-#include "../CompileMap.h"
+#include "../../Compiler/CompileMap.h"
 #include "../../Utilities/StrTok.h"
-#include "../../Parser/Types/FunctionCall.h"
-#include "../../Parser/Types/LocalVariable.h"
-#include "../../Parser/Types/Conditional.h"
+#include "../Types/FunctionCall.h"
+#include "../Types/LocalVariable.h"
+#include "../Types/Conditional.h"
 
 void EnviromentMap::AddVariable(RefObject<Variable> Element)
 {
 	AddVariableNoCompile(Element);
-	AddParsed(Element.Cast<ParserElement>());
+	AddParsed(Element.Cast<TypeElement>());
 }
 
 void EnviromentMap::AddVariableNoCompile(RefObject<Variable> Element)
@@ -33,7 +33,7 @@ RefObject<Variable> EnviromentMap::GetVariable(const char* Name, unsigned long l
 	return Variables.GetByIndex(Index);
 }
 
-void EnviromentMap::AddParsed(RefObject<ParserElement> Element)
+void EnviromentMap::AddParsed(RefObject<TypeElement> Element)
 {
 	ParseElements.Add(Element);
 }
@@ -46,7 +46,7 @@ void EnviromentMap::Parse(const char* Expression, RefObject<Enviroment> Current)
 		{
 			RefObject<Conditional> Condition = RefObject<Conditional>(Conditional());
 
-			AddParsed(Condition.Cast<ParserElement>());
+			AddParsed(Condition.Cast<TypeElement>());
 
 			Condition->Parse(*this, Token.GetToken());
 
@@ -68,7 +68,7 @@ void EnviromentMap::Parse(const char* Expression, RefObject<Enviroment> Current)
 		{
 			RefObject<Arithmetic> Expression = RefObject<Arithmetic>(Arithmetic());
 
-			AddParsed(Expression.Cast<ParserElement>());
+			AddParsed(Expression.Cast<TypeElement>());
 
 			Expression->Parse(*this, Token.GetToken());
 		}
@@ -76,7 +76,7 @@ void EnviromentMap::Parse(const char* Expression, RefObject<Enviroment> Current)
 		{
 			RefObject<FunctionCall> Expression = RefObject<FunctionCall>(FunctionCall());
 
-			AddParsed(Expression.Cast<ParserElement>());
+			AddParsed(Expression.Cast<TypeElement>());
 
 			Expression->Parse(*this, Token.GetToken());
 		}
@@ -85,14 +85,14 @@ void EnviromentMap::Parse(const char* Expression, RefObject<Enviroment> Current)
 
 void EnviromentMap::Compile(CompileMap& Enviroment)
 {
-	for (RefObject<ParserElement> Element : ParseElements)
+	for (RefObject<TypeElement> Element : ParseElements)
 		Element->Compile(Enviroment);
 }
 
 unsigned short EnviromentMap::EstimateRegisterUsage() const
 {
 	unsigned short Mask = 0;
-	for (RefObject<ParserElement> Element : ParseElements)
+	for (RefObject<TypeElement> Element : ParseElements)
 		Mask |= Element->GetRegisterMask();
 
 	return Mask;
@@ -102,7 +102,7 @@ unsigned long long EnviromentMap::EstimateStackSize() const
 {
 	unsigned long long StackSize = 0;
 	unsigned long long CallingStackSize = 0;
-	for (RefObject<ParserElement> Element : ParseElements)
+	for (RefObject<TypeElement> Element : ParseElements)
 	{
 		unsigned long long CallingStack;
 

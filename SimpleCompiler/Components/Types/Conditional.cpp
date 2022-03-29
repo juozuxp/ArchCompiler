@@ -1,9 +1,46 @@
 #include "Conditional.h"
 #include <string.h>
-#include "../../Compiler/Enviroments/Enviroment.h"
+#include "../Enviroments/Enviroment.h"
 #include "../Transferable/TransferRegister.h"
+#include "../Enviroments/EnviromentMap.h"
+#include "../../Compiler/CompileMap.h"
 
-unsigned long long Conditional::Parse(EnviromentMap& Enviroment, const char* Expression)
+#define SHELL_RELATIVITY MainRelativity
+
+#include "../../Utilities/x86_x64Shell.h"
+
+void Conditional::Compile(CompileMap& Enviroment)
+{
+	unsigned long JumpLocation;
+	unsigned long MainRelativity;
+
+	Condition->Compile(Enviroment);
+
+	JumpLocation = 0;
+	MainRelativity = 0;
+	unsigned char Conditional[] =
+	{
+		PFX_REXW, TESTD_RM_R(LR_R(RAX, RAX)),
+		R_CP(JumpLocation, JE_RD(0))
+	};
+
+	JumpLocation += Enviroment.GetRelativeLocation();
+	Enviroment.AddCode(Conditional, sizeof(Conditional));
+
+	SubEnviroment->Compile(Enviroment);
+
+	MainRelativity = 0;
+	unsigned char JumpPatch[] =
+	{
+		JE_RD(Enviroment.GetRelativeLocation() - (JumpLocation + MainRelativity))
+	};
+
+	Enviroment.PatchCode(JumpLocation, JumpPatch, sizeof(JumpPatch));
+}
+
+#undef RAX
+
+unsigned long long Conditional::Parse(RefObject<EnviromentMap> Enviroment, const char* Expression)
 {
 	List<char> SubString;
 
@@ -12,8 +49,8 @@ unsigned long long Conditional::Parse(EnviromentMap& Enviroment, const char* Exp
 	const char* StartIf;
 	const char* EndIf;
 
-	EndIf = strrchr(Expression, ')') + 1;
 	StartIf = strchr(Expression, '(');
+	EndIf = Encapsulable.GetEncapEnd(StartIf) + 1;
 
 	SubString.Add(StartIf + 1, EndIf - StartIf - 2);
 	SubString.Add('\0');
@@ -21,13 +58,10 @@ unsigned long long Conditional::Parse(EnviromentMap& Enviroment, const char* Exp
 	Condition = RefObject<Arithmetic>(Arithmetic());
 	Condition->Parse(Enviroment, SubString, RefObject<TransferRegister>(TransferRegister(RegisterType::RAX)).Cast<Transferable>());
 
-	Enviroment::ExtractSubEnviroment(EndIf, &Length);
-	return (EndIf - Expression) + Length;
-}
+	SubEnviroment = RefObject<EnviromentMap>(EnviromentMap(Enviroment.Cast<::Enviroment>()));
+	SubEnviroment->Parse(Enviroment::ExtractSubEnviroment(EndIf, &Length), SubEnviroment.Cast<::Enviroment>());
 
-void Conditional::Compile(CompileMap& Enviroment)
-{
-	Condition->Compile(Enviroment);
+	return (EndIf - Expression) + Length;
 }
 
 bool Conditional::IsConditional(const char* Expression)

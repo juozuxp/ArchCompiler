@@ -29,7 +29,22 @@ public:
 		CompiledCode.Add(Code, Size);
 	}
 
-	inline List<unsigned char> GetCode()
+	inline void PatchCode(unsigned long long Location, unsigned char Code)
+	{
+		CompiledCode[Location] = Code;
+	}
+
+	inline void PatchCode(unsigned long long Location, List<unsigned char> Code)
+	{
+		CompiledCode.Set(Location, Code, Code.GetCount());
+	}
+
+	inline void PatchCode(unsigned long long Location, const unsigned char* Code, unsigned long long Size)
+	{
+		CompiledCode.Set(Location, Code, Size);
+	}
+
+	inline List<unsigned char>& GetCode()
 	{
 		return CompiledCode;
 	}

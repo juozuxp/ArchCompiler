@@ -213,7 +213,7 @@ public:
 		if ((ArrayNum - Index) < Count)
 			Count = ArrayNum - Index;
 
-		for (unsigned long i = Index; i < (Index + Count); i++)
+		for (unsigned long long i = Index; i < (Index + Count); i++)
 			Array[i].~Type();
 
 		ArrayNum -= Count;
@@ -224,7 +224,7 @@ public:
 
 	inline void Flush()
 	{
-		for (unsigned long i = 0; i < ArrayNum; i++)
+		for (unsigned long long i = 0; i < ArrayNum; i++)
 			Array[i].~Type();
 
 		memset(Array, 0, sizeof(Type) * ArrayNum);
@@ -240,6 +240,12 @@ public:
 		memset(Array + NewSize, 0, (ArrayNum - NewSize) * sizeof(Type));
 
 		ArrayNum = NewSize;
+	}
+
+	inline void Set(unsigned long long Index, const Type* Array, unsigned long long Count)
+	{
+		for (unsigned long long i = 0; i < Count; i++)
+			this->Array[Index + i] = Array[i];
 	}
 
 protected:

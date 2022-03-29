@@ -1,5 +1,5 @@
 #include "FileEnviromentMap.h"
-#include "../CompileMap.h"
+#include "../../Compiler/CompileMap.h"
 
 void FileEnviromentMap::AddFunction(RefObject<Function> Function)
 {

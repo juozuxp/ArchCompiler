@@ -1,5 +1,5 @@
 #include "Arithmetic.h"
-#include "../../Compiler/Enviroments/EnviromentMap.h"
+#include "../Enviroments/EnviromentMap.h"
 #include "../../Compiler/CompileMap.h"
 #include "Variable.h"
 #include "../Transferable/TransferVariable.h"
@@ -109,7 +109,7 @@ void Arithmetic::Subtraction::Compile(CompileMap& Enviroment, RegisterType Sourc
 	}
 }
 
-unsigned long long Arithmetic::Parse(EnviromentMap& Enviroment, const char* Expression)
+unsigned long long Arithmetic::Parse(RefObject<EnviromentMap> Enviroment, const char* Expression)
 {
 	List<char> Deflate = Deflater.Deflate(Expression);
 
@@ -120,17 +120,17 @@ unsigned long long Arithmetic::Parse(EnviromentMap& Enviroment, const char* Expr
 			break;
 	}
 
-	AssignTo = RefObject<TransferVariable>(TransferVariable(Enviroment.GetVariable(Deflate, EqualsIdx))).Cast<Transferable>();
+	AssignTo = RefObject<TransferVariable>(TransferVariable(Enviroment->GetVariable(Deflate, EqualsIdx))).Cast<Transferable>();
 
-	Origin = EvaluateArthmetic(Enviroment, Deflate + EqualsIdx + 1);
+	Origin = EvaluateArthmetic(*Enviroment, Deflate + EqualsIdx + 1);
 
 	return 0;
 }
 
-unsigned long long Arithmetic::Parse(class EnviromentMap& Enviroment, const char* Expression, RefObject<Transferable> AssignTo)
+unsigned long long Arithmetic::Parse(RefObject<EnviromentMap> Enviroment, const char* Expression, RefObject<Transferable> AssignTo)
 {
 	this->AssignTo = AssignTo;
-	this->Origin = EvaluateArthmetic(Enviroment, Deflater.Deflate(Expression));
+	this->Origin = EvaluateArthmetic(*Enviroment, Deflater.Deflate(Expression));
 
 	return 0;
 }

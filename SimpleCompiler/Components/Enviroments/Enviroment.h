@@ -1,7 +1,7 @@
 #pragma once
 #include "../../Utilities/RefObject.h"
 #include "../../Utilities/HashMap.h"
-#include "../../Parser/Types/Variable.h"
+#include "../Types/Variable.h"
 
 class Enviroment
 {

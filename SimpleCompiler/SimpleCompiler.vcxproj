@@ -18,6 +18,79 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Compiler\CompileMap.h" />
+    <ClInclude Include="Compiler\Compiler.h" />
+    <ClInclude Include="Compiler\Instructions\Instruction.h" />
+    <ClInclude Include="Compiler\Instructions\InstructionBuilder.h" />
+    <ClInclude Include="Compiler\Instructions\Operands\Memory.h" />
+    <ClInclude Include="Compiler\Instructions\Operands\Operand.h" />
+    <ClInclude Include="Compiler\Instructions\Operands\Register.h" />
+    <ClInclude Include="Compiler\Registers.h" />
+    <ClInclude Include="Compiler\TempVariableMap.h" />
+    <ClInclude Include="Components\Enviroments\Enviroment.h" />
+    <ClInclude Include="Components\Enviroments\EnviromentMap.h" />
+    <ClInclude Include="Components\Enviroments\FileEnviromentMap.h" />
+    <ClInclude Include="Components\Transferable\Transferable.h" />
+    <ClInclude Include="Components\Transferable\TransferDynStack.h" />
+    <ClInclude Include="Components\Transferable\TransferRegister.h" />
+    <ClInclude Include="Components\Transferable\TransferStack.h" />
+    <ClInclude Include="Components\Transferable\TransferValue.h" />
+    <ClInclude Include="Components\Transferable\TransferVariable.h" />
+    <ClInclude Include="Components\Types\Argument.h" />
+    <ClInclude Include="Components\Types\Arithmetic.h" />
+    <ClInclude Include="Components\Types\Conditional.h" />
+    <ClInclude Include="Components\Types\Function.h" />
+    <ClInclude Include="Components\Types\FunctionCall.h" />
+    <ClInclude Include="Components\Types\LocalVariable.h" />
+    <ClInclude Include="Components\Types\TypeElement.h" />
+    <ClInclude Include="Components\Types\Variable.h" />
+    <ClInclude Include="Utilities\Encapsulable.h" />
+    <ClInclude Include="GlobalInfo\RegisterTypes.h" />
+    <ClInclude Include="GlobalInfo\VariableTypes.h" />
+    <ClInclude Include="Parser\SyntaxParser.h" />
+    <ClInclude Include="Utilities\ArrayBase.h" />
+    <ClInclude Include="Utilities\Deflatable.h" />
+    <ClInclude Include="Utilities\HashMap.h" />
+    <ClInclude Include="Utilities\List.h" />
+    <ClInclude Include="Utilities\ManObject.h" />
+    <ClInclude Include="Utilities\RefObject.h" />
+    <ClInclude Include="Utilities\SimpleUtilities.h" />
+    <ClInclude Include="Utilities\Skippable.h" />
+    <ClInclude Include="Utilities\StrTok.h" />
+    <ClInclude Include="Utilities\x86_x64Shell.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Compiler\CompileMap.cpp" />
+    <ClCompile Include="Compiler\Compiler.cpp" />
+    <ClCompile Include="Compiler\Instructions\Instruction.cpp" />
+    <ClCompile Include="Compiler\Instructions\InstructionBuilder.cpp" />
+    <ClCompile Include="Compiler\Instructions\Operands\Memory.cpp" />
+    <ClCompile Include="Compiler\Instructions\Operands\Operand.cpp" />
+    <ClCompile Include="Compiler\Instructions\Operands\Register.cpp" />
+    <ClCompile Include="Compiler\Registers.cpp" />
+    <ClCompile Include="Compiler\TempVariableMap.cpp" />
+    <ClCompile Include="Components\Enviroments\Enviroment.cpp" />
+    <ClCompile Include="Components\Enviroments\EnviromentMap.cpp" />
+    <ClCompile Include="Components\Enviroments\FileEnviromentMap.cpp" />
+    <ClCompile Include="Components\Transferable\Transferable.cpp" />
+    <ClCompile Include="Components\Transferable\TransferDynStack.cpp" />
+    <ClCompile Include="Components\Transferable\TransferRegister.cpp" />
+    <ClCompile Include="Components\Transferable\TransferStack.cpp" />
+    <ClCompile Include="Components\Transferable\TransferValue.cpp" />
+    <ClCompile Include="Components\Transferable\TransferVariable.cpp" />
+    <ClCompile Include="Components\Types\Argument.cpp" />
+    <ClCompile Include="Components\Types\Arithmetic.cpp" />
+    <ClCompile Include="Components\Types\Conditional.cpp" />
+    <ClCompile Include="Components\Types\Function.cpp" />
+    <ClCompile Include="Components\Types\FunctionCall.cpp" />
+    <ClCompile Include="Components\Types\LocalVariable.cpp" />
+    <ClCompile Include="Components\Types\TypeElement.cpp" />
+    <ClCompile Include="Components\Types\Variable.cpp" />
+    <ClCompile Include="GlobalInfo\VariableTypes.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Parser\SyntaxParser.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -138,78 +211,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Compiler\Instructions\InstructionBuilder.cpp" />
-    <ClCompile Include="Compiler\Instructions\Instruction.cpp" />
-    <ClCompile Include="Compiler\Instructions\Operands\Operand.cpp" />
-    <ClCompile Include="Compiler\Instructions\Operands\Memory.cpp" />
-    <ClCompile Include="Parser\Types\Conditional.cpp" />
-    <ClCompile Include="Parser\Transferable\TransferDynStack.cpp" />
-    <ClCompile Include="Parser\Types\Argument.cpp" />
-    <ClCompile Include="Compiler\Compiler.cpp" />
-    <ClCompile Include="Parser\Transferable\TransferStack.cpp" />
-    <ClCompile Include="Compiler\Enviroments\Enviroment.cpp" />
-    <ClCompile Include="Parser\Types\FunctionCall.cpp" />
-    <ClCompile Include="Parser\Transferable\TransferVariable.cpp" />
-    <ClCompile Include="Parser\Types\Arithmetic.cpp" />
-    <ClCompile Include="Parser\Transferable\Transferable.cpp" />
-    <ClCompile Include="Compiler\CompileMap.cpp" />
-    <ClCompile Include="Compiler\Enviroments\EnviromentMap.cpp" />
-    <ClCompile Include="Compiler\Enviroments\FileEnviromentMap.cpp" />
-    <ClCompile Include="Parser\Types\Function.cpp" />
-    <ClCompile Include="Parser\Types\LocalVariable.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Parser\Types\ParserElement.cpp" />
-    <ClCompile Include="Compiler\Registers.cpp" />
-    <ClCompile Include="Parser\Types\Variable.cpp" />
-    <ClCompile Include="GlobalInfo\VariableTypes.cpp" />
-    <ClCompile Include="Parser\Transferable\TransferRegister.cpp" />
-    <ClCompile Include="Parser\SyntaxParser.cpp" />
-    <ClCompile Include="Compiler\TempVariableMap.cpp" />
-    <ClCompile Include="Parser\Transferable\TransferValue.cpp" />
-    <ClCompile Include="Compiler\Instructions\Operands\Register.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Compiler\Instructions\InstructionBuilder.h" />
-    <ClInclude Include="Compiler\Instructions\Instruction.h" />
-    <ClInclude Include="Compiler\Instructions\Operands\Operand.h" />
-    <ClInclude Include="Compiler\Instructions\Operands\Memory.h" />
-    <ClInclude Include="Parser\Types\Conditional.h" />
-    <ClInclude Include="Parser\Transferable\TransferDynStack.h" />
-    <ClInclude Include="Parser\Types\Argument.h" />
-    <ClInclude Include="Compiler\Compiler.h" />
-    <ClInclude Include="Parser\Transferable\TransferStack.h" />
-    <ClInclude Include="Compiler\Enviroments\Enviroment.h" />
-    <ClInclude Include="Parser\Types\FunctionCall.h" />
-    <ClInclude Include="Parser\Transferable\TransferVariable.h" />
-    <ClInclude Include="GlobalInfo\RegisterTypes.h" />
-    <ClInclude Include="Parser\Types\Arithmetic.h" />
-    <ClInclude Include="Parser\Transferable\TransferRegister.h" />
-    <ClInclude Include="Parser\SyntaxParser.h" />
-    <ClInclude Include="Compiler\TempVariableMap.h" />
-    <ClInclude Include="Parser\Transferable\TransferValue.h" />
-    <ClInclude Include="Compiler\Instructions\Operands\Register.h" />
-    <ClInclude Include="Utilities\ArrayBase.h" />
-    <ClInclude Include="Parser\Transferable\Transferable.h" />
-    <ClInclude Include="Compiler\CompileMap.h" />
-    <ClInclude Include="Utilities\Deflatable.h" />
-    <ClInclude Include="Compiler\Enviroments\EnviromentMap.h" />
-    <ClInclude Include="Compiler\Enviroments\FileEnviromentMap.h" />
-    <ClInclude Include="Parser\Types\Function.h" />
-    <ClInclude Include="Utilities\HashMap.h" />
-    <ClInclude Include="Utilities\List.h" />
-    <ClInclude Include="Parser\Types\LocalVariable.h" />
-    <ClInclude Include="Utilities\ManObject.h" />
-    <ClInclude Include="Parser\Types\ParserElement.h" />
-    <ClInclude Include="Utilities\RefObject.h" />
-    <ClInclude Include="Compiler\Registers.h" />
-    <ClInclude Include="Utilities\SimpleUtilities.h" />
-    <ClInclude Include="Parser\Types\Variable.h" />
-    <ClInclude Include="GlobalInfo\VariableTypes.h" />
-    <ClInclude Include="Utilities\Skippable.h" />
-    <ClInclude Include="Utilities\StrTok.h" />
-    <ClInclude Include="Utilities\x86_x64Shell.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

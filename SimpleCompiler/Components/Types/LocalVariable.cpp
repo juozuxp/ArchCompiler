@@ -1,6 +1,6 @@
 #include "LocalVariable.h"
 #include "../../Utilities/SimpleUtilities.h"
-#include "../../Compiler/Enviroments/EnviromentMap.h"
+#include "../Enviroments/EnviromentMap.h"
 #include "../../Compiler/CompileMap.h"
 #include "Arithmetic.h"
 #include "../../Utilities/x86_x64Shell.h"

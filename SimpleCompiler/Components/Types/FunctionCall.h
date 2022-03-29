@@ -1,11 +1,11 @@
 #pragma once
-#include "ParserElement.h"
+#include "TypeElement.h"
 #include "../Transferable/Transferable.h"
 #include "Arithmetic.h"
 #include "Variable.h"
 #include "../../Utilities/Skippable.h"
 
-class FunctionCall : ParserElement
+class FunctionCall : TypeElement
 {
 public:
 	constexpr FunctionCall()
@@ -15,7 +15,7 @@ public:
 public:
 	unsigned long long GetCallingStackSize();
 	void Compile(class CompileMap& Enviroment);
-	unsigned long long Parse(class EnviromentMap& Enviroment, const char* Expression);
+	unsigned long long Parse(RefObject<EnviromentMap> Enviroment, const char* Expression);
 
 public:
 	static bool IsFunctionCall(const char* Expression);

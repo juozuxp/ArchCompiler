@@ -1,5 +1,5 @@
 #include "FunctionCall.h"
-#include "../../Compiler/Enviroments/EnviromentMap.h"
+#include "../Enviroments/EnviromentMap.h"
 #include "../../Utilities/StrTok.h"
 #include "../Transferable/Transferable.h"
 #include "../../GlobalInfo/RegisterTypes.h"
@@ -20,7 +20,7 @@ unsigned long long FunctionCall::GetCallingStackSize()
 	return (Arguments.GetCount() * 0x8) < 0x20 ? 0x20 : (Arguments.GetCount() * 0x8);
 }
 
-unsigned long long FunctionCall::Parse(EnviromentMap& Enviroment, const char* Expression)
+unsigned long long FunctionCall::Parse(RefObject<EnviromentMap> Enviroment, const char* Expression)
 {
 	const char* Opening;
 	const char* Closing;
@@ -30,7 +30,7 @@ unsigned long long FunctionCall::Parse(EnviromentMap& Enviroment, const char* Ex
 	Opening = strchr(Expression, '(');
 	Closing = strrchr(Opening, ')');
 
-	Function = Enviroment.GetVariable(Expression, Opening - Expression);
+	Function = Enviroment->GetVariable(Expression, Opening - Expression);
 	for (char* Token : StrTok(Opening + 1, Closing - (Opening + 1), ","))
 	{
 		RefObject<Arithmetic> Argument;
