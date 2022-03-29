@@ -1,10 +1,10 @@
 #pragma once
 #include "../../Utilities/List.h"
 
-class ParserElement
+class TypeElement
 {
 public:
-	constexpr ParserElement()
+	constexpr TypeElement()
 	{
 	}
 
@@ -28,7 +28,8 @@ public:
 	{
 	}
 
-	virtual void Parse(class EnviromentMap& Enviroment, const char* Expression)
+	virtual unsigned long long Parse(class EnviromentMap& Enviroment, const char* Expression)
 	{
+		return 0;
 	}
 };

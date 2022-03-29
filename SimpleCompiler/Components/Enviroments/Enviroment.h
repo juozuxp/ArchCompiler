@@ -24,8 +24,6 @@ public:
 
 public:
 	static unsigned long EstimateSubEnviromentSize(const char* Expression);
-
-protected:
 	static List<char> ExtractSubEnviroment(const char* Enviroment, unsigned long long* Length);
 
 protected:

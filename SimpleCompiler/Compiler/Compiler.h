@@ -1,5 +1,6 @@
 #pragma once
-#include "Enviroments/FileEnviromentMap.h"
+#include "../Components/Enviroments/FileEnviromentMap.h"
+#include "../Utilities/List.h"
 
 class Compiler
 {

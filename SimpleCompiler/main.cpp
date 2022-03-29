@@ -24,7 +24,7 @@ int main()
 							 "	Shlong(10, false, Type);"
 							 "	ulong Another = 10000000000000;\n"
 							 "	uint Variable = Another - Type + Hello;"
-							 "	if (nope)"
+							 "	if (Hello)"
 							 "		Hello = Hello + Type + Another + Variable;"
 							 "\n"
 							 "uint Test(uint Hello, uint World, uint Test, uint Yes)"

@@ -1,7 +1,7 @@
 #pragma once
 #include "EnviromentMap.h"
 #include "Enviroment.h"
-#include "../../Parser/Types/Function.h"
+#include "../Types/Function.h"
 
 class FileEnviromentMap : public Enviroment
 {

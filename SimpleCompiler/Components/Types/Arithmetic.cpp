@@ -109,7 +109,7 @@ void Arithmetic::Subtraction::Compile(CompileMap& Enviroment, RegisterType Sourc
 	}
 }
 
-void Arithmetic::Parse(EnviromentMap& Enviroment, const char* Expression)
+unsigned long long Arithmetic::Parse(EnviromentMap& Enviroment, const char* Expression)
 {
 	List<char> Deflate = Deflater.Deflate(Expression);
 
@@ -123,12 +123,16 @@ void Arithmetic::Parse(EnviromentMap& Enviroment, const char* Expression)
 	AssignTo = RefObject<TransferVariable>(TransferVariable(Enviroment.GetVariable(Deflate, EqualsIdx))).Cast<Transferable>();
 
 	Origin = EvaluateArthmetic(Enviroment, Deflate + EqualsIdx + 1);
+
+	return 0;
 }
 
-void Arithmetic::Parse(class EnviromentMap& Enviroment, const char* Expression, RefObject<Transferable> AssignTo)
+unsigned long long Arithmetic::Parse(class EnviromentMap& Enviroment, const char* Expression, RefObject<Transferable> AssignTo)
 {
 	this->AssignTo = AssignTo;
 	this->Origin = EvaluateArthmetic(Enviroment, Deflater.Deflate(Expression));
+
+	return 0;
 }
 
 bool Arithmetic::IsArtimetic(const char* Expression)

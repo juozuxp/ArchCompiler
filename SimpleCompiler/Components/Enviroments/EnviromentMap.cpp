@@ -42,11 +42,15 @@ void EnviromentMap::Parse(const char* Expression, RefObject<Enviroment> Current)
 {
 	for (StrTok::CommmitIterator::Commitable Token : StrTok(Expression, ";").GetCommitable())
 	{
-		RefObject<ParserElement> Object;
-
 		if (Conditional::IsConditional(Token.GetToken()))
 		{
-			Token.SkipFor(Conditional::ExpressionSize(Token.GetToken()));
+			RefObject<Conditional> Condition = RefObject<Conditional>(Conditional());
+
+			AddParsed(Condition.Cast<ParserElement>());
+
+			Condition->Parse(*this, Token.GetToken());
+
+			Token.SkipFor(Condition->Parse(*this, Token.GetToken()));
 			continue;
 		}
 

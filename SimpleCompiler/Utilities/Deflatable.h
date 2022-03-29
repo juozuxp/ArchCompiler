@@ -13,7 +13,7 @@ public:
 	}
 
 public:
-	constexpr unsigned long long Deflate(char* String) const
+	constexpr unsigned long long Deflate(char* String, unsigned long long* Deflateload = 0) const
 	{
 		unsigned long long Offset = 0;
 		unsigned long long Length = 0;
@@ -26,33 +26,36 @@ public:
 			*String = String[Offset];
 		}
 
+		if (Deflateload)
+			*Deflateload = Offset;
+		
 		*String = '\0';
 		return Length;
 	}
 
-	inline void Deflate(List<char>& String) const
+	inline void Deflate(List<char>& String, unsigned long long* Deflateload = 0) const
 	{
 		unsigned long long Length;
 
-		Length = Deflate(String.operator char* ());
+		Length = Deflate(String.operator char* (), Deflateload);
 		String.Trim(Length + 1);
 	}
 
-	inline List<char> Deflate(const List<char>& String) const
+	inline List<char> Deflate(const List<char>& String, unsigned long long* Deflateload = 0) const
 	{
 		List<char> Copy = String;
 
-		Deflate(Copy);
+		Deflate(Copy, Deflateload);
 
 		return Copy;
 	}
 
-	inline List<char> Deflate(const char* String) const
+	inline List<char> Deflate(const char* String, unsigned long long* DeflateLoad = 0) const
 	{
 		List<char> Copy = List<char>(0);
 
 		Copy.Add(String, strlen(String) + 1);
-		Deflate(Copy);
+		Deflate(Copy, DeflateLoad);
 
 		return Copy;
 	}

@@ -15,7 +15,7 @@ public:
 public:
 	unsigned long long GetCallingStackSize();
 	void Compile(class CompileMap& Enviroment);
-	void Parse(class EnviromentMap& Enviroment, const char* Expression);
+	unsigned long long Parse(class EnviromentMap& Enviroment, const char* Expression);
 
 public:
 	static bool IsFunctionCall(const char* Expression);

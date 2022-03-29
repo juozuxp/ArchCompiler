@@ -1,9 +1,9 @@
 #pragma once
-#include "ParserElement.h"
+#include "TypeElement.h"
 #include "Arithmetic.h"
 #include "../../Utilities/Skippable.h"
 
-class Variable : public ParserElement
+class Variable : public TypeElement
 {
 public:
 	constexpr Variable()
@@ -21,7 +21,7 @@ public:
 public:
 	unsigned short GetRegisterMask();
 
-	void Parse(class EnviromentMap& Enviroment, const char* Expression);
+	unsigned long long Parse(class EnviromentMap& Enviroment, const char* Expression);
 
 public:
 	virtual void CompileCall(class CompileMap& Enviroment)

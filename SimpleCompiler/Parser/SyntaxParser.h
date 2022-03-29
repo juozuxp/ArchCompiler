@@ -1,6 +1,6 @@
 #pragma once
 #include "../Utilities/RefObject.h"
-#include "../Compiler/Enviroments/FileEnviromentMap.h"
+#include "../Components/Enviroments/FileEnviromentMap.h"
 
 class SyntaxParser
 {

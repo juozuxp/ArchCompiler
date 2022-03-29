@@ -20,7 +20,7 @@ unsigned long long FunctionCall::GetCallingStackSize()
 	return (Arguments.GetCount() * 0x8) < 0x20 ? 0x20 : (Arguments.GetCount() * 0x8);
 }
 
-void FunctionCall::Parse(EnviromentMap& Enviroment, const char* Expression)
+unsigned long long FunctionCall::Parse(EnviromentMap& Enviroment, const char* Expression)
 {
 	const char* Opening;
 	const char* Closing;
@@ -40,6 +40,8 @@ void FunctionCall::Parse(EnviromentMap& Enviroment, const char* Expression)
 
 		Arguments.Add(Argument);
 	}
+
+	return 0;
 }
 
 bool FunctionCall::IsFunctionCall(const char* Expression)

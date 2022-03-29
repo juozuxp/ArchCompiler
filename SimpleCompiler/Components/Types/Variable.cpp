@@ -23,14 +23,16 @@ unsigned short Variable::GetRegisterMask()
 	return Assigner->GetRegisterMask();
 }
 
-void Variable::Parse(EnviromentMap& Enviroment, const char* Expression)
+unsigned long long Variable::Parse(EnviromentMap& Enviroment, const char* Expression)
 {
 	const char* PostDefExpression = strstr(Expression, VariableName);
 	if (!Arithmetic::IsArtimetic(Expression))
-		return;
+		return 0;
 
 	Assigner = RefObject<Arithmetic>(Arithmetic());
 	Assigner->Parse(Enviroment, PostDefExpression);
+
+	return 0;
 }
 
 List<char> Variable::ExtractName(const char* Expression)

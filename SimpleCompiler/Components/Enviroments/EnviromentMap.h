@@ -1,14 +1,14 @@
 #pragma once
 #include "../../Utilities/HashMap.h"
-#include "../../Parser/Types/Variable.h"
-#include "../../Parser/Types/ParserElement.h"
+#include "../Types/Variable.h"
+#include "../Types/TypeElement.h"
 #include "../../Utilities/RefObject.h"
 #include "Enviroment.h"
 
 class EnviromentMap : public Enviroment
 {
 public:
-	inline EnviromentMap(RefObject<Enviroment> Parent) : ParseElements(List<RefObject<ParserElement>>(0)), Parent(Parent)
+	inline EnviromentMap(RefObject<Enviroment> Parent) : Parent(Parent)
 	{
 	}
 
@@ -17,7 +17,7 @@ public:
 	void Parse(const char* Expression, RefObject<Enviroment> Current);
 
 	void AddVariable(RefObject<Variable> Element);
-	void AddParsed(RefObject<ParserElement> Element);
+	void AddParsed(RefObject<TypeElement> Element);
 	void AddVariableNoCompile(RefObject<Variable> Element);
 
 	RefObject<Variable> GetVariable(const char* Name, unsigned long long Length = 0) const;
@@ -34,7 +34,7 @@ public:
 
 public:
 	RefObject<Enviroment> Parent;
-	List<RefObject<ParserElement>> ParseElements;
+	List<RefObject<TypeElement>> ParseElements;
 
 	unsigned long long RelativeLocation;
 };

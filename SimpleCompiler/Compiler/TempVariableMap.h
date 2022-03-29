@@ -1,6 +1,5 @@
 #pragma once
 #include "../GlobalInfo/RegisterTypes.h"
-#include "../Parser/Transferable/Transferable.h"
 #include "../Utilities/RefObject.h"
 
 class TempVariableMap
