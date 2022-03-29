@@ -19,22 +19,14 @@ public:
 	}
 
 public:
-	unsigned short GetRegisterMask();
+	void PreCompile(class CompileMap& Enviroment);
 
-	unsigned long long Parse(class EnviromentMap& Enviroment, const char* Expression);
+	unsigned long long Parse(RefObject<EnviromentMap> Enviroment, const char* Expression);
 
 public:
-	virtual void CompileCall(class CompileMap& Enviroment)
-	{
-	}
-
-	virtual void CompileAssign(class CompileMap& Enviroment, RegisterType Source)
-	{
-	}
-
-	virtual void CompileRetrieve(class CompileMap& Enviroment, RegisterType Source)
-	{
-	}
+	virtual void CompileCall(class CompileMap& Enviroment);
+	virtual void CompileAssign(class CompileMap& Enviroment, RegisterType Source);
+	virtual void CompileRetrieve(class CompileMap& Enviroment, RegisterType Source);
 
 public:
 	static bool IsVariable(const char* Expression);

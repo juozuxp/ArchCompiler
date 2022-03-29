@@ -76,7 +76,7 @@ private:
 	unsigned long long Value = 0;
 };
 
-class Arithmetic : TypeElement
+class Arithmetic : public TypeElement
 {
 private:
 	class Operand
@@ -167,8 +167,7 @@ public:
 	static bool IsArtimetic(const char* Expression);
 
 public:
-	unsigned short GetRegisterMask();
-
+	void PreCompile(class CompileMap& Enviroment);
 	void Compile(class CompileMap& Enviroment);
 
 	unsigned long long Parse(RefObject<EnviromentMap> Enviroment, const char* Expression);

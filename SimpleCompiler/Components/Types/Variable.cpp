@@ -4,6 +4,18 @@
 #include "Arithmetic.h"
 #include "../../GlobalInfo/VariableTypes.h"
 
+void Variable::CompileCall(class CompileMap& Enviroment)
+{
+}
+
+void Variable::CompileAssign(class CompileMap& Enviroment, RegisterType Source)
+{
+}
+
+void Variable::CompileRetrieve(class CompileMap& Enviroment, RegisterType Source)
+{
+}
+
 Variable::Variable(const char* Expression) : TypeElement()
 {
 	const VariableType* Variable;
@@ -15,15 +27,12 @@ Variable::Variable(const char* Expression) : TypeElement()
 	VariableName = ExtractName(Expression + strlen(Variable->GetName()));
 }
 
-unsigned short Variable::GetRegisterMask()
+void Variable::PreCompile(CompileMap& Enviroment)
 {
-	if (!Assigner)
-		return 0;
-
-	return Assigner->GetRegisterMask();
+	Assigner->PreCompile(Enviroment);
 }
 
-unsigned long long Variable::Parse(EnviromentMap& Enviroment, const char* Expression)
+unsigned long long Variable::Parse(RefObject<EnviromentMap> Enviroment, const char* Expression)
 {
 	const char* PostDefExpression = strstr(Expression, VariableName);
 	if (!Arithmetic::IsArtimetic(Expression))

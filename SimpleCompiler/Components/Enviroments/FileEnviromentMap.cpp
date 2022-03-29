@@ -10,7 +10,16 @@ void FileEnviromentMap::AddFunction(RefObject<Function> Function)
 void FileEnviromentMap::Compile(CompileMap& Enviroment)
 {
 	for (RefObject<Function> Function : Functions)
+	{
+		Enviroment.SwitchToPreCompile();
+		Function->PreCompile(Enviroment);
+
+		Enviroment.SwitchToCompile();
 		Function->Compile(Enviroment);
+
+		Enviroment.SwitchToPostCompile();
+		Function->PostCompile(Enviroment);
+	}
 }
 
 void FileEnviromentMap::Parse(const char* Expression, RefObject<Enviroment> Current)

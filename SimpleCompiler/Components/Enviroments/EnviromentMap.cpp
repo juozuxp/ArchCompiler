@@ -38,7 +38,7 @@ void EnviromentMap::AddParsed(RefObject<TypeElement> Element)
 	ParseElements.Add(Element);
 }
 
-void EnviromentMap::Parse(const char* Expression, RefObject<Enviroment> Current)
+void EnviromentMap::Parse(const char* Expression, RefObject<Enviroment> This)
 {
 	for (StrTok::CommmitIterator::Commitable Token : StrTok(Expression, ";").GetCommitable())
 	{
@@ -48,9 +48,9 @@ void EnviromentMap::Parse(const char* Expression, RefObject<Enviroment> Current)
 
 			AddParsed(Condition.Cast<TypeElement>());
 
-			Condition->Parse(*this, Token.GetToken());
+			Condition->Parse(This.Cast<EnviromentMap>(), Token.GetToken());
 
-			Token.SkipFor(Condition->Parse(*this, Token.GetToken()));
+			Token.SkipFor(Condition->Parse(This.Cast<EnviromentMap>(), Token.GetToken()));
 			continue;
 		}
 
@@ -62,7 +62,7 @@ void EnviromentMap::Parse(const char* Expression, RefObject<Enviroment> Current)
 
 			AddVariable(Variable.Cast<::Variable>());
 
-			Variable->Parse(*this, Token.GetToken());
+			Variable->Parse(This.Cast<EnviromentMap>(), Token.GetToken());
 		}
 		else if (Arithmetic::IsArtimetic(Token.GetToken()))
 		{
@@ -70,7 +70,7 @@ void EnviromentMap::Parse(const char* Expression, RefObject<Enviroment> Current)
 
 			AddParsed(Expression.Cast<TypeElement>());
 
-			Expression->Parse(*this, Token.GetToken());
+			Expression->Parse(This.Cast<EnviromentMap>(), Token.GetToken());
 		}
 		else if (FunctionCall::IsFunctionCall(Token.GetToken()))
 		{
@@ -78,8 +78,17 @@ void EnviromentMap::Parse(const char* Expression, RefObject<Enviroment> Current)
 
 			AddParsed(Expression.Cast<TypeElement>());
 
-			Expression->Parse(*this, Token.GetToken());
+			Expression->Parse(This.Cast<EnviromentMap>(), Token.GetToken());
 		}
+	}
+}
+
+void EnviromentMap::PreCompile(CompileMap& Enviroment)
+{
+	for (RefObject<TypeElement> Element : ParseElements)
+	{
+		Enviroment.ResetTempStack();
+		Element->PreCompile(Enviroment);
 	}
 }
 
@@ -87,33 +96,4 @@ void EnviromentMap::Compile(CompileMap& Enviroment)
 {
 	for (RefObject<TypeElement> Element : ParseElements)
 		Element->Compile(Enviroment);
-}
-
-unsigned short EnviromentMap::EstimateRegisterUsage() const
-{
-	unsigned short Mask = 0;
-	for (RefObject<TypeElement> Element : ParseElements)
-		Mask |= Element->GetRegisterMask();
-
-	return Mask;
-}
-
-unsigned long long EnviromentMap::EstimateStackSize() const
-{
-	unsigned long long StackSize = 0;
-	unsigned long long CallingStackSize = 0;
-	for (RefObject<TypeElement> Element : ParseElements)
-	{
-		unsigned long long CallingStack;
-
-		StackSize += Element->GetStackSize();
-		CallingStack = Element->GetCallingStackSize();
-
-		if (CallingStackSize < CallingStack)
-			CallingStackSize = CallingStack;
-	}
-
-	StackSize += CallingStackSize;
-
-	return StackSize;
 }

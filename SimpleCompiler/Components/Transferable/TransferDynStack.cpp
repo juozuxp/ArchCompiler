@@ -5,7 +5,7 @@
 void TransferDynStack::CompileAssign(CompileMap& Enviroment, RegisterType Source)
 {
 	if (LocationInStack == ~0)
-		LocationInStack = Enviroment.AllocateLocalVariable(0x8);
+		LocationInStack = Enviroment.AllocTempStack(0x8);
 
 	if (LocationInStack <= 0x7F)
 	{
@@ -54,7 +54,7 @@ void TransferDynStack::CompileAssign(CompileMap& Enviroment, RegisterType Source
 void TransferDynStack::CompileRetrieve(CompileMap& Enviroment, RegisterType Source)
 {
 	if (LocationInStack == ~0)
-		LocationInStack = Enviroment.AllocateLocalVariable(0x8);
+		LocationInStack = Enviroment.AllocTempStack(0x8);
 
 	if (LocationInStack <= 0x7F)
 	{

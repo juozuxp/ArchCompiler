@@ -6,8 +6,9 @@
 #include "../Transferable/TransferRegister.h"
 #include "../Transferable/TransferStack.h"
 #include "Arithmetic.h"
+#include "../../Compiler/CompileMap.h"
 
-void FunctionCall::Compile(class CompileMap& Enviroment)
+void FunctionCall::Compile(CompileMap& Enviroment)
 {
 	for (RefObject<Arithmetic> Argument : Arguments)
 		Argument->Compile(Enviroment);
@@ -15,9 +16,12 @@ void FunctionCall::Compile(class CompileMap& Enviroment)
 	Function->CompileCall(Enviroment);
 }
 
-unsigned long long FunctionCall::GetCallingStackSize()
+void FunctionCall::PreCompile(CompileMap& Enviroment)
 {
-	return (Arguments.GetCount() * 0x8) < 0x20 ? 0x20 : (Arguments.GetCount() * 0x8);
+	for (RefObject<Arithmetic> Argument : Arguments)
+		Argument->PreCompile(Enviroment);
+
+	Enviroment.AllocTempStack((Arguments.GetCount() * 0x8) < 0x20 ? 0x20 : (Arguments.GetCount() * 0x8));
 }
 
 unsigned long long FunctionCall::Parse(RefObject<EnviromentMap> Enviroment, const char* Expression)
@@ -36,7 +40,7 @@ unsigned long long FunctionCall::Parse(RefObject<EnviromentMap> Enviroment, cons
 		RefObject<Arithmetic> Argument;
 
 		Argument = RefObject<Arithmetic>(Arithmetic());
-		Argument->Parse(Enviroment, Token, GetAssignable(Arguments.GetCount()));
+		Argument->Parse(Enviroment, Token, GetTranferable(Arguments.GetCount()));
 
 		Arguments.Add(Argument);
 	}
@@ -52,7 +56,7 @@ bool FunctionCall::IsFunctionCall(const char* Expression)
 	if (!Opening)
 		return false;
 
-	if (!strrchr(Opening, ')'))
+	if (!strchr(Opening, ')'))
 		return false;
 
 	if (strchr(Expression, '='))
@@ -61,7 +65,7 @@ bool FunctionCall::IsFunctionCall(const char* Expression)
 	return true;
 }
 
-RefObject<Transferable> FunctionCall::GetAssignable(unsigned long long Argument)
+RefObject<Transferable> FunctionCall::GetTranferable(unsigned long long Argument)
 {
 	if (Argument < 4)
 	{

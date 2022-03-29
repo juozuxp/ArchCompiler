@@ -1,5 +1,21 @@
 #include "Enviroment.h"
 
+void Enviroment::PreCompile(class CompileMap& Enviroment)
+{
+}
+
+void Enviroment::Compile(class CompileMap& Enviroment)
+{
+}
+
+void Enviroment::PostCompile(class CompileMap& Enviroment)
+{
+}
+
+void Enviroment::Parse(const char* Expression, RefObject<Enviroment> This)
+{
+}
+
 RefObject<Variable> Enviroment::GetVariable(const char* Name, unsigned long long Length) const
 {
 	if (!Length)

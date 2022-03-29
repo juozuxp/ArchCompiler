@@ -5,7 +5,7 @@
 #include "Variable.h"
 #include "../../Utilities/Skippable.h"
 
-class FunctionCall : TypeElement
+class FunctionCall : public TypeElement
 {
 public:
 	constexpr FunctionCall()
@@ -13,15 +13,16 @@ public:
 	}
 
 public:
-	unsigned long long GetCallingStackSize();
+	void PreCompile(class CompileMap& Enviroment);
 	void Compile(class CompileMap& Enviroment);
+
 	unsigned long long Parse(RefObject<EnviromentMap> Enviroment, const char* Expression);
 
 public:
 	static bool IsFunctionCall(const char* Expression);
 
 private:
-	static RefObject<Transferable> GetAssignable(unsigned long long Argument);
+	static RefObject<Transferable> GetTranferable(unsigned long long Argument);
 
 private:
 	RefObject<Variable> Function;

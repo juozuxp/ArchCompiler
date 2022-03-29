@@ -5,10 +5,12 @@
 #include "TypeElement.h"
 #include "Arithmetic.h"
 
-class Conditional : TypeElement
+class Conditional : public TypeElement
 {
 public:
+	void PreCompile(class CompileMap& Enviroment);
 	void Compile(class CompileMap& Enviroment);
+
 	unsigned long long Parse(RefObject<EnviromentMap> Enviroment, const char* Expression);
 
 public:

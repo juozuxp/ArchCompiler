@@ -400,11 +400,19 @@ void LocalVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source)
 	}
 }
 
+void LocalVariable::PreCompile(CompileMap& Enviroment)
+{
+	if (Assigner)
+		Assigner->PreCompile(Enviroment);
+	
+	Enviroment.AllocConstStack(VariableSize);
+}
+
 void LocalVariable::Compile(CompileMap& Enviroment)
 {
-	StackPosition = Enviroment.AllocateLocalVariable(VariableSize);
-	if (this->Assigner)
-		this->Assigner->Compile(Enviroment);
+	StackPosition = Enviroment.AllocConstStack(VariableSize);
+	if (Assigner)
+		Assigner->Compile(Enviroment);
 }
 
 void LocalVariable::CompileCall(CompileMap& Enviroment)

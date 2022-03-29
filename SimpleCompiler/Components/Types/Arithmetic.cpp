@@ -149,12 +149,12 @@ bool Arithmetic::IsArtimetic(const char* Expression)
 	return false;
 }
 
-unsigned short Arithmetic::GetRegisterMask()
-{
-	return TemporarySpace.RetrieveRegisterMask();
-}
-
 #undef RAX
+
+void Arithmetic::PreCompile(CompileMap& Enviroment)
+{
+	Enviroment.AddRegisterMask(TemporarySpace.RetrieveRegisterMask());
+}
 
 void Arithmetic::Compile(CompileMap& Enviroment)
 {

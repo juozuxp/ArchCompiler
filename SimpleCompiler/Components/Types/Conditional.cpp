@@ -9,6 +9,11 @@
 
 #include "../../Utilities/x86_x64Shell.h"
 
+void Conditional::PreCompile(CompileMap& Enviroment)
+{
+	Condition->PreCompile(Enviroment);
+}
+
 void Conditional::Compile(CompileMap& Enviroment)
 {
 	unsigned long JumpLocation;
@@ -24,7 +29,7 @@ void Conditional::Compile(CompileMap& Enviroment)
 		R_CP(JumpLocation, JE_RD(0))
 	};
 
-	JumpLocation += Enviroment.GetRelativeLocation();
+	JumpLocation += Enviroment.GetCodeLocation();
 	Enviroment.AddCode(Conditional, sizeof(Conditional));
 
 	SubEnviroment->Compile(Enviroment);
@@ -32,7 +37,7 @@ void Conditional::Compile(CompileMap& Enviroment)
 	MainRelativity = 0;
 	unsigned char JumpPatch[] =
 	{
-		JE_RD(Enviroment.GetRelativeLocation() - (JumpLocation + MainRelativity))
+		JE_RD(Enviroment.GetCodeLocation() - (JumpLocation + MainRelativity))
 	};
 
 	Enviroment.PatchCode(JumpLocation, JumpPatch, sizeof(JumpPatch));

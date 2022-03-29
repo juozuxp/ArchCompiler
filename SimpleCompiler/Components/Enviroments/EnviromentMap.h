@@ -13,8 +13,10 @@ public:
 	}
 
 public:
+	void PreCompile(class CompileMap& Enviroment);
 	void Compile(class CompileMap& Enviroment);
-	void Parse(const char* Expression, RefObject<Enviroment> Current);
+
+	void Parse(const char* Expression, RefObject<Enviroment> This);
 
 	void AddVariable(RefObject<Variable> Element);
 	void AddParsed(RefObject<TypeElement> Element);
@@ -23,14 +25,10 @@ public:
 	RefObject<Variable> GetVariable(const char* Name, unsigned long long Length = 0) const;
 
 public:
-	constexpr unsigned long long GetRelativeLocation()
+	constexpr unsigned long long GetRelativeLocation() const
 	{
 		return RelativeLocation;
 	}
-
-public:
-	unsigned short EstimateRegisterUsage() const;
-	unsigned long long EstimateStackSize() const;
 
 public:
 	RefObject<Enviroment> Parent;

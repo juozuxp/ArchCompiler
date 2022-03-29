@@ -3,7 +3,7 @@
 #include "../../Utilities/RefObject.h"
 #include "../../Utilities/Skippable.h"
 
-class Function : Variable
+class Function : public Variable
 {
 public:
 	constexpr Function()
@@ -16,7 +16,9 @@ public:
 	void ExtractArguments(const char* Expression);
 	void BindEnviroment(RefObject<EnviromentMap> Enviroment);
 
+	void PreCompile(class CompileMap& Enviroment);
 	void Compile(class CompileMap& Enviroment);
+
 	void CompileCall(class CompileMap& Enviroment);
 	void CompileRetrieve(class CompileMap& Enviroment, RegisterType Source);
 
@@ -25,10 +27,11 @@ public:
 	static unsigned long long GetDefinitionLength(const char* Expression);
 
 private:
-	void CreateExit(class CompileMap& Enviroment, unsigned short RegisterMask);
-	void CreateEntry(class CompileMap& Enviroment, unsigned short RegisterMask);
-	void CompileRegisterBackups(class CompileMap& Enviroment, unsigned short Mask);
-	void CompileRegisterRestores(class CompileMap& Enviroment, unsigned short Mask);
+	void CompileExit(class CompileMap& Enviroment);
+	void CompileEntry(class CompileMap& Enviroment);
+
+	void CompileRegisterBackups(class CompileMap& Enviroment);
+	void CompileRegisterRestores(class CompileMap& Enviroment);
 
 private:
 	RefObject<EnviromentMap> Enviroment;

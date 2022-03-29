@@ -1,7 +1,7 @@
 #pragma once
 #include "LocalVariable.h"
 
-class Argument : LocalVariable
+class Argument : public LocalVariable
 {
 public:
 	constexpr Argument() 
@@ -13,11 +13,6 @@ public:
 	}
 
 public:
-	unsigned long long GetStackSize()
-	{
-		return 0;
-	}
-
 	void Compile(class CompileMap& Enviroment);
 
 private:

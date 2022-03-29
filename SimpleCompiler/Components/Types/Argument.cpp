@@ -12,7 +12,7 @@ void Argument::Compile(CompileMap& Enviroment)
 		R9
 	};
 
-	this->StackPosition = Enviroment.GetStackSize() + 0x8 * (Index + 1);
+	StackPosition = Enviroment.GetCollectiveStack() + 0x8 * (Index + 1);
 	if (Index < 2)
 	{
 		unsigned char Shell[] =
@@ -25,7 +25,6 @@ void Argument::Compile(CompileMap& Enviroment)
 	}
 	else if (Index < 4)
 	{
-
 		unsigned char Shell[] =
 		{
 			PFX_REXWR, MOVD_RM_R(MRSP_BO_R(Register[Index], 0x8 * (Index + 1)))
