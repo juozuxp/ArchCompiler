@@ -11,6 +11,7 @@
 
 void Conditional::PreCompile(CompileMap& Enviroment)
 {
+	SubEnviroment->PreCompile(Enviroment);
 	Condition->PreCompile(Enviroment);
 }
 

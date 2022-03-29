@@ -2,6 +2,10 @@
 #include "../../Compiler/CompileMap.h"
 #include "../../Utilities/x86_x64Shell.h"
 
+void Argument::PreCompile(CompileMap& Enviroment)
+{
+}
+
 void Argument::Compile(CompileMap& Enviroment)
 {
 	constexpr unsigned char Register[] =

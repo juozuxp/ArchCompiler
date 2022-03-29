@@ -13,6 +13,7 @@ public:
 	}
 
 public:
+	void PreCompile(class CompileMap& Enviroment);
 	void Compile(class CompileMap& Enviroment);
 
 private:
