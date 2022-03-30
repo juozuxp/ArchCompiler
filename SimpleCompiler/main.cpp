@@ -12,7 +12,7 @@ void AttemptExecution(List<unsigned char> ShellCode)
 	printf("%llX\n", ShellCode.operator unsigned char *());
 	system("pause");
 
-	((void(*)(int))ShellCode.operator unsigned char*())(10);
+	((void(*)(int))ShellCode.operator unsigned char*())(1);
 }
 
 int main()
@@ -21,8 +21,8 @@ int main()
 							 "	ushort Type = ((80 + 1) + (80 + (90 + 100 + (100 + 80 + (70 + 90)))));\n"
 							 "	uint Hello = true;\n"
 							 "	ulong Shlong = main;"
-							 "	if (CallMe - 1)"
-							 "		if (CallMe - 1)"
+							 "	if (CallMe)"
+							 "		if (CallMe == Hello)"
 							 "			main(CallMe - 1);"
 							 "	ulong Another = 10000000000000;\n"
 							 "	uint Variable = Another - Type + Hello;"

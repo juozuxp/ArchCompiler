@@ -4,6 +4,7 @@
 #include "../../Utilities/Deflatable.h"
 #include "../Transferable/Transferable.h"
 #include "../../Compiler/TempVariableMap.h"
+#include "../../Utilities/SimpleUtilities.h"
 
 class OperationDef // this absolutely insists on being defined outside the parent class, holy fuck kms
 {
@@ -16,9 +17,18 @@ public:
 		OperationType_Division,
 		OperationType_Multiplication,
 		OperationType_Modulus,
-		OperationType_Xor,
-		OperationType_And,
-		OperationType_Or
+		OperationType_LogicXor,
+		OperationType_LogicAnd,
+		OperationType_LogicOr,
+
+		OperationType_And, // Conditional operations (yes arithmatic is gonna be conditional, this is way better than doing something simple and mundain)
+		OperationType_Or,
+		OperationType_Less,
+		OperationType_Over,
+		OperationType_LessOrEqual,
+		OperationType_OverOrEqual,
+		OperationType_Equal,
+		OperationType_NotEqual
 	};
 
 public:
@@ -26,14 +36,22 @@ public:
 	{
 	}
 
-	constexpr OperationDef(OperationType Type, char Symbol) : Type(Type), Symbol(Symbol)
+	constexpr OperationDef(OperationType Type, const char* SymbolSet, unsigned long long SetLength) : Type(Type), SymbolSet(SymbolSet), SetLength(SetLength)
 	{
 	}
 
 public:
-	constexpr bool IsOperation(char Symbol) const
+	inline bool IsOperation(const char* SymbolSet) const
 	{
-		return Symbol == this->Symbol;
+		return !strncmp(this->SymbolSet, SymbolSet, SetLength);
+	}
+
+	inline bool IsBetterFit(const OperationDef* Operation, const char* SymbolSet) const
+	{
+		if (SetLength <= Operation->SetLength)
+			return false;
+
+		return IsOperation(SymbolSet);
 	}
 
 	constexpr OperationType GetType() const
@@ -41,8 +59,15 @@ public:
 		return Type;
 	}
 
+	constexpr unsigned long long ExpressionSize() const
+	{
+		return SetLength;
+	}
+
 private:
-	char Symbol = 0;
+	const char* SymbolSet = 0;
+	unsigned long long SetLength = 0;
+
 	OperationType Type = OperationType_None;
 };
 
@@ -158,6 +183,21 @@ private:
 		void Compile(class CompileMap& Enviroment, RegisterType Source);
 	};
 
+	class Equal : Operation
+	{
+	public:
+		constexpr Equal()
+		{
+		}
+
+		inline Equal(RefObject<Operand> Left, RefObject<Operand> Right, RegisterType TransitionSpace) : Operation(Left, Right, TransitionSpace)
+		{
+		}
+
+	public:
+		void Compile(class CompileMap& Enviroment, RegisterType Source);
+	};
+
 public:
 	constexpr Arithmetic() : TypeElement()
 	{
@@ -189,8 +229,11 @@ private:
 
 private:
 	static constexpr Deflatable Deflater = Deflatable(" \t");
-	static constexpr OperationDef Operations[] = { OperationDef(OperationDef::OperationType_Addition, '+'), OperationDef(OperationDef::OperationType_Subtraction, '-'), OperationDef(OperationDef::OperationType_Division, '/'), 
-												   OperationDef(OperationDef::OperationType_Multiplication, '*'), OperationDef(OperationDef::OperationType_Modulus, '%'), OperationDef(OperationDef::OperationType_Or, '|'), 
-												   OperationDef(OperationDef::OperationType_Xor, '^'), OperationDef(OperationDef::OperationType_And, '&') };
+	static constexpr OperationDef Operations[] = { OperationDef(OperationDef::OperationType_Addition, CSL_PAR("+")), OperationDef(OperationDef::OperationType_Subtraction, CSL_PAR("-")), OperationDef(OperationDef::OperationType_Division, CSL_PAR("/")),
+												   OperationDef(OperationDef::OperationType_Multiplication, CSL_PAR("*")), OperationDef(OperationDef::OperationType_Modulus, CSL_PAR("%")), OperationDef(OperationDef::OperationType_LogicOr, CSL_PAR("|")),
+												   OperationDef(OperationDef::OperationType_LogicXor, CSL_PAR("^")), OperationDef(OperationDef::OperationType_LogicAnd, CSL_PAR("&")), OperationDef(OperationDef::OperationType_LogicAnd, CSL_PAR("&")),
+												   OperationDef(OperationDef::OperationType_And, CSL_PAR("&&")), OperationDef(OperationDef::OperationType_Or,CSL_PAR("||")), OperationDef(OperationDef::OperationType_Less, CSL_PAR("<")),
+												   OperationDef(OperationDef::OperationType_Over, CSL_PAR(">")), OperationDef(OperationDef::OperationType_LessOrEqual, CSL_PAR("<=")), OperationDef(OperationDef::OperationType_OverOrEqual, CSL_PAR(">=")),
+												   OperationDef(OperationDef::OperationType_Equal, CSL_PAR("==")), OperationDef(OperationDef::OperationType_NotEqual, CSL_PAR("!=")) };
 	static constexpr DefinitionValue DefValues[] = { DefinitionValue("true", 1), DefinitionValue("false", 0) };
 };

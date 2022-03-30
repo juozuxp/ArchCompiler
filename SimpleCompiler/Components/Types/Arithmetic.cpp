@@ -4,6 +4,8 @@
 #include "Variable.h"
 #include "../Transferable/TransferVariable.h"
 #include "../Transferable/TransferValue.h"
+
+#define SHELL_RELATIVITY MainRelativity
 #include "../../Utilities/x86_x64Shell.h"
 
 void Arithmetic::TranferOperator::Compile(CompileMap& Enviroment, RegisterType Source)
@@ -13,9 +15,12 @@ void Arithmetic::TranferOperator::Compile(CompileMap& Enviroment, RegisterType S
 
 void Arithmetic::Addition::Compile(CompileMap& Enviroment, RegisterType Source)
 {
+	unsigned long MainRelativity;
+
 	Left->Compile(Enviroment, Source);
 	Right->Compile(Enviroment, TransitionSpace);
 
+	MainRelativity = 0;
 	if (TransitionSpace.IsExtended())
 	{
 		if (Source.IsExtended())
@@ -62,9 +67,12 @@ void Arithmetic::Addition::Compile(CompileMap& Enviroment, RegisterType Source)
 
 void Arithmetic::Subtraction::Compile(CompileMap& Enviroment, RegisterType Source)
 {
+	unsigned long MainRelativity;
+
 	Left->Compile(Enviroment, Source);
 	Right->Compile(Enviroment, TransitionSpace);
 
+	MainRelativity = 0;
 	if (TransitionSpace.IsExtended())
 	{
 		if (Source.IsExtended())
@@ -102,6 +110,67 @@ void Arithmetic::Subtraction::Compile(CompileMap& Enviroment, RegisterType Sourc
 			unsigned char Operation[] =
 			{
 				PFX_REXW, SUBD_R_RM(R_LR(Source, TransitionSpace)),
+			};
+
+			Enviroment.AddCode(Operation, sizeof(Operation));
+		}
+	}
+}
+
+void Arithmetic::Equal::Compile(CompileMap& Enviroment, RegisterType Source)
+{
+	unsigned long MainRelativity;
+	unsigned long JumpRelativity;
+
+	Left->Compile(Enviroment, Source);
+	Right->Compile(Enviroment, TransitionSpace);
+
+	MainRelativity = 0;
+	if (TransitionSpace.IsExtended())
+	{
+		if (Source.IsExtended())
+		{
+			unsigned char Operation[] =
+			{
+				PFX_REXWRB, CMPD_R_RM(R_LR(Source, TransitionSpace)),
+				PFX_REXB, MOV_RM_D(LR(Source), 0),
+				PFX_REXB, SETE_RM(LR(Source))
+			};
+
+			Enviroment.AddCode(Operation, sizeof(Operation));
+		}
+		else
+		{
+			unsigned char Operation[] =
+			{
+				PFX_REXWB, CMPD_R_RM(R_LR(Source, TransitionSpace)),
+				MOV_RM_D(LR(Source), 0),
+				PFX_REX, SETE_RM(LR(Source))
+			};
+
+			Enviroment.AddCode(Operation, sizeof(Operation));
+		}
+	}
+	else
+	{
+		if (Source.IsExtended())
+		{
+			unsigned char Operation[] =
+			{
+				PFX_REXWR, CMPD_R_RM(R_LR(Source, TransitionSpace)),
+				PFX_REXB, MOV_RM_D(LR(Source), 0),
+				PFX_REXB, SETE_RM(LR(Source))
+			};
+
+			Enviroment.AddCode(Operation, sizeof(Operation));
+		}
+		else
+		{
+			unsigned char Operation[] =
+			{
+				PFX_REXW, CMPD_R_RM(R_LR(Source, TransitionSpace)),
+				MOV_RM_D(LR(Source), 0),
+				PFX_REX, SETE_RM(LR(Source))
 			};
 
 			Enviroment.AddCode(Operation, sizeof(Operation));
@@ -168,10 +237,26 @@ const char* Arithmetic::LocateOperation(const char* Expression, const OperationD
 	{
 		for (unsigned long long i = 0; i < ARRAY_COUNT(Operations); i++)
 		{
-			if (Operations[i].IsOperation(*Expression))
+			if (Operations[i].IsOperation(Expression))
 			{
 				if (OperationDescription)
-					*OperationDescription = &Operations[i];
+				{
+					*OperationDescription = 0;
+
+					const OperationDef* CuurentFit = &Operations[i];
+					while (*OperationDescription != CuurentFit)
+					{
+						*OperationDescription = CuurentFit;
+						for (unsigned long long ii = 0; ii < ARRAY_COUNT(Operations); ii++)
+						{
+							if (Operations[i].IsBetterFit(CuurentFit, Expression))
+							{
+								CuurentFit = &Operations[ii];
+								break;
+							}
+						}
+					}
+				}
 
 				return Expression;
 			}
@@ -263,7 +348,7 @@ RefObject<Arithmetic::Operand> Arithmetic::EvaluateArthmetic(EnviromentMap& Envi
 
 	TransferRegister = TemporarySpace.GetRegister();
 
-	Expression = LocOperation + 1;
+	Expression = LocOperation + OperationType->ExpressionSize();
 	while (true)
 	{
 		const OperationDef* NextOperation;
@@ -305,13 +390,17 @@ RefObject<Arithmetic::Operand> Arithmetic::EvaluateArthmetic(EnviromentMap& Envi
 		{
 			First = RefObject<Subtraction>(Subtraction(First, Second, TransferRegister)).Cast<Operand>();
 		} break;
+		case OperationDef::OperationType_Equal:
+		{
+			First = RefObject<Equal>(Equal(First, Second, TransferRegister)).Cast<Operand>();
+		} break;
 		}
 
 		if (!LocOperation)
 			break;
 
 		OperationType = NextOperation;
-		Expression = LocOperation + 1;
+		Expression = LocOperation + NextOperation->ExpressionSize();
 	}
 
 	return First;

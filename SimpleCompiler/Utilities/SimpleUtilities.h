@@ -2,6 +2,8 @@
 
 #define ARRAY_COUNT(Array) (sizeof(Array) / sizeof((Array)[0]))
 
+#define CSL_PAR(String) (String), (sizeof(String) - 1) // Constant string length pair
+
 #define IS_NUMBER(String) ((*(String)) >= '0' && (*(String)) <= '9')
 
 #define GET_ELEMENT(Struct, Element) ((unsigned long long)(&(((Struct*)(0))->Element)))
