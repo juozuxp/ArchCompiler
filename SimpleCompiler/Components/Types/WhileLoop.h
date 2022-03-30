@@ -1,11 +1,12 @@
 #pragma once
-#include "../../Utilities/Skippable.h"
-#include "../../Utilities/Deflatable.h"
-#include "../../Utilities/Encapsulable.h"
 #include "TypeElement.h"
 #include "Arithmetic.h"
+#include "../Enviroments/EnviromentMap.h"
+#include "../../Utilities/Deflatable.h"
+#include "../../Utilities/Skippable.h"
+#include "../../Utilities/Encapsulable.h"
 
-class Conditional : public TypeElement
+class WhileLoop : public TypeElement
 {
 public:
 	void PreCompile(class CompileMap& Enviroment);
@@ -14,13 +15,11 @@ public:
 	unsigned long long Parse(RefObject<EnviromentMap> Enviroment, const char* Expression);
 
 public:
-	static bool IsConditional(const char* Expression);
+	static bool IsWhileLoop(const char* Expression);
 
 private:
 	RefObject<Arithmetic> Condition;
-
-	RefObject<EnviromentMap> ElseEnviroment;
-	RefObject<EnviromentMap> ConditionEnviroment;
+	RefObject<EnviromentMap> LoopEnviroment;
 
 private:
 	static constexpr Skippable Ignorable = Skippable(" \t");

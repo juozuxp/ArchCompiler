@@ -11,7 +11,7 @@
 
 void Conditional::PreCompile(CompileMap& Enviroment)
 {
-	SubEnviroment->PreCompile(Enviroment);
+	ConditionEnviroment->PreCompile(Enviroment);
 	Condition->PreCompile(Enviroment);
 }
 
@@ -33,15 +33,49 @@ void Conditional::Compile(CompileMap& Enviroment)
 	JumpLocation += Enviroment.GetCodeLocation();
 	Enviroment.AddCode(Conditional, sizeof(Conditional));
 
-	SubEnviroment->Compile(Enviroment);
+	ConditionEnviroment->Compile(Enviroment);
 
-	MainRelativity = 0;
-	unsigned char JumpPatch[] =
+	if (ElseEnviroment)
 	{
-		JE_RD(Enviroment.GetCodeLocation() - (JumpLocation + MainRelativity))
-	};
+		unsigned long ElseJumpLocation;
 
-	Enviroment.PatchCode(JumpLocation, JumpPatch, sizeof(JumpPatch));
+		unsigned char ElseJump[] =
+		{
+			JMP_RD(0)
+		};
+
+		ElseJumpLocation = Enviroment.GetCodeLocation();
+
+		Enviroment.AddCode(ElseJump, sizeof(ElseJump));
+
+		MainRelativity = 0;
+		unsigned char JumpPatch[] =
+		{
+			JE_RD(Enviroment.GetCodeLocation() - (JumpLocation + MainRelativity))
+		};
+
+		Enviroment.PatchCode(JumpLocation, JumpPatch, sizeof(JumpPatch));
+
+		ElseEnviroment->Compile(Enviroment);
+
+		MainRelativity = 0;
+		unsigned char ElseJumpPatch[] =
+		{
+			JMP_RD(Enviroment.GetCodeLocation() - (ElseJumpLocation + MainRelativity))
+		};
+
+		Enviroment.PatchCode(ElseJumpLocation, ElseJumpPatch, sizeof(ElseJumpPatch));
+	}
+	else
+	{
+		MainRelativity = 0;
+		unsigned char JumpPatch[] =
+		{
+			JE_RD(Enviroment.GetCodeLocation() - (JumpLocation + MainRelativity))
+		};
+
+		Enviroment.PatchCode(JumpLocation, JumpPatch, sizeof(JumpPatch));
+	}
 }
 
 #undef RAX
@@ -52,6 +86,7 @@ unsigned long long Conditional::Parse(RefObject<EnviromentMap> Enviroment, const
 
 	unsigned long long Length;
 
+	const char* PostEnviroment;
 	const char* StartIf;
 	const char* EndIf;
 
@@ -64,10 +99,21 @@ unsigned long long Conditional::Parse(RefObject<EnviromentMap> Enviroment, const
 	Condition = RefObject<Arithmetic>(Arithmetic());
 	Condition->Parse(Enviroment, SubString, RefObject<TransferRegister>(TransferRegister(RegisterType::RAX)).Cast<Transferable>());
 
-	SubEnviroment = RefObject<EnviromentMap>(EnviromentMap(Enviroment.Cast<::Enviroment>()));
-	SubEnviroment->Parse(Enviroment::ExtractSubEnviroment(EndIf, &Length), SubEnviroment.Cast<::Enviroment>());
+	ConditionEnviroment = RefObject<EnviromentMap>(EnviromentMap(Enviroment.Cast<::Enviroment>()));
+	ConditionEnviroment->Parse(Enviroment::ExtractSubEnviroment(EndIf, &Length), ConditionEnviroment.Cast<::Enviroment>());
 
-	return (EndIf - Expression) + Length;
+	PostEnviroment = Expression + (EndIf - Expression) + Length;
+
+	StartIf = Ignorable.Skip(PostEnviroment);
+	if (strncmp(StartIf, CSL_PAIR("else")))
+		return PostEnviroment - Expression;
+
+	PostEnviroment = StartIf + sizeof("else") - 1;
+
+	ElseEnviroment = RefObject<EnviromentMap>(EnviromentMap(Enviroment.Cast<::Enviroment>()));
+	ElseEnviroment->Parse(Enviroment::ExtractSubEnviroment(PostEnviroment, &Length), ElseEnviroment.Cast<::Enviroment>());
+
+	return PostEnviroment - Expression + Length;
 }
 
 bool Conditional::IsConditional(const char* Expression)
@@ -76,7 +122,7 @@ bool Conditional::IsConditional(const char* Expression)
 	if (strncmp(Expression, "if", sizeof("if") - 1))
 		return false;
 
-	if (!Ignorable.IsSkippable(*(Expression + sizeof("if") - 1)))
+	if (!Ignorable.IsSkippable(*(Expression + sizeof("if") - 1)) && *(Expression + sizeof("if") - 1) != '(')
 		return false;
 
 	if (!strchr(Expression, '('))

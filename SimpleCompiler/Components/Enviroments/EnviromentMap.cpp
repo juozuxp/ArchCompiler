@@ -4,6 +4,7 @@
 #include "../Types/FunctionCall.h"
 #include "../Types/LocalVariable.h"
 #include "../Types/Conditional.h"
+#include "../Types/WhileLoop.h"
 
 void EnviromentMap::AddVariable(RefObject<Variable> Element)
 {
@@ -48,9 +49,16 @@ void EnviromentMap::Parse(const char* Expression, RefObject<Enviroment> This)
 
 			AddParsed(Condition.Cast<TypeElement>());
 
-			Condition->Parse(This.Cast<EnviromentMap>(), Token.GetToken());
-
 			Token.SkipFor(Condition->Parse(This.Cast<EnviromentMap>(), Token.GetToken()));
+			continue;
+		}
+		else if (WhileLoop::IsWhileLoop(Token.GetToken()))
+		{
+			RefObject<WhileLoop> Loop = RefObject<WhileLoop>(WhileLoop());
+
+			AddParsed(Loop.Cast<TypeElement>());
+
+			Token.SkipFor(Loop->Parse(This.Cast<EnviromentMap>(), Token.GetToken()));
 			continue;
 		}
 

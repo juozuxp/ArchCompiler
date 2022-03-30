@@ -59,6 +59,7 @@
     <ClInclude Include="Utilities\Skippable.h" />
     <ClInclude Include="Utilities\StrTok.h" />
     <ClInclude Include="Utilities\x86_x64Shell.h" />
+    <ClInclude Include="Components\Types\WhileLoop.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Compiler\CompileMap.cpp" />
@@ -90,6 +91,7 @@
     <ClCompile Include="GlobalInfo\VariableTypes.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Parser\SyntaxParser.cpp" />
+    <ClCompile Include="Components\Types\WhileLoop.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
