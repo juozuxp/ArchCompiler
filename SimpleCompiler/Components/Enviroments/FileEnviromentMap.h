@@ -6,9 +6,7 @@
 class FileEnviromentMap : public Enviroment
 {
 public:
-	inline FileEnviromentMap() : Enviroment()
-	{
-	}
+	FileEnviromentMap();
 
 public:
 	void Compile(class CompileMap& Enviroment);

@@ -37,6 +37,8 @@ private:
 	RefObject<EnviromentMap> Enviroment;
 	List<RefObject<Argument>> Arguments;
 
+	unsigned long long RelativeLocation = 0;
+
 private:
 	static constexpr Skippable Ignorable = Skippable(" \t");
 };

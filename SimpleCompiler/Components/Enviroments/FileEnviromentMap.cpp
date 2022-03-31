@@ -1,5 +1,12 @@
 #include "FileEnviromentMap.h"
 #include "../../Compiler/CompileMap.h"
+#include "../../GlobalInfo/GlobalConstants.h"
+
+FileEnviromentMap::FileEnviromentMap() : Enviroment()
+{
+	for (unsigned long long i = 0; i < ARRAY_COUNT(GlobalConstants::Constants); i++)
+		AddConstantValue(GlobalConstants::Constants[i].GetValue(), GlobalConstants::Constants[i].GetName(), GlobalConstants::Constants[i].GetNameLength());
+}
 
 void FileEnviromentMap::AddFunction(RefObject<Function> Function)
 {

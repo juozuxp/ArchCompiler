@@ -49,6 +49,8 @@ void Function::PreCompile(CompileMap& Enviroment)
 
 void Function::Compile(CompileMap& Enviroment)
 {
+	RelativeLocation = Enviroment.GetCodeLocation();
+
 	CompileEntry(Enviroment);
 
 	this->Enviroment->Compile(Enviroment);
@@ -90,7 +92,7 @@ void Function::CompileCall(CompileMap& Enviroment)
 	MainRelativity = 0;
 	unsigned char Shell[] =
 	{
-		CALL_RD(this->Enviroment->RelativeLocation - (Enviroment.GetCodeLocation() + MainRelativity))
+		CALL_RD(RelativeLocation - (Enviroment.GetCodeLocation() + MainRelativity))
 	};
 
 	Enviroment.AddCode(Shell, sizeof(Shell));
@@ -105,7 +107,7 @@ void Function::CompileRetrieve(CompileMap& Enviroment, RegisterType Source)
 		MainRelativity = 0;
 		unsigned char Shell[] =
 		{
-			PFX_REXWR, LEAD_R_M(R_REL_DO(Source, this->Enviroment->RelativeLocation - (Enviroment.GetCodeLocation() + MainRelativity)))
+			PFX_REXWR, LEAD_R_M(R_REL_DO(Source, RelativeLocation - (Enviroment.GetCodeLocation() + MainRelativity)))
 		};
 
 		Enviroment.AddCode(Shell, sizeof(Shell));
@@ -115,7 +117,7 @@ void Function::CompileRetrieve(CompileMap& Enviroment, RegisterType Source)
 		MainRelativity = 0;
 		unsigned char Shell[] =
 		{
-			PFX_REXW, LEAD_R_M(R_REL_DO(Source, this->Enviroment->RelativeLocation - (Enviroment.GetCodeLocation() + MainRelativity)))
+			PFX_REXW, LEAD_R_M(R_REL_DO(Source, RelativeLocation - (Enviroment.GetCodeLocation() + MainRelativity)))
 		};
 
 		Enviroment.AddCode(Shell, sizeof(Shell));

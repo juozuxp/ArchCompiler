@@ -32,6 +32,30 @@ void Enviroment::AddVariable(RefObject<Variable> Element)
 	Variables.Add(VarName, strlen(VarName), Element);
 }
 
+void Enviroment::AddConstantValue(unsigned long long Value, const char* Name, unsigned long long Length)
+{
+	if (!Length)
+		Length = strlen(Name);
+
+	ConstantValues.Add(Name, Length, Value);
+}
+
+bool Enviroment::GetConstantValue(unsigned long long* Value, const char* Name, unsigned long long Length) const
+{
+	unsigned long long Index;
+	if (!Length)
+		Length = strlen(Name);
+
+	Index = ConstantValues.GetIndex(Name, Length);
+	if (Index == ~0ull)
+		return false;
+
+	if (Value)
+		*Value = ConstantValues.GetByIndex(Index);
+
+	return true;
+}
+
 unsigned long Enviroment::EstimateSubEnviromentSize(const char* Expression)
 {
 	const char* RunEnviroment = Expression;

@@ -5,178 +5,12 @@
 #include "../Transferable/TransferVariable.h"
 #include "../Transferable/TransferValue.h"
 
-#define SHELL_RELATIVITY MainRelativity
-#include "../../Utilities/x86_x64Shell.h"
-
-void Arithmetic::TranferOperator::Compile(CompileMap& Enviroment, RegisterType Source)
-{
-	this->Source->CompileRetrieve(Enviroment, Source);
-}
-
-void Arithmetic::Addition::Compile(CompileMap& Enviroment, RegisterType Source)
-{
-	unsigned long MainRelativity;
-
-	Left->Compile(Enviroment, Source);
-	Right->Compile(Enviroment, TransitionSpace);
-
-	MainRelativity = 0;
-	if (TransitionSpace.IsExtended())
-	{
-		if (Source.IsExtended())
-		{
-			unsigned char Operation[] =
-			{
-				PFX_REXWRB, ADDD_R_RM(R_LR(Source, TransitionSpace)),
-			};
-
-			Enviroment.AddCode(Operation, sizeof(Operation));
-		}
-		else
-		{
-			unsigned char Operation[] =
-			{
-				PFX_REXWB, ADDD_R_RM(R_LR(Source, TransitionSpace)),
-			};
-
-			Enviroment.AddCode(Operation, sizeof(Operation));
-		}
-	}
-	else
-	{
-		if (Source.IsExtended())
-		{
-			unsigned char Operation[] =
-			{
-				PFX_REXWR, ADDD_R_RM(R_LR(Source, TransitionSpace)),
-			};
-
-			Enviroment.AddCode(Operation, sizeof(Operation));
-		}
-		else
-		{
-			unsigned char Operation[] =
-			{
-				PFX_REXW, ADDD_R_RM(R_LR(Source, TransitionSpace)),
-			};
-
-			Enviroment.AddCode(Operation, sizeof(Operation));
-		}
-	}
-}
-
-void Arithmetic::Subtraction::Compile(CompileMap& Enviroment, RegisterType Source)
-{
-	unsigned long MainRelativity;
-
-	Left->Compile(Enviroment, Source);
-	Right->Compile(Enviroment, TransitionSpace);
-
-	MainRelativity = 0;
-	if (TransitionSpace.IsExtended())
-	{
-		if (Source.IsExtended())
-		{
-			unsigned char Operation[] =
-			{
-				PFX_REXWRB, SUBD_R_RM(R_LR(Source, TransitionSpace)),
-			};
-
-			Enviroment.AddCode(Operation, sizeof(Operation));
-		}
-		else
-		{
-			unsigned char Operation[] =
-			{
-				PFX_REXWB, SUBD_R_RM(R_LR(Source, TransitionSpace)),
-			};
-
-			Enviroment.AddCode(Operation, sizeof(Operation));
-		}
-	}
-	else
-	{
-		if (Source.IsExtended())
-		{
-			unsigned char Operation[] =
-			{
-				PFX_REXWR, SUBD_R_RM(R_LR(Source, TransitionSpace)),
-			};
-
-			Enviroment.AddCode(Operation, sizeof(Operation));
-		}
-		else
-		{
-			unsigned char Operation[] =
-			{
-				PFX_REXW, SUBD_R_RM(R_LR(Source, TransitionSpace)),
-			};
-
-			Enviroment.AddCode(Operation, sizeof(Operation));
-		}
-	}
-}
-
-void Arithmetic::Equal::Compile(CompileMap& Enviroment, RegisterType Source)
-{
-	unsigned long MainRelativity;
-	unsigned long JumpRelativity;
-
-	Left->Compile(Enviroment, Source);
-	Right->Compile(Enviroment, TransitionSpace);
-
-	MainRelativity = 0;
-	if (TransitionSpace.IsExtended())
-	{
-		if (Source.IsExtended())
-		{
-			unsigned char Operation[] =
-			{
-				PFX_REXWRB, CMPD_R_RM(R_LR(Source, TransitionSpace)),
-				PFX_REXB, MOV_RM_D(LR(Source), 0),
-				PFX_REXB, SETE_RM(LR(Source))
-			};
-
-			Enviroment.AddCode(Operation, sizeof(Operation));
-		}
-		else
-		{
-			unsigned char Operation[] =
-			{
-				PFX_REXWB, CMPD_R_RM(R_LR(Source, TransitionSpace)),
-				MOV_RM_D(LR(Source), 0),
-				PFX_REX, SETE_RM(LR(Source))
-			};
-
-			Enviroment.AddCode(Operation, sizeof(Operation));
-		}
-	}
-	else
-	{
-		if (Source.IsExtended())
-		{
-			unsigned char Operation[] =
-			{
-				PFX_REXWR, CMPD_R_RM(R_LR(Source, TransitionSpace)),
-				PFX_REXB, MOV_RM_D(LR(Source), 0),
-				PFX_REXB, SETE_RM(LR(Source))
-			};
-
-			Enviroment.AddCode(Operation, sizeof(Operation));
-		}
-		else
-		{
-			unsigned char Operation[] =
-			{
-				PFX_REXW, CMPD_R_RM(R_LR(Source, TransitionSpace)),
-				MOV_RM_D(LR(Source), 0),
-				PFX_REX, SETE_RM(LR(Source))
-			};
-
-			Enviroment.AddCode(Operation, sizeof(Operation));
-		}
-	}
-}
+#include "Arithmetic/OperationDef.h"
+#include "Arithmetic/Operation.h"
+#include "Arithmetic/Equal.h"
+#include "Arithmetic/Addition.h"
+#include "Arithmetic/Subtraction.h"
+#include "Arithmetic/TranferOperator.h"
 
 unsigned long long Arithmetic::Parse(RefObject<EnviromentMap> Enviroment, const char* Expression)
 {
@@ -212,13 +46,8 @@ bool Arithmetic::IsArtimetic(const char* Expression)
 			return true;
 	}
 
-	if (LocateOperation(Expression, 0))
-		return true;
-
 	return false;
 }
-
-#undef RAX
 
 void Arithmetic::PreCompile(CompileMap& Enviroment)
 {
@@ -229,55 +58,6 @@ void Arithmetic::Compile(CompileMap& Enviroment)
 {
 	Origin->Compile(Enviroment, RegisterType::RAX);
 	AssignTo->CompileAssign(Enviroment, RegisterType::RAX);
-}
-
-const char* Arithmetic::LocateOperation(const char* Expression, const OperationDef** OperationDescription)
-{
-	for (; *Expression; Expression++)
-	{
-		for (unsigned long long i = 0; i < ARRAY_COUNT(Operations); i++)
-		{
-			if (Operations[i].IsOperation(Expression))
-			{
-				if (OperationDescription)
-				{
-					*OperationDescription = 0;
-
-					const OperationDef* CuurentFit = &Operations[i];
-					while (*OperationDescription != CuurentFit)
-					{
-						*OperationDescription = CuurentFit;
-						for (unsigned long long ii = 0; ii < ARRAY_COUNT(Operations); ii++)
-						{
-							if (Operations[i].IsBetterFit(CuurentFit, Expression))
-							{
-								CuurentFit = &Operations[ii];
-								break;
-							}
-						}
-					}
-				}
-
-				return Expression;
-			}
-		}
-	}
-
-	return 0;
-}
-
-const DefinitionValue* Arithmetic::ExtractDefinitionValue(const char* Expression, unsigned long long Length)
-{
-	if (!Length)
-		Length = strlen(Expression);
-
-	for (unsigned long long i = 0; i < ARRAY_COUNT(DefValues); i++)
-	{
-		if (DefValues[i].IsType(Expression, Length))
-			return &DefValues[i];
-	}
-
-	return 0;
 }
 
 const char* Arithmetic::HuntEnclosure(const char* Expression)
@@ -305,7 +85,7 @@ List<char> Arithmetic::ExtractEnclosure(const char* Expression)
 	return Result;
 }
 
-RefObject<Arithmetic::Operand> Arithmetic::EvaluateArthmetic(EnviromentMap& Enviroment, const char* Expression)
+RefObject<Operand> Arithmetic::EvaluateArthmetic(EnviromentMap& Enviroment, const char* Expression)
 {
 	const OperationDef* OperationType;
 
@@ -322,11 +102,11 @@ RefObject<Arithmetic::Operand> Arithmetic::EvaluateArthmetic(EnviromentMap& Envi
 		First = EvaluateArthmetic(Enviroment, Enclosure);
 
 		Expression += Enclosure.GetCount() - 1 + 2;
-		LocOperation = LocateOperation(Expression, &OperationType);
+		LocOperation = Operation::LocateOperation(Expression, &OperationType);
 	}
 	else
 	{
-		LocOperation = LocateOperation(Expression, &OperationType);
+		LocOperation = Operation::LocateOperation(Expression, &OperationType);
 		if (IS_NUMBER(Expression))
 			First = RefObject<TranferOperator>(RefObject<TransferValue>(TransferValue(strtoull(Expression, 0, 10))).Cast<Transferable>()).Cast<Operand>();
 		else
@@ -334,10 +114,10 @@ RefObject<Arithmetic::Operand> Arithmetic::EvaluateArthmetic(EnviromentMap& Envi
 			unsigned long long Length = 0;
 			if (LocOperation)
 				Length = LocOperation - Expression;
-			
-			const DefinitionValue* ConstantValue = ExtractDefinitionValue(Expression, Length);
-			if (ConstantValue)
-				First = RefObject<TranferOperator>(RefObject<TransferValue>(TransferValue(ConstantValue->GetValue())).Cast<Transferable>()).Cast<Operand>();
+
+			unsigned long long ConstantValue;
+			if (Enviroment.GetConstantValue(&ConstantValue, Expression, Length))
+				First = RefObject<TranferOperator>(RefObject<TransferValue>(TransferValue(ConstantValue)).Cast<Transferable>()).Cast<Operand>();
 			else
 				First = RefObject<TranferOperator>(RefObject<TransferVariable>(TransferVariable(Enviroment.GetVariable(Expression, Length))).Cast<Transferable>()).Cast<Operand>();
 		}
@@ -359,11 +139,11 @@ RefObject<Arithmetic::Operand> Arithmetic::EvaluateArthmetic(EnviromentMap& Envi
 			Second = EvaluateArthmetic(Enviroment, Enclosure);
 
 			Expression += Enclosure.GetCount() - 1 + 2;
-			LocOperation = LocateOperation(Expression, &NextOperation);
+			LocOperation = Operation::LocateOperation(Expression, &NextOperation);
 		}
 		else
 		{
-			LocOperation = LocateOperation(Expression, &NextOperation);
+			LocOperation = Operation::LocateOperation(Expression, &NextOperation);
 			if (IS_NUMBER(Expression))
 				Second = RefObject<TranferOperator>(RefObject<TransferValue>(TransferValue(strtoull(Expression, 0, 10))).Cast<Transferable>()).Cast<Operand>();
 			else
@@ -372,9 +152,9 @@ RefObject<Arithmetic::Operand> Arithmetic::EvaluateArthmetic(EnviromentMap& Envi
 				if (LocOperation)
 					Length = LocOperation - Expression;
 
-				const DefinitionValue* ConstantValue = ExtractDefinitionValue(Expression, Length);
-				if (ConstantValue)
-					Second = RefObject<TranferOperator>(RefObject<TransferValue>(TransferValue(ConstantValue->GetValue())).Cast<Transferable>()).Cast<Operand>();
+				unsigned long long ConstantValue;
+				if (Enviroment.GetConstantValue(&ConstantValue, Expression, Length))
+					Second = RefObject<TranferOperator>(RefObject<TransferValue>(TransferValue(ConstantValue)).Cast<Transferable>()).Cast<Operand>();
 				else
 					Second = RefObject<TranferOperator>(RefObject<TransferVariable>(TransferVariable(Enviroment.GetVariable(Expression, Length))).Cast<Transferable>()).Cast<Operand>();
 			}

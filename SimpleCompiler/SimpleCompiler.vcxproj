@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components\Types\Arithmetic\Addition.h" />
     <ClInclude Include="Compiler\CompileMap.h" />
     <ClInclude Include="Compiler\Compiler.h" />
     <ClInclude Include="Compiler\Instructions\Instruction.h" />
@@ -45,6 +46,13 @@
     <ClInclude Include="Components\Types\LocalVariable.h" />
     <ClInclude Include="Components\Types\TypeElement.h" />
     <ClInclude Include="Components\Types\Variable.h" />
+    <ClInclude Include="Components\Types\Arithmetic\OperationDef.h" />
+    <ClInclude Include="Components\Types\Arithmetic\Operand.h" />
+    <ClInclude Include="Components\Types\Arithmetic\TranferOperator.h" />
+    <ClInclude Include="Components\Types\Arithmetic\Operation.h" />
+    <ClInclude Include="Components\Types\Arithmetic\Subtraction.h" />
+    <ClInclude Include="Components\Types\Arithmetic\Equal.h" />
+    <ClInclude Include="GlobalInfo\GlobalConstants.h" />
     <ClInclude Include="Utilities\Encapsulable.h" />
     <ClInclude Include="GlobalInfo\RegisterTypes.h" />
     <ClInclude Include="GlobalInfo\VariableTypes.h" />
@@ -62,6 +70,7 @@
     <ClInclude Include="Components\Types\WhileLoop.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Components\Types\Arithmetic\Addition.cpp" />
     <ClCompile Include="Compiler\CompileMap.cpp" />
     <ClCompile Include="Compiler\Compiler.cpp" />
     <ClCompile Include="Compiler\Instructions\Instruction.cpp" />
@@ -88,10 +97,16 @@
     <ClCompile Include="Components\Types\LocalVariable.cpp" />
     <ClCompile Include="Components\Types\TypeElement.cpp" />
     <ClCompile Include="Components\Types\Variable.cpp" />
+    <ClCompile Include="Components\Types\Arithmetic\Equal.cpp" />
     <ClCompile Include="GlobalInfo\VariableTypes.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Components\Types\Arithmetic\OperationDef.cpp" />
+    <ClCompile Include="Components\Types\Arithmetic\Operand.cpp" />
+    <ClCompile Include="Components\Types\Arithmetic\Operation.cpp" />
     <ClCompile Include="Parser\SyntaxParser.cpp" />
     <ClCompile Include="Components\Types\WhileLoop.cpp" />
+    <ClCompile Include="Components\Types\Arithmetic\TranferOperator.cpp" />
+    <ClCompile Include="Components\Types\Arithmetic\Subtraction.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

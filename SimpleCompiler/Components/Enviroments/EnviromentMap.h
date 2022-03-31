@@ -23,16 +23,9 @@ public:
 	void AddVariableNoCompile(RefObject<Variable> Element);
 
 	RefObject<Variable> GetVariable(const char* Name, unsigned long long Length = 0) const;
-
-public:
-	constexpr unsigned long long GetRelativeLocation() const
-	{
-		return RelativeLocation;
-	}
+	bool GetConstantValue(unsigned long long* Value, const char* Name, unsigned long long Length = 0) const;
 
 public:
 	RefObject<Enviroment> Parent;
 	List<RefObject<TypeElement>> ParseElements;
-
-	unsigned long long RelativeLocation;
 };

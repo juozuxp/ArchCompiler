@@ -21,6 +21,22 @@ void EnviromentMap::AddVariableNoCompile(RefObject<Variable> Element)
 	Variables.Add(VarName, strlen(VarName), Element);
 }
 
+bool EnviromentMap::GetConstantValue(unsigned long long* Value, const char* Name, unsigned long long Length) const
+{
+	unsigned long long Index;
+	if (!Length)
+		Length = strlen(Name);
+
+	Index = ConstantValues.GetIndex(Name, Length);
+	if (Index == ~0ull)
+		return Parent->GetConstantValue(Value, Name, Length);
+
+	if (Value)
+		*Value = ConstantValues.GetByIndex(Index);
+
+	return true;
+}
+
 RefObject<Variable> EnviromentMap::GetVariable(const char* Name, unsigned long long Length) const
 {
 	unsigned long long Index;

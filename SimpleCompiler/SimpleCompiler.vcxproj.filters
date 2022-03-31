@@ -138,6 +138,30 @@
     <ClInclude Include="Components\Types\WhileLoop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Components\Types\Arithmetic\OperationDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Types\Arithmetic\Operand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Types\Arithmetic\TranferOperator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Types\Arithmetic\Operation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Types\Arithmetic\Addition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Types\Arithmetic\Subtraction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Types\Arithmetic\Equal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalInfo\GlobalConstants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Compiler\CompileMap.cpp">
@@ -228,6 +252,27 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Components\Types\WhileLoop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Types\Arithmetic\OperationDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Types\Arithmetic\Operand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Types\Arithmetic\TranferOperator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Types\Arithmetic\Operation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Types\Arithmetic\Addition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Types\Arithmetic\Subtraction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Types\Arithmetic\Equal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
