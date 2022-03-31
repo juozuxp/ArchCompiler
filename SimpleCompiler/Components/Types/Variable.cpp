@@ -29,7 +29,14 @@ Variable::Variable(const char* Expression) : TypeElement()
 
 void Variable::PreCompile(CompileMap& Enviroment)
 {
-	Assigner->PreCompile(Enviroment);
+	if (Assigner)
+		Assigner->PreCompile(Enviroment);
+}
+
+void Variable::PostCompile(CompileMap& Enviroment)
+{
+	if (Assigner)
+		Assigner->PostCompile(Enviroment);
 }
 
 unsigned long long Variable::Parse(RefObject<EnviromentMap> Enviroment, const char* Expression)

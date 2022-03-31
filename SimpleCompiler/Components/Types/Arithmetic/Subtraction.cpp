@@ -50,3 +50,8 @@ void Subtraction::Compile(CompileMap& Enviroment, RegisterType Source)
 		}
 	}
 }
+
+RefObject<Operand> Subtraction::CreateOperator(RefObject<Operand> First, RefObject<Operand> Second, RegisterType TransitionSpace)
+{
+	return RefObject<Subtraction>(Subtraction(First, Second, TransitionSpace)).Cast<Operand>();
+}

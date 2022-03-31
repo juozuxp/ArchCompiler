@@ -1,5 +1,6 @@
 #include "Equal.h"
 #include "../../../Compiler/CompileMap.h"
+#include "../../../Compiler/TempVariableMap.h"
 #include "../../../Utilities/x86_x64Shell.h"
 
 void Equal::Compile(CompileMap& Enviroment, RegisterType Source)
@@ -61,4 +62,9 @@ void Equal::Compile(CompileMap& Enviroment, RegisterType Source)
 			Enviroment.AddCode(Operation, sizeof(Operation));
 		}
 	}
+}
+
+RefObject<Operand> Equal::CreateOperator(RefObject<Operand> First, RefObject<Operand> Second, RegisterType TransitionSpace)
+{
+	return RefObject<Equal>(Equal(First, Second, TransitionSpace)).Cast<Operand>();
 }

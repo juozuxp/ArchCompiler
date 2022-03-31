@@ -58,6 +58,11 @@ void Function::Compile(CompileMap& Enviroment)
 	CompileExit(Enviroment);
 }
 
+void Function::PostCompile(CompileMap& Enviroment)
+{
+	this->Enviroment->PostCompile(Enviroment);
+}
+
 bool Function::IsFunctionDefinition(const char* Expression)
 {
 	const VariableType* Type = VariableTypes::RetrieveType(Expression);

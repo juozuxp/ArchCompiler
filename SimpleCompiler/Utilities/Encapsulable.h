@@ -52,7 +52,7 @@ public:
 		if (!End)
 			return List<char>();
 
-		Space.Add(Begining, End - Begining);
+		Space.Add(Begining + 1, End - (Begining + 1));
 		Space.Add('\0');
 
 		return Space;

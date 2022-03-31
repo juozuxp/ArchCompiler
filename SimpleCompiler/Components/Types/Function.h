@@ -18,6 +18,7 @@ public:
 
 	void PreCompile(class CompileMap& Enviroment);
 	void Compile(class CompileMap& Enviroment);
+	void PostCompile(class CompileMap& Enviroment);
 
 	void CompileCall(class CompileMap& Enviroment);
 	void CompileRetrieve(class CompileMap& Enviroment, RegisterType Source);

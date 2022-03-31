@@ -43,7 +43,7 @@ bool Arithmetic::IsArtimetic(const char* Expression)
 	for (; *Expression; Expression++)
 	{
 		if (*Expression == '=')
-			return true;
+			return *(Expression + 1) != '=';
 	}
 
 	return false;
@@ -60,53 +60,32 @@ void Arithmetic::Compile(CompileMap& Enviroment)
 	AssignTo->CompileAssign(Enviroment, RegisterType::RAX);
 }
 
-const char* Arithmetic::HuntEnclosure(const char* Expression)
+void Arithmetic::PostCompile(CompileMap& Enviroment)
 {
-	Expression++;
-	for (; *Expression; Expression++)
-	{
-		if (*Expression == '(')
-			Expression = HuntEnclosure(Expression);
-
-		if (*Expression == ')')
-			break;
-	}
-
-	return Expression + 1;
-}
-
-List<char> Arithmetic::ExtractEnclosure(const char* Expression)
-{
-	List<char> Result;
-
-	Result.Add(Expression + 1, (HuntEnclosure(Expression) - 1) - (Expression + 1));
-	Result.Add('\0');
-
-	return Result;
 }
 
 RefObject<Operand> Arithmetic::EvaluateArthmetic(EnviromentMap& Enviroment, const char* Expression)
 {
 	const OperationDef* OperationType;
 
-	RegisterType TransferRegister;
-
 	RefObject<Operand> First;
 	RefObject<Operand> Second;
+
+	RegisterType TransitionSpace;
 
 	const char* LocOperation;
 
 	if (*Expression == '(')
 	{
-		List<char> Enclosure = ExtractEnclosure(Expression);
+		List<char> Enclosure = Encapsule.GetEncapSpace(Expression);
 		First = EvaluateArthmetic(Enviroment, Enclosure);
 
 		Expression += Enclosure.GetCount() - 1 + 2;
-		LocOperation = Operation::LocateOperation(Expression, &OperationType);
+		LocOperation = OperationDefs::LocateOperation(Expression, &OperationType);
 	}
 	else
 	{
-		LocOperation = Operation::LocateOperation(Expression, &OperationType);
+		LocOperation = OperationDefs::LocateOperation(Expression, &OperationType);
 		if (IS_NUMBER(Expression))
 			First = RefObject<TranferOperator>(RefObject<TransferValue>(TransferValue(strtoull(Expression, 0, 10))).Cast<Transferable>()).Cast<Operand>();
 		else
@@ -126,7 +105,7 @@ RefObject<Operand> Arithmetic::EvaluateArthmetic(EnviromentMap& Enviroment, cons
 	if (!LocOperation)
 		return First;
 
-	TransferRegister = TemporarySpace.GetRegister();
+	TransitionSpace = TemporarySpace.GetRegister();
 
 	Expression = LocOperation + OperationType->ExpressionSize();
 	while (true)
@@ -135,15 +114,15 @@ RefObject<Operand> Arithmetic::EvaluateArthmetic(EnviromentMap& Enviroment, cons
 
 		if (*Expression == '(')
 		{
-			List<char> Enclosure = ExtractEnclosure(Expression);
+			List<char> Enclosure = Encapsule.GetEncapSpace(Expression);
 			Second = EvaluateArthmetic(Enviroment, Enclosure);
 
 			Expression += Enclosure.GetCount() - 1 + 2;
-			LocOperation = Operation::LocateOperation(Expression, &NextOperation);
+			LocOperation = OperationDefs::LocateOperation(Expression, &NextOperation);
 		}
 		else
 		{
-			LocOperation = Operation::LocateOperation(Expression, &NextOperation);
+			LocOperation = OperationDefs::LocateOperation(Expression, &NextOperation);
 			if (IS_NUMBER(Expression))
 				Second = RefObject<TranferOperator>(RefObject<TransferValue>(TransferValue(strtoull(Expression, 0, 10))).Cast<Transferable>()).Cast<Operand>();
 			else
@@ -159,23 +138,8 @@ RefObject<Operand> Arithmetic::EvaluateArthmetic(EnviromentMap& Enviroment, cons
 					Second = RefObject<TranferOperator>(RefObject<TransferVariable>(TransferVariable(Enviroment.GetVariable(Expression, Length))).Cast<Transferable>()).Cast<Operand>();
 			}
 		}
-
-		switch (OperationType->GetType())
-		{
-		case OperationDef::OperationType_Addition:
-		{
-			First = RefObject<Addition>(Addition(First, Second, TransferRegister)).Cast<Operand>();
-		} break;
-		case OperationDef::OperationType_Subtraction:
-		{
-			First = RefObject<Subtraction>(Subtraction(First, Second, TransferRegister)).Cast<Operand>();
-		} break;
-		case OperationDef::OperationType_Equal:
-		{
-			First = RefObject<Equal>(Equal(First, Second, TransferRegister)).Cast<Operand>();
-		} break;
-		}
-
+		
+		First = OperationType->CreateOperation(First, Second, TransitionSpace);
 		if (!LocOperation)
 			break;
 

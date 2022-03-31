@@ -53,6 +53,7 @@
     <ClInclude Include="Components\Types\Arithmetic\Subtraction.h" />
     <ClInclude Include="Components\Types\Arithmetic\Equal.h" />
     <ClInclude Include="GlobalInfo\GlobalConstants.h" />
+    <ClInclude Include="Components\Types\FunctionReturn.h" />
     <ClInclude Include="Utilities\Encapsulable.h" />
     <ClInclude Include="GlobalInfo\RegisterTypes.h" />
     <ClInclude Include="GlobalInfo\VariableTypes.h" />
@@ -107,6 +108,7 @@
     <ClCompile Include="Components\Types\WhileLoop.cpp" />
     <ClCompile Include="Components\Types\Arithmetic\TranferOperator.cpp" />
     <ClCompile Include="Components\Types\Arithmetic\Subtraction.cpp" />
+    <ClCompile Include="Components\Types\FunctionReturn.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -24,6 +24,12 @@ void FunctionCall::PreCompile(CompileMap& Enviroment)
 	Enviroment.AllocTempStack((Arguments.GetCount() * 0x8) < 0x20 ? 0x20 : (Arguments.GetCount() * 0x8));
 }
 
+void FunctionCall::PostCompile(CompileMap& Enviroment)
+{
+	for (RefObject<Arithmetic> Argument : Arguments)
+		Argument->PostCompile(Enviroment);
+}
+
 unsigned long long FunctionCall::Parse(RefObject<EnviromentMap> Enviroment, const char* Expression)
 {
 	const char* Opening;

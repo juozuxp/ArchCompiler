@@ -15,6 +15,8 @@ public:
 
 	void AddFunction(RefObject<Function> Function);
 
+	bool IsUnderlying();
+
 public:
 	List<RefObject<Function>> Functions;
 };

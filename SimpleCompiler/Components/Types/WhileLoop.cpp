@@ -12,6 +12,12 @@ void WhileLoop::PreCompile(CompileMap& Enviroment)
 	LoopEnviroment->PreCompile(Enviroment);
 }
 
+void WhileLoop::PostCompile(CompileMap& Enviroment)
+{
+	Condition->PostCompile(Enviroment);
+	LoopEnviroment->PostCompile(Enviroment);
+}
+
 void WhileLoop::Compile(CompileMap& Enviroment)
 {
 	unsigned long JumpLocation;

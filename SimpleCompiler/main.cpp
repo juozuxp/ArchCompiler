@@ -3,6 +3,11 @@
 #include <stdio.h>
 #include "Compiler/Compiler.h"
 
+void Test(unsigned long long A, unsigned long long B, unsigned long long C, unsigned long long D, unsigned long long E)
+{
+	printf("Hello %llu %llu %llu %llu %llu\n", A, B, C, D, E);
+}
+
 void AttemptExecution(List<unsigned char> ShellCode)
 {
 	unsigned long OldProtection;
@@ -12,12 +17,14 @@ void AttemptExecution(List<unsigned char> ShellCode)
 	printf("%llX\n", ShellCode.operator unsigned char *());
 	system("pause");
 
-	((void(*)(int))ShellCode.operator unsigned char*())(1);
+	printf("Done: %llX", ((unsigned long long(*)(void*))ShellCode.operator unsigned char* ())(Test));
 }
 
 int main()
 {
-	const char* Enviroment = "uint main(uchar CallMe)"
+	const char* Enviroment = "uint main(ulong CallMe)"
+							 "	CallMe(0, 1, 2, 3, 1337);"
+							 "	return main == main;"
 							 "	ushort Type = ((80 + 1) + (80 + (90 + 100 + (100 + 80 + (70 + 90)))));\n"
 							 "	uint Hello = true;\n"
 							 "	ulong Shlong = main;"

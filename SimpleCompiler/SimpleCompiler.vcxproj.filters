@@ -162,6 +162,9 @@
     <ClInclude Include="GlobalInfo\GlobalConstants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Components\Types\FunctionReturn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Compiler\CompileMap.cpp">
@@ -273,6 +276,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Components\Types\Arithmetic\Equal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Types\FunctionReturn.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

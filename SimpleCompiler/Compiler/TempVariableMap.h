@@ -23,6 +23,12 @@ public:
 
 		return VolatileRegisterMasks[RegisterUseMask - 1];
 	}
+	
+	constexpr void Merge(TempVariableMap& Other)
+	{
+		if (RegisterUseMask < Other.RegisterUseMask)
+			RegisterUseMask = Other.RegisterUseMask;
+	}
 
 private:
 	unsigned char RegisterUseMask = 0;

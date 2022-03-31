@@ -1,5 +1,6 @@
 #include "Addition.h"
 #include "../../../Compiler/CompileMap.h"
+#include "../../../Compiler/TempVariableMap.h"
 #include "../../../Utilities/x86_x64Shell.h"
 
 void Addition::Compile(CompileMap& Enviroment, RegisterType Source)
@@ -49,4 +50,9 @@ void Addition::Compile(CompileMap& Enviroment, RegisterType Source)
 			Enviroment.AddCode(Operation, sizeof(Operation));
 		}
 	}
+}
+
+RefObject<Operand> Addition::CreateOperator(RefObject<Operand> First, RefObject<Operand> Second, RegisterType TransitionSpace)
+{
+	return RefObject<Addition>(Addition(First, Second, TransitionSpace)).Cast<Operand>();
 }

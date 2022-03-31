@@ -900,7 +900,7 @@
 #define CALL_RD(rd) 0xE8, DWORDPTR(rd) // call rd [Size: 0x5]
 
 #define JMP_RW(rw) PFX_WORD, 0xE9, WORDPTR(rw) // jmp rw [Size: 0x4]
-#define JMP_RD(rd) 0xE9, DWORDPTR(rd) // jmp rd [Size: 0x4]
+#define JMP_RD(rd) 0xE9, DWORDPTR(rd) // jmp rd [Size: 0x5]
 
 #define JMP_RB(rb) 0xEB, BYTEPTR(rb) // jmp rb [Size: 0x2]
 

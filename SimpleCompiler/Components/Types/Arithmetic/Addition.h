@@ -13,5 +13,8 @@ public:
 	}
 
 public:
+	static RefObject<class Operand> CreateOperator(RefObject<class Operand> First, RefObject<class Operand> Second, class RegisterType TransitionSpace);
+
+public:
 	void Compile(class CompileMap& Enviroment, RegisterType Source);
 };

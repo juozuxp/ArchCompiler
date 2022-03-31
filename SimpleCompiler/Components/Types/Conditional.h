@@ -10,6 +10,7 @@ class Conditional : public TypeElement
 public:
 	void PreCompile(class CompileMap& Enviroment);
 	void Compile(class CompileMap& Enviroment);
+	void PostCompile(class CompileMap& Enviroment);
 
 	unsigned long long Parse(RefObject<EnviromentMap> Enviroment, const char* Expression);
 

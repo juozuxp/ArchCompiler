@@ -5,6 +5,7 @@
 #include "../Transferable/Transferable.h"
 #include "../../Compiler/TempVariableMap.h"
 #include "../../Utilities/SimpleUtilities.h"
+#include "../../Utilities/Encapsulable.h"
 
 #include "Arithmetic/Operand.h"
 
@@ -21,6 +22,7 @@ public:
 public:
 	void PreCompile(class CompileMap& Enviroment);
 	void Compile(class CompileMap& Enviroment);
+	void PostCompile(class CompileMap& Enviroment);
 
 	unsigned long long Parse(RefObject<EnviromentMap> Enviroment, const char* Expression);
 	unsigned long long Parse(RefObject<EnviromentMap> Enviroment, const char* Expression, RefObject<Transferable> AssignTo);
@@ -29,14 +31,11 @@ private:
 	RefObject<class Operand> EvaluateArthmetic(class EnviromentMap& Enviroment, const char* Expression);
 
 private:
-	static const char* HuntEnclosure(const char* Expression);
-	static List<char> ExtractEnclosure(const char* Expression);
-
-private:
 	RefObject<Operand> Origin;
 	TempVariableMap TemporarySpace;
 	RefObject<Transferable> AssignTo;
 
 private:
 	static constexpr Deflatable Deflater = Deflatable(" \t");
+	static constexpr Encapsulable Encapsule = Encapsulable('(', ')');
 };

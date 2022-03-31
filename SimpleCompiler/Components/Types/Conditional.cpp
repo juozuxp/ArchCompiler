@@ -78,6 +78,12 @@ void Conditional::Compile(CompileMap& Enviroment)
 	}
 }
 
+void Conditional::PostCompile(CompileMap& Enviroment)
+{
+	ConditionEnviroment->PostCompile(Enviroment);
+	Condition->PostCompile(Enviroment);
+}
+
 #undef RAX
 
 unsigned long long Conditional::Parse(RefObject<EnviromentMap> Enviroment, const char* Expression)

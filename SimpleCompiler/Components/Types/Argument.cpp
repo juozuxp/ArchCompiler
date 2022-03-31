@@ -6,6 +6,10 @@ void Argument::PreCompile(CompileMap& Enviroment)
 {
 }
 
+void Argument::PostCompile(CompileMap& Enviroment)
+{
+}
+
 void Argument::Compile(CompileMap& Enviroment)
 {
 	constexpr unsigned char Register[] =

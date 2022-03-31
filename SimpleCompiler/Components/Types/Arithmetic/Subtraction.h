@@ -1,7 +1,7 @@
 #pragma once
 #include "Operation.h"
 
-class Subtraction : Operation
+class Subtraction : public Operation
 {
 public:
 	constexpr Subtraction()
@@ -11,6 +11,9 @@ public:
 	inline Subtraction(RefObject<Operand> Left, RefObject<Operand> Right, RegisterType TransitionSpace) : Operation(Left, Right, TransitionSpace)
 	{
 	}
+
+public:
+	static RefObject<class Operand> CreateOperator(RefObject<class Operand> First, RefObject<class Operand> Second, class RegisterType TransitionSpace);
 
 public:
 	void Compile(class CompileMap& Enviroment, RegisterType Source);

@@ -23,6 +23,8 @@ public:
 	virtual RefObject<Variable> GetVariable(const char* Name, unsigned long long Length = 0) const;
 	virtual bool GetConstantValue(unsigned long long* Value, const char* Name, unsigned long long Length = 0) const;
 
+	virtual bool IsUnderlying();
+
 public:
 	static unsigned long EstimateSubEnviromentSize(const char* Expression);
 	static List<char> ExtractSubEnviroment(const char* Enviroment, unsigned long long* Length);

@@ -57,3 +57,8 @@ void FileEnviromentMap::Parse(const char* Expression, RefObject<Enviroment> Curr
 			break;
 	}
 }
+
+bool FileEnviromentMap::IsUnderlying()
+{
+	return true;
+}

@@ -5,6 +5,7 @@
 #include "../Types/LocalVariable.h"
 #include "../Types/Conditional.h"
 #include "../Types/WhileLoop.h"
+#include "../Types/FunctionReturn.h"
 
 void EnviromentMap::AddVariable(RefObject<Variable> Element)
 {
@@ -104,6 +105,16 @@ void EnviromentMap::Parse(const char* Expression, RefObject<Enviroment> This)
 
 			Expression->Parse(This.Cast<EnviromentMap>(), Token.GetToken());
 		}
+		else if (FunctionReturn::IsExpression(Token.GetToken()))
+		{
+			RefObject<FunctionReturn> Expression = RefObject<FunctionReturn>(FunctionReturn());
+
+			AddParsed(Expression.Cast<TypeElement>());
+
+			Expression->Parse(This.Cast<EnviromentMap>(), Token.GetToken());
+
+			return;
+		}
 	}
 }
 
@@ -118,6 +129,23 @@ void EnviromentMap::PreCompile(CompileMap& Enviroment)
 
 void EnviromentMap::Compile(CompileMap& Enviroment)
 {
+	EnviromentEntry = Enviroment.GetCodeLocation();
 	for (RefObject<TypeElement> Element : ParseElements)
 		Element->Compile(Enviroment);
+
+	EnviromentSize = Enviroment.GetCodeLocation() - EnviromentEntry;
+}
+
+void EnviromentMap::PostCompile(CompileMap& Enviroment)
+{
+	for (RefObject<TypeElement> Element : ParseElements)
+		Element->PostCompile(Enviroment);
+}
+
+RefObject<EnviromentMap> EnviromentMap::GetBaseEnviroment()
+{
+	RefObject<EnviromentMap> Base = RefObject<EnviromentMap>();
+	for (RefObject<EnviromentMap> Current = Parent.Cast<EnviromentMap>(); !Current->IsUnderlying(); Base = Current, Current = Current->Parent.Cast<EnviromentMap>());
+
+	return Base;
 }

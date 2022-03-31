@@ -15,6 +15,7 @@ public:
 public:
 	void PreCompile(class CompileMap& Enviroment);
 	void Compile(class CompileMap& Enviroment);
+	void PostCompile(class CompileMap& Enviroment);
 
 	void Parse(const char* Expression, RefObject<Enviroment> This);
 
@@ -25,7 +26,23 @@ public:
 	RefObject<Variable> GetVariable(const char* Name, unsigned long long Length = 0) const;
 	bool GetConstantValue(unsigned long long* Value, const char* Name, unsigned long long Length = 0) const;
 
+	RefObject<EnviromentMap> GetBaseEnviroment();
+
 public:
+	constexpr unsigned long long GetEnviromentSize()
+	{
+		return EnviromentSize;
+	}
+
+	constexpr unsigned long long GetEnviromentEntry()
+	{
+		return EnviromentEntry;
+	}
+
+private:
 	RefObject<Enviroment> Parent;
 	List<RefObject<TypeElement>> ParseElements;
+
+	unsigned long long EnviromentEntry;
+	unsigned long long EnviromentSize;
 };

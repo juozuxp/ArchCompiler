@@ -16,6 +16,11 @@ void Enviroment::Parse(const char* Expression, RefObject<Enviroment> This)
 {
 }
 
+bool Enviroment::IsUnderlying()
+{
+	return false;
+}
+
 RefObject<Variable> Enviroment::GetVariable(const char* Name, unsigned long long Length) const
 {
 	if (!Length)
