@@ -1,14 +1,14 @@
 #pragma once
-#include "Operation.h"
+#include "DOOperation.h"
 
-class Addition : public Operation
+class Addition : public DOOperation
 {
 public:
 	constexpr Addition()
 	{
 	}
 
-	inline Addition(RefObject<Operand> Left, RefObject<Operand> Right, RegisterType TransitionSpace) : Operation(Left, Right, TransitionSpace)
+	inline Addition(RefObject<Operand> Left, RefObject<Operand> Right, RegisterType TransitionSpace) : DOOperation(Left, Right, TransitionSpace)
 	{
 	}
 

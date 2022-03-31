@@ -5,8 +5,8 @@
 #include "../Transferable/TransferVariable.h"
 #include "../Transferable/TransferValue.h"
 
+#include "Arithmetic/DOOperation.h"
 #include "Arithmetic/OperationDef.h"
-#include "Arithmetic/Operation.h"
 #include "Arithmetic/Equal.h"
 #include "Arithmetic/Addition.h"
 #include "Arithmetic/Subtraction.h"
@@ -64,9 +64,54 @@ void Arithmetic::PostCompile(CompileMap& Enviroment)
 {
 }
 
+RefObject<Operand> Arithmetic::EvaluateOperand(EnviromentMap& Enviroment, const char** Expression, const DualOperation** ResultingOperation)
+{
+	const SingularOperation* Singular;
+
+	Singular = OperationDefs::LocateSingularOperation(*Expression);
+	if (Singular)
+	{
+		*Expression += Singular->ExpressionSize();
+		return Singular->CreateOperation(EvaluateOperand(Enviroment, Expression, ResultingOperation));
+	}
+	else if (**Expression == '(')
+	{
+		RefObject<Operand> Result;
+
+		List<char> Enclosure = Encapsule.GetEncapSpace(*Expression);
+		Result = EvaluateArthmetic(Enviroment, Enclosure);
+
+		(*Expression) += Enclosure.GetCount() - 1 + 2;
+		*Expression = OperationDefs::LocateDualOperation(*Expression, ResultingOperation);
+
+		return Result;
+	}
+
+	const char* LocOperation;
+	const char* Expresive;
+
+	Expresive = *Expression;
+
+	LocOperation = OperationDefs::LocateDualOperation(Expresive, ResultingOperation);
+	*Expression = LocOperation;
+
+	if (IS_NUMBER(Expresive))
+		return RefObject<TranferOperator>(RefObject<TransferValue>(TransferValue(strtoull(Expresive, 0, 10))).Cast<Transferable>()).Cast<Operand>();
+
+	unsigned long long Length = 0;
+	if (LocOperation)
+		Length = LocOperation - Expresive;
+
+	unsigned long long ConstantValue;
+	if (Enviroment.GetConstantValue(&ConstantValue, Expresive, Length))
+		return RefObject<TranferOperator>(RefObject<TransferValue>(TransferValue(ConstantValue)).Cast<Transferable>()).Cast<Operand>();
+
+	return RefObject<TranferOperator>(RefObject<TransferVariable>(TransferVariable(Enviroment.GetVariable(Expresive, Length))).Cast<Transferable>()).Cast<Operand>();
+}
+
 RefObject<Operand> Arithmetic::EvaluateArthmetic(EnviromentMap& Enviroment, const char* Expression)
 {
-	const OperationDef* OperationType;
+	const DualOperation* OperationType;
 
 	RefObject<Operand> First;
 	RefObject<Operand> Second;
@@ -75,33 +120,8 @@ RefObject<Operand> Arithmetic::EvaluateArthmetic(EnviromentMap& Enviroment, cons
 
 	const char* LocOperation;
 
-	if (*Expression == '(')
-	{
-		List<char> Enclosure = Encapsule.GetEncapSpace(Expression);
-		First = EvaluateArthmetic(Enviroment, Enclosure);
-
-		Expression += Enclosure.GetCount() - 1 + 2;
-		LocOperation = OperationDefs::LocateOperation(Expression, &OperationType);
-	}
-	else
-	{
-		LocOperation = OperationDefs::LocateOperation(Expression, &OperationType);
-		if (IS_NUMBER(Expression))
-			First = RefObject<TranferOperator>(RefObject<TransferValue>(TransferValue(strtoull(Expression, 0, 10))).Cast<Transferable>()).Cast<Operand>();
-		else
-		{
-			unsigned long long Length = 0;
-			if (LocOperation)
-				Length = LocOperation - Expression;
-
-			unsigned long long ConstantValue;
-			if (Enviroment.GetConstantValue(&ConstantValue, Expression, Length))
-				First = RefObject<TranferOperator>(RefObject<TransferValue>(TransferValue(ConstantValue)).Cast<Transferable>()).Cast<Operand>();
-			else
-				First = RefObject<TranferOperator>(RefObject<TransferVariable>(TransferVariable(Enviroment.GetVariable(Expression, Length))).Cast<Transferable>()).Cast<Operand>();
-		}
-	}
-
+	LocOperation = Expression;
+	First = EvaluateOperand(Enviroment, &LocOperation, &OperationType);
 	if (!LocOperation)
 		return First;
 
@@ -110,35 +130,11 @@ RefObject<Operand> Arithmetic::EvaluateArthmetic(EnviromentMap& Enviroment, cons
 	Expression = LocOperation + OperationType->ExpressionSize();
 	while (true)
 	{
-		const OperationDef* NextOperation;
+		const DualOperation* NextOperation;
 
-		if (*Expression == '(')
-		{
-			List<char> Enclosure = Encapsule.GetEncapSpace(Expression);
-			Second = EvaluateArthmetic(Enviroment, Enclosure);
+		LocOperation = Expression;
+		Second = EvaluateOperand(Enviroment, &LocOperation, &NextOperation);
 
-			Expression += Enclosure.GetCount() - 1 + 2;
-			LocOperation = OperationDefs::LocateOperation(Expression, &NextOperation);
-		}
-		else
-		{
-			LocOperation = OperationDefs::LocateOperation(Expression, &NextOperation);
-			if (IS_NUMBER(Expression))
-				Second = RefObject<TranferOperator>(RefObject<TransferValue>(TransferValue(strtoull(Expression, 0, 10))).Cast<Transferable>()).Cast<Operand>();
-			else
-			{
-				unsigned long long Length = 0;
-				if (LocOperation)
-					Length = LocOperation - Expression;
-
-				unsigned long long ConstantValue;
-				if (Enviroment.GetConstantValue(&ConstantValue, Expression, Length))
-					Second = RefObject<TranferOperator>(RefObject<TransferValue>(TransferValue(ConstantValue)).Cast<Transferable>()).Cast<Operand>();
-				else
-					Second = RefObject<TranferOperator>(RefObject<TransferVariable>(TransferVariable(Enviroment.GetVariable(Expression, Length))).Cast<Transferable>()).Cast<Operand>();
-			}
-		}
-		
 		First = OperationType->CreateOperation(First, Second, TransitionSpace);
 		if (!LocOperation)
 			break;

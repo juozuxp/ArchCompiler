@@ -6,11 +6,47 @@
 #include "Equal.h"
 #include "Addition.h"
 #include "Subtraction.h"
+#include "Derefrence.h"
 
-class OperationDef // this absolutely insists on being defined outside the parent class, holy fuck kms
+class OperationDefinition
 {
 public:
-	enum OperationType
+	constexpr OperationDefinition()
+	{
+	}
+
+	constexpr OperationDefinition(const char* SymbolSet, unsigned long long SetLength) : SymbolSet(SymbolSet), SetLength(SetLength)
+	{
+	}
+
+public:
+	inline bool IsOperation(const char* SymbolSet) const
+	{
+		return !strncmp(this->SymbolSet, SymbolSet, SetLength);
+	}
+
+	inline bool IsBetterFit(const OperationDefinition* Operation, const char* SymbolSet) const
+	{
+		if (SetLength <= Operation->SetLength)
+			return false;
+
+		return IsOperation(SymbolSet);
+	}
+
+	constexpr unsigned long long ExpressionSize() const
+	{
+		return SetLength;
+	}
+
+private:
+	const char* SymbolSet = 0;
+	unsigned long long SetLength = 0;
+};
+
+class DualOperation : public OperationDefinition
+{
+public:
+	enum OperationType // More of a suggestion list now
 	{
 		OperationType_None,
 		OperationType_Addition,
@@ -33,53 +69,61 @@ public:
 	};
 
 public:
-	constexpr OperationDef()
+	constexpr DualOperation()
 	{
 	}
 
-	constexpr OperationDef(RefObject<class Operand>(*CreateOperator)(RefObject<class Operand> First, RefObject<class Operand> Second, class RegisterType TransitionSpace), const char* SymbolSet, unsigned long long SetLength) : CreateOperator(CreateOperator), SymbolSet(SymbolSet), SetLength(SetLength)
+	constexpr DualOperation(RefObject<class Operand>(*CreateOperator)(RefObject<class Operand> First, RefObject<class Operand> Second, class RegisterType TransitionSpace), const char* SymbolSet, unsigned long long SetLength) : OperationDefinition(SymbolSet, SetLength), CreateOperator(CreateOperator)
 	{
 	}
 
 public:
 	RefObject<class Operand> CreateOperation(RefObject<class Operand> First, RefObject<class Operand> Second, class RegisterType TransitionSpace) const;
 
+private:
+	RefObject<class Operand>(*CreateOperator)(RefObject<class Operand> First, RefObject<class Operand> Second, class RegisterType TransitionSpace) = 0;
+};
+
+class SingularOperation : public OperationDefinition
+{
 public:
-	inline bool IsOperation(const char* SymbolSet) const
+	enum OperationType // More of a suggestion list now
 	{
-		return !strncmp(this->SymbolSet, SymbolSet, SetLength);
+		OperationType_None,
+		OperationType_Not,
+		OperationType_Dereference,
+		OperationType_LogicNot
+	};
+
+public:
+	constexpr SingularOperation()
+	{
 	}
 
-	inline bool IsBetterFit(const OperationDef* Operation, const char* SymbolSet) const
+	constexpr SingularOperation(RefObject<class Operand>(*CreateOperator)(RefObject<class Operand> Operand), const char* SymbolSet, unsigned long long SetLength) : OperationDefinition(SymbolSet, SetLength), CreateOperator(CreateOperator)
 	{
-		if (SetLength <= Operation->SetLength)
-			return false;
-
-		return IsOperation(SymbolSet);
 	}
 
-	constexpr unsigned long long ExpressionSize() const
-	{
-		return SetLength;
-	}
+public:
+	RefObject<class Operand> CreateOperation(RefObject<class Operand> Operand) const;
 
 private:
-	const char* SymbolSet = 0;
-	unsigned long long SetLength = 0;
-
-	RefObject<class Operand>(*CreateOperator)(RefObject<class Operand> First, RefObject<class Operand> Second, class RegisterType TransitionSpace) = 0;
+	RefObject<class Operand>(*CreateOperator)(RefObject<class Operand> Operand) = 0;
 };
 
 class OperationDefs
 {
 public:
-	static const char* LocateOperation(const char* Expression, const OperationDef** OperationDescription);
+	static const SingularOperation* LocateSingularOperation(const char* Expression);
+	static const char* LocateDualOperation(const char* Expression, const DualOperation** OperationDescription);
 
 private:
-	static constexpr OperationDef Operations[] = { OperationDef(Addition::CreateOperator, CSL_PAIR("+")), OperationDef(Subtraction::CreateOperator, CSL_PAIR("-")), OperationDef(0, CSL_PAIR("/")),
-												   OperationDef(0, CSL_PAIR("*")), OperationDef(0, CSL_PAIR("%")), OperationDef(0, CSL_PAIR("|")),
-												   OperationDef(0, CSL_PAIR("^")), OperationDef(0, CSL_PAIR("&")), OperationDef(0, CSL_PAIR("&")),
-												   OperationDef(0, CSL_PAIR("&&")), OperationDef(0, CSL_PAIR("||")), OperationDef(0, CSL_PAIR("<")),
-												   OperationDef(0, CSL_PAIR(">")), OperationDef(0, CSL_PAIR("<=")), OperationDef(0, CSL_PAIR(">=")),
-												   OperationDef(Equal::CreateOperator, CSL_PAIR("==")), OperationDef(0, CSL_PAIR("!=")) };
+	static constexpr DualOperation DualOperations[] = { DualOperation(Addition::CreateOperator, CSL_PAIR("+")), DualOperation(Subtraction::CreateOperator, CSL_PAIR("-")), DualOperation(0, CSL_PAIR("/")),
+												   DualOperation(0, CSL_PAIR("*")), DualOperation(0, CSL_PAIR("%")), DualOperation(0, CSL_PAIR("|")),
+												   DualOperation(0, CSL_PAIR("^")), DualOperation(0, CSL_PAIR("&")), DualOperation(0, CSL_PAIR("&")),
+												   DualOperation(0, CSL_PAIR("&&")), DualOperation(0, CSL_PAIR("||")), DualOperation(0, CSL_PAIR("<")),
+												   DualOperation(0, CSL_PAIR(">")), DualOperation(0, CSL_PAIR("<=")), DualOperation(0, CSL_PAIR(">=")),
+												   DualOperation(Equal::CreateOperator, CSL_PAIR("==")), DualOperation(0, CSL_PAIR("!=")) };
+
+	static constexpr SingularOperation SingularOperations[] = { SingularOperation(0, CSL_PAIR("!")), SingularOperation(0, CSL_PAIR("~")), SingularOperation(Derefrence::CreateOperator, CSL_PAIR("*"))};
 };

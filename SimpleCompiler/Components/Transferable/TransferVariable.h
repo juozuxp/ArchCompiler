@@ -21,4 +21,3 @@ public:
 private:
 	RefObject<Variable> Variable;
 };
-

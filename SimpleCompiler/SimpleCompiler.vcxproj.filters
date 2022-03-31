@@ -147,7 +147,7 @@
     <ClInclude Include="Components\Types\Arithmetic\TranferOperator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Components\Types\Arithmetic\Operation.h">
+    <ClInclude Include="Components\Types\Arithmetic\DOOperation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Components\Types\Arithmetic\Addition.h">
@@ -163,6 +163,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Components\Types\FunctionReturn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Types\Arithmetic\SOOperation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Types\Arithmetic\Derefrence.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -266,7 +272,7 @@
     <ClCompile Include="Components\Types\Arithmetic\TranferOperator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Components\Types\Arithmetic\Operation.cpp">
+    <ClCompile Include="Components\Types\Arithmetic\DOOperation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Components\Types\Arithmetic\Addition.cpp">
@@ -279,6 +285,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Components\Types\FunctionReturn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Types\Arithmetic\SOOperation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Types\Arithmetic\Derefrence.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

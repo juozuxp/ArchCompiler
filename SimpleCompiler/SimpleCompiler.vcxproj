@@ -49,11 +49,13 @@
     <ClInclude Include="Components\Types\Arithmetic\OperationDef.h" />
     <ClInclude Include="Components\Types\Arithmetic\Operand.h" />
     <ClInclude Include="Components\Types\Arithmetic\TranferOperator.h" />
-    <ClInclude Include="Components\Types\Arithmetic\Operation.h" />
+    <ClInclude Include="Components\Types\Arithmetic\DOOperation.h" />
     <ClInclude Include="Components\Types\Arithmetic\Subtraction.h" />
     <ClInclude Include="Components\Types\Arithmetic\Equal.h" />
+    <ClInclude Include="Components\Types\Arithmetic\Derefrence.h" />
     <ClInclude Include="GlobalInfo\GlobalConstants.h" />
     <ClInclude Include="Components\Types\FunctionReturn.h" />
+    <ClInclude Include="Components\Types\Arithmetic\SOOperation.h" />
     <ClInclude Include="Utilities\Encapsulable.h" />
     <ClInclude Include="GlobalInfo\RegisterTypes.h" />
     <ClInclude Include="GlobalInfo\VariableTypes.h" />
@@ -99,16 +101,18 @@
     <ClCompile Include="Components\Types\TypeElement.cpp" />
     <ClCompile Include="Components\Types\Variable.cpp" />
     <ClCompile Include="Components\Types\Arithmetic\Equal.cpp" />
+    <ClCompile Include="Components\Types\Arithmetic\Derefrence.cpp" />
     <ClCompile Include="GlobalInfo\VariableTypes.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Components\Types\Arithmetic\OperationDef.cpp" />
     <ClCompile Include="Components\Types\Arithmetic\Operand.cpp" />
-    <ClCompile Include="Components\Types\Arithmetic\Operation.cpp" />
+    <ClCompile Include="Components\Types\Arithmetic\DOOperation.cpp" />
     <ClCompile Include="Parser\SyntaxParser.cpp" />
     <ClCompile Include="Components\Types\WhileLoop.cpp" />
     <ClCompile Include="Components\Types\Arithmetic\TranferOperator.cpp" />
     <ClCompile Include="Components\Types\Arithmetic\Subtraction.cpp" />
     <ClCompile Include="Components\Types\FunctionReturn.cpp" />
+    <ClCompile Include="Components\Types\Arithmetic\SOOperation.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

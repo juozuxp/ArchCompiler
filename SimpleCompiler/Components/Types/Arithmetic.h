@@ -29,6 +29,7 @@ public:
 
 private:
 	RefObject<class Operand> EvaluateArthmetic(class EnviromentMap& Enviroment, const char* Expression);
+	RefObject<class Operand> EvaluateOperand(class EnviromentMap& Enviroment, const char** Expression, const class DualOperation** ResultingOperation);
 
 private:
 	RefObject<Operand> Origin;

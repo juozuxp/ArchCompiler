@@ -1,14 +1,14 @@
 #pragma once
-#include "Operation.h"
+#include "DOOperation.h"
 
-class Subtraction : public Operation
+class Subtraction : public DOOperation
 {
 public:
 	constexpr Subtraction()
 	{
 	}
 
-	inline Subtraction(RefObject<Operand> Left, RefObject<Operand> Right, RegisterType TransitionSpace) : Operation(Left, Right, TransitionSpace)
+	inline Subtraction(RefObject<Operand> Left, RefObject<Operand> Right, RegisterType TransitionSpace) : DOOperation(Left, Right, TransitionSpace)
 	{
 	}
 

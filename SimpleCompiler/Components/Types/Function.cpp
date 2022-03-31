@@ -217,7 +217,7 @@ void Function::CompileEntry(CompileMap& Enviroment)
 
 		Enviroment.AddCode(Shell, sizeof(Shell));
 	}
-	else
+	else if (Enviroment.GetStackSize())
 	{
 		unsigned char Shell[] =
 		{
@@ -242,7 +242,7 @@ void Function::CompileExit(CompileMap& Enviroment)
 
 		Enviroment.AddCode(Shell, sizeof(Shell));
 	}
-	else
+	else if (Enviroment.GetStackSize())
 	{
 		unsigned char Shell[] =
 		{

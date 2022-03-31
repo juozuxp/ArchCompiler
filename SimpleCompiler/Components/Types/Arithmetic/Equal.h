@@ -1,14 +1,14 @@
 #pragma once
-#include "Operation.h"
+#include "DOOperation.h"
 
-class Equal : public Operation
+class Equal : public DOOperation
 {
 public:
 	constexpr Equal()
 	{
 	}
 
-	inline Equal(RefObject<Operand> Left, RefObject<Operand> Right, RegisterType TransitionSpace) : Operation(Left, Right, TransitionSpace)
+	inline Equal(RefObject<Operand> Left, RefObject<Operand> Right, RegisterType TransitionSpace) : DOOperation(Left, Right, TransitionSpace)
 	{
 	}
 
