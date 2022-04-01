@@ -31,21 +31,23 @@ public:
 	virtual void CompileRetrieve(class CompileMap& Enviroment, class RegisterType Source);
 	virtual void CompileRefrence(class CompileMap& Enviroment, class RegisterType Source);
 
-	virtual unsigned long GetArithmeticMultiplier(long long Reference);
+	virtual unsigned long GetReferenceMultiplier(long long Reference);
 
 public:
 	static bool IsVariable(const char* Expression);
 	
 protected:
 	static List<char> ExtractName(const char* Expression);
+	static unsigned long long CountReferences(const char* Expression);
 
 protected:
 	List<char> VariableName;
 	RefObject<Arithmetic> Assigner;
 
 	unsigned long long VariableSize = 0;
+	unsigned long long VariableReference = 0;
 
 private:
-	static constexpr Skippable NonNameChar = Skippable(" \t=()");
+	static constexpr Skippable NonNameChar = Skippable(" \t*=()");
 	static constexpr Skippable Ignorables = Skippable(" \t");
 };

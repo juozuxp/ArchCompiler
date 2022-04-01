@@ -10,7 +10,7 @@ public:
 	}
 
 public:
-	unsigned long GetArithmeticMultiplier(long long Reference);
+	unsigned long GetReferenceMultiplier(long long Reference);
 
 protected:
 	inline SOOperation(RefObject<Operand> Operand) : GivenOperand(Operand)

@@ -14,7 +14,7 @@ public:
 	}
 
 public:
-	unsigned long GetArithmeticMultiplier(long long Reference);
+	unsigned long GetReferenceMultiplier(long long Reference);
 
 public:
 	static RefObject<class Operand> CreateOperator(RefObject<class Operand> Operand);

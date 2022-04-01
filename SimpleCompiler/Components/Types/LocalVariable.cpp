@@ -7,7 +7,7 @@
 
 void LocalVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source)
 {
-	switch (VariableSize)
+	switch (VariableReference ? 8 : VariableSize)
 	{
 	case 1:
 	{
@@ -201,7 +201,7 @@ void LocalVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source)
 
 void LocalVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source)
 {
-	switch (VariableSize)
+	switch (VariableReference ? 8 : VariableSize)
 	{
 	case 1:
 	{

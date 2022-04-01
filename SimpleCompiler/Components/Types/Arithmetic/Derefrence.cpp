@@ -3,9 +3,9 @@
 #include "../../../GlobalInfo/RegisterTypes.h"
 #include "../../../Utilities/x86_x64Shell.h"
 
-unsigned long Derefrence::GetArithmeticMultiplier(long long Reference)
+unsigned long Derefrence::GetReferenceMultiplier(long long Reference)
 {
-	return GivenOperand->GetArithmeticMultiplier(Reference + 1);
+	return GivenOperand->GetReferenceMultiplier(Reference + 1);
 }
 
 RefObject<Operand> Derefrence::CreateOperator(RefObject<Operand> Operand)
@@ -16,22 +16,93 @@ RefObject<Operand> Derefrence::CreateOperator(RefObject<Operand> Operand)
 void Derefrence::Compile(CompileMap& Enviroment, RegisterType Source)
 {
 	GivenOperand->Compile(Enviroment, Source);
-	if (Source.IsExtended())
+	switch (GivenOperand->GetReferenceMultiplier(0))
 	{
-		unsigned char Shell[] =
+	/*case 1:
+		if (Source.IsExtended())
 		{
-			PFX_REXWBR, MOVD_R_RM(R_MR(Source, Source))
-		};
+			unsigned char Shell[] =
+			{
+				PFX_REXBR, XORD_RM_R(LR_R(Source, Source)),
+				PFX_REXBR, MOVD_R_RM(R_MR(Source, Source))
+			};
 
-		Enviroment.AddCode(Shell, sizeof(Shell));
-	}
-	else
+			Enviroment.AddCode(Shell, sizeof(Shell));
+		}
+		else
+		{
+			unsigned char Shell[] =
+			{
+				PFX_REXW, XORD_RM_R(LR_R(Source, Source)),
+				MOVD_R_RM(R_MR(Source, Source))
+			};
+
+			Enviroment.AddCode(Shell, sizeof(Shell));
+		}
+
+	case 2:
+		if (Source.IsExtended())
+		{
+			unsigned char Shell[] =
+			{
+				PFX_REXBR, XORD_RM_R(LR_R(Source, Source)),
+				PFX_REXBR, MOVD_R_RM(R_MR(Source, Source))
+			};
+
+			Enviroment.AddCode(Shell, sizeof(Shell));
+		}
+		else
+		{
+			unsigned char Shell[] =
+			{
+				PFX_REXW, XORD_RM_R(LR_R(Source, Source)),
+				MOVD_R_RM(R_MR(Source, Source))
+			};
+
+			Enviroment.AddCode(Shell, sizeof(Shell));
+		}*/
+
+	case 4:
 	{
-		unsigned char Shell[] =
+		if (Source.IsExtended())
 		{
-			PFX_REXW, MOVD_R_RM(R_MR(Source, Source))
-		};
+			unsigned char Shell[] =
+			{
+				PFX_REXBR, MOVD_R_RM(R_MR(Source, Source))
+			};
 
-		Enviroment.AddCode(Shell, sizeof(Shell));
+			Enviroment.AddCode(Shell, sizeof(Shell));
+		}
+		else
+		{
+			unsigned char Shell[] =
+			{
+				MOVD_R_RM(R_MR(Source, Source))
+			};
+
+			Enviroment.AddCode(Shell, sizeof(Shell));
+		}
+	} break;
+	default:
+	{
+		if (Source.IsExtended())
+		{
+			unsigned char Shell[] =
+			{
+				PFX_REXWBR, MOVD_R_RM(R_MR(Source, Source))
+			};
+
+			Enviroment.AddCode(Shell, sizeof(Shell));
+		}
+		else
+		{
+			unsigned char Shell[] =
+			{
+				PFX_REXW, MOVD_R_RM(R_MR(Source, Source))
+			};
+
+			Enviroment.AddCode(Shell, sizeof(Shell));
+		}
+	} break;
 	}
 }

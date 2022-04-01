@@ -11,7 +11,7 @@ public:
 	}
 
 public:
-	unsigned long GetArithmeticMultiplier(long long Reference);
+	unsigned long GetReferenceMultiplier(long long Reference);
 
 protected:
 	inline DOOperation(RefObject<Operand> Left, RefObject<Operand> Right, RegisterType TransitionSpace) : Left(Left), Right(Right), TransitionSpace(TransitionSpace)

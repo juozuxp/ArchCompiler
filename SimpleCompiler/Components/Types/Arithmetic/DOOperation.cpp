@@ -2,18 +2,19 @@
 #include "../../../Utilities/x86_x64Shell.h"
 #include "../../../Compiler/CompileMap.h"
 
-unsigned long DOOperation::GetArithmeticMultiplier(long long Reference)
+unsigned long DOOperation::GetReferenceMultiplier(long long Reference)
 {
-	return Left->GetArithmeticMultiplier(Reference) < Right->GetArithmeticMultiplier(Reference) ? Right->GetArithmeticMultiplier(Reference) : Left->GetArithmeticMultiplier(Reference);
+	return Left->GetReferenceMultiplier(Reference) < Right->GetReferenceMultiplier(Reference) ? Right->GetReferenceMultiplier(Reference) : Left->GetReferenceMultiplier(Reference);
 }
 
 void DOOperation::CompileArithmeticMultiplier(CompileMap& Enviroment, RegisterType Register)
 {
-	unsigned long Multiplier = Left->GetArithmeticMultiplier(0);
+	unsigned long Multiplier = Left->GetReferenceMultiplier(0);
 	if (TransitionSpace.IsExtended())
 	{
 		switch (Multiplier)
 		{
+		case 0:
 		case 1:
 		{
 		} break;
@@ -59,6 +60,7 @@ void DOOperation::CompileArithmeticMultiplier(CompileMap& Enviroment, RegisterTy
 	{
 		switch (Multiplier)
 		{
+		case 0:
 		case 1:
 		{
 		} break;

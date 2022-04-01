@@ -14,7 +14,7 @@ public:
 	}
 
 public:
-	unsigned long GetArithmeticMultiplier(long long Reference);
+	unsigned long GetReferenceMultiplier(long long Reference);
 
 	void Compile(class CompileMap& Enviroment, RegisterType Source);
 	void CompileRefrence(class CompileMap& Enviroment, class RegisterType Source);

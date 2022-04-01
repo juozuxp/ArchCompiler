@@ -2,9 +2,9 @@
 #include "../../GlobalInfo/RegisterTypes.h"
 #include "../Types/Variable.h"
 
-unsigned long TransferVariable::GetArithmeticMultiplier(long long Reference)
+unsigned long TransferVariable::GetReferenceMultiplier(long long Reference)
 {
-	return Variable->GetArithmeticMultiplier(Reference);
+	return Variable->GetReferenceMultiplier(Reference);
 }
 
 void TransferVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source)

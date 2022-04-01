@@ -2,9 +2,9 @@
 #include "../../../GlobalInfo/RegisterTypes.h"
 #include "../../Transferable/Transferable.h"
 
-unsigned long TranferOperator::GetArithmeticMultiplier(long long Reference)
+unsigned long TranferOperator::GetReferenceMultiplier(long long Reference)
 {
-	return this->Source->GetArithmeticMultiplier(Reference);
+	return this->Source->GetReferenceMultiplier(Reference);
 }
 
 void TranferOperator::Compile(CompileMap& Enviroment, RegisterType Source)

@@ -1,9 +1,9 @@
 #include "Transferable.h"
 #include "../../GlobalInfo/RegisterTypes.h"
 
-unsigned long Transferable::GetArithmeticMultiplier(long long Reference)
+unsigned long Transferable::GetReferenceMultiplier(long long Reference)
 {
-	return 1;
+	return 0;
 }
 
 void Transferable::CompileAssign(class CompileMap& Enviroment, RegisterType Source)

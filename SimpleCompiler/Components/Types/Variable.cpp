@@ -20,12 +20,18 @@ void Variable::CompileRefrence(class CompileMap& Enviroment, RegisterType Source
 {
 }
 
-unsigned long Variable::GetArithmeticMultiplier(long long Reference)
+unsigned long Variable::GetReferenceMultiplier(long long Reference)
 {
 	if (Reference < 0)
+		return VariableReference ? 8 : VariableSize;
+
+	if (((long long)VariableReference) - Reference == 1)
 		return VariableSize;
 
-	return 1;
+	if (((long long)VariableReference) - Reference > 1)
+		return 8;
+
+	return 0;
 }
 
 Variable::Variable(const char* Expression) : TypeElement()
@@ -35,8 +41,11 @@ Variable::Variable(const char* Expression) : TypeElement()
 	Expression = Ignorables.Skip(Expression);
 	Variable = VariableTypes::RetrieveType(Expression);
 
+	Expression += strlen(Variable->GetName());
+
 	VariableSize = Variable->GetSize();
-	VariableName = ExtractName(Expression + strlen(Variable->GetName()));
+	VariableName = ExtractName(Expression);
+	VariableReference = CountReferences(Expression);
 }
 
 void Variable::PreCompile(CompileMap& Enviroment)
@@ -74,6 +83,20 @@ List<char> Variable::ExtractName(const char* Expression)
 	Name.Add('\0');
 
 	return Name;
+}
+
+unsigned long long Variable::CountReferences(const char* Expression)
+{
+	unsigned long long References;
+
+	Expression = Ignorables.Skip(Expression);
+	for (References = 0; NonNameChar.IsSkippable(*Expression); Expression++)
+	{
+		if (*Expression == '*')
+			References++;
+	}
+
+	return References;
 }
 
 bool Variable::IsVariable(const char* Expression)

@@ -1,6 +1,6 @@
 #include "SOOperation.h"
 
-unsigned long SOOperation::GetArithmeticMultiplier(long long Reference)
+unsigned long SOOperation::GetReferenceMultiplier(long long Reference)
 {
-	return GivenOperand->GetArithmeticMultiplier(Reference);
+	return GivenOperand->GetReferenceMultiplier(Reference);
 }
