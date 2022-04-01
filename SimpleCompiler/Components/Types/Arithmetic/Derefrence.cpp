@@ -3,6 +3,11 @@
 #include "../../../GlobalInfo/RegisterTypes.h"
 #include "../../../Utilities/x86_x64Shell.h"
 
+unsigned long Derefrence::GetArithmeticMultiplier(long long Reference)
+{
+	return GivenOperand->GetArithmeticMultiplier(Reference + 1);
+}
+
 RefObject<Operand> Derefrence::CreateOperator(RefObject<Operand> Operand)
 {
 	return RefObject<Derefrence>(Derefrence(Operand)).Cast<::Operand>();

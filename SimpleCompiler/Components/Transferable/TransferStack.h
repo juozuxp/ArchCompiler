@@ -1,7 +1,7 @@
 #pragma once
 #include "Transferable.h"
 
-class TransferStack : Transferable
+class TransferStack : public Transferable
 {
 public:
 	constexpr TransferStack()
@@ -13,8 +13,8 @@ public:
 	}
 
 public:
-	void CompileAssign(class CompileMap& Enviroment, RegisterType Source);
-	void CompileRetrieve(class CompileMap& Enviroment, RegisterType Source);
+	void CompileAssign(class CompileMap& Enviroment, class RegisterType Source);
+	void CompileRetrieve(class CompileMap& Enviroment, class RegisterType Source);
 
 private:
 	unsigned long long StackLocation = 0;

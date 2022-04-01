@@ -1,9 +1,8 @@
 #pragma once
 #include "TypeElement.h"
-#include "../Transferable/Transferable.h"
-#include "Arithmetic.h"
-#include "Variable.h"
 #include "../../Utilities/Skippable.h"
+#include "../../Utilities/RefObject.h"
+#include "../../Utilities/List.h"
 
 class FunctionCall : public TypeElement
 {
@@ -17,17 +16,17 @@ public:
 	void Compile(class CompileMap& Enviroment);
 	void PostCompile(class CompileMap& Enviroment);
 
-	unsigned long long Parse(RefObject<EnviromentMap> Enviroment, const char* Expression);
+	unsigned long long Parse(RefObject<class EnviromentMap> Enviroment, const char* Expression);
 
 public:
 	static bool IsFunctionCall(const char* Expression);
 
 private:
-	static RefObject<Transferable> GetTranferable(unsigned long long Argument);
+	static RefObject<class Transferable> GetTranferable(unsigned long long Argument);
 
 private:
-	RefObject<Variable> Function;
-	List<RefObject<Arithmetic>> Arguments;
+	RefObject<class Variable> Function;
+	List<RefObject<class Arithmetic>> Arguments;
 
 private:
 	static constexpr Skippable Ignorables = Skippable("\t ");

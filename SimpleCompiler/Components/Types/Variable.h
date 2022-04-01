@@ -1,7 +1,8 @@
 #pragma once
 #include "TypeElement.h"
-#include "Arithmetic.h"
 #include "../../Utilities/Skippable.h"
+#include "../../Utilities/List.h"
+#include "Arithmetic.h"
 
 class Variable : public TypeElement
 {
@@ -22,12 +23,15 @@ public:
 	void PreCompile(class CompileMap& Enviroment);
 	void PostCompile(class CompileMap& Enviroment);
 
-	unsigned long long Parse(RefObject<EnviromentMap> Enviroment, const char* Expression);
+	unsigned long long Parse(RefObject<class EnviromentMap> Enviroment, const char* Expression);
 
 public:
 	virtual void CompileCall(class CompileMap& Enviroment);
-	virtual void CompileAssign(class CompileMap& Enviroment, RegisterType Source);
-	virtual void CompileRetrieve(class CompileMap& Enviroment, RegisterType Source);
+	virtual void CompileAssign(class CompileMap& Enviroment, class RegisterType Source);
+	virtual void CompileRetrieve(class CompileMap& Enviroment, class RegisterType Source);
+	virtual void CompileRefrence(class CompileMap& Enviroment, class RegisterType Source);
+
+	virtual unsigned long GetArithmeticMultiplier(long long Reference);
 
 public:
 	static bool IsVariable(const char* Expression);

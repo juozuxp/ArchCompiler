@@ -1,4 +1,5 @@
 #include "Enviroment.h"
+#include "../Types/Variable.h"
 
 void Enviroment::PreCompile(class CompileMap& Enviroment)
 {

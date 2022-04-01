@@ -10,10 +10,16 @@ public:
 	{
 	}
 
+public:
+	unsigned long GetArithmeticMultiplier(long long Reference);
+
 protected:
 	inline DOOperation(RefObject<Operand> Left, RefObject<Operand> Right, RegisterType TransitionSpace) : Left(Left), Right(Right), TransitionSpace(TransitionSpace)
 	{
 	}
+
+protected:
+	void CompileArithmeticMultiplier(class CompileMap& Enviroment, class RegisterType Register);
 
 protected:
 	RefObject<Operand> Left;

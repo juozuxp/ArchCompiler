@@ -1,5 +1,4 @@
 #pragma once
-#include "../../Utilities/List.h"
 #include "../../Utilities/RefObject.h"
 
 class TypeElement

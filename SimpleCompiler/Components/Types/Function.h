@@ -1,7 +1,10 @@
 #pragma once
-#include "Argument.h"
 #include "../../Utilities/RefObject.h"
 #include "../../Utilities/Skippable.h"
+#include "../../Utilities/List.h"
+#include "Variable.h"
+#include "Argument.h"
+#include "../Enviroments/EnviromentMap.h"
 
 class Function : public Variable
 {
@@ -14,14 +17,14 @@ public:
 
 public:
 	void ExtractArguments(const char* Expression);
-	void BindEnviroment(RefObject<EnviromentMap> Enviroment);
+	void BindEnviroment(RefObject<class EnviromentMap> Enviroment);
 
 	void PreCompile(class CompileMap& Enviroment);
 	void Compile(class CompileMap& Enviroment);
 	void PostCompile(class CompileMap& Enviroment);
 
 	void CompileCall(class CompileMap& Enviroment);
-	void CompileRetrieve(class CompileMap& Enviroment, RegisterType Source);
+	void CompileRetrieve(class CompileMap& Enviroment, class RegisterType Source);
 
 public:
 	static bool IsFunctionDefinition(const char* Expression);

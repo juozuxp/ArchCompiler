@@ -1,7 +1,6 @@
 #pragma once
 #include "Operand.h"
 #include "../../../Utilities/RefObject.h"
-#include "../../Transferable/Transferable.h"
 
 class TranferOperator : public Operand
 {
@@ -10,13 +9,16 @@ public:
 	{
 	}
 
-	inline TranferOperator(RefObject<Transferable> Source) : Source(Source)
+	inline TranferOperator(RefObject<class Transferable> Source) : Source(Source)
 	{
 	}
 
 public:
+	unsigned long GetArithmeticMultiplier(long long Reference);
+
 	void Compile(class CompileMap& Enviroment, RegisterType Source);
+	void CompileRefrence(class CompileMap& Enviroment, class RegisterType Source);
 
 private:
-	RefObject<Transferable> Source;
+	RefObject<class Transferable> Source;
 };

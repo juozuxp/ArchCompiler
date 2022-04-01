@@ -3,7 +3,6 @@
 #include "../../Utilities/Deflatable.h"
 #include "../../Utilities/Encapsulable.h"
 #include "TypeElement.h"
-#include "Arithmetic.h"
 
 class Conditional : public TypeElement
 {
@@ -18,7 +17,7 @@ public:
 	static bool IsConditional(const char* Expression);
 
 private:
-	RefObject<Arithmetic> Condition;
+	RefObject<class Arithmetic> Condition;
 
 	RefObject<EnviromentMap> ElseEnviroment;
 	RefObject<EnviromentMap> ConditionEnviroment;

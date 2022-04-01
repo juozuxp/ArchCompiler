@@ -8,5 +8,8 @@ public:
 	}
 
 public:
+	virtual unsigned long GetArithmeticMultiplier(long long Reference);
+
 	virtual void Compile(class CompileMap& Enviroment, class RegisterType Source);
+	virtual void CompileRefrence(class CompileMap& Enviroment, class RegisterType Source);
 };

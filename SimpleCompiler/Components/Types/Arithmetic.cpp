@@ -5,11 +5,7 @@
 #include "../Transferable/TransferVariable.h"
 #include "../Transferable/TransferValue.h"
 
-#include "Arithmetic/DOOperation.h"
 #include "Arithmetic/OperationDef.h"
-#include "Arithmetic/Equal.h"
-#include "Arithmetic/Addition.h"
-#include "Arithmetic/Subtraction.h"
 #include "Arithmetic/TranferOperator.h"
 
 unsigned long long Arithmetic::Parse(RefObject<EnviromentMap> Enviroment, const char* Expression)

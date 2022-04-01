@@ -5,8 +5,8 @@
 #include "../../GlobalInfo/RegisterTypes.h"
 #include "../Transferable/TransferRegister.h"
 #include "../Transferable/TransferStack.h"
-#include "Arithmetic.h"
 #include "../../Compiler/CompileMap.h"
+#include "Arithmetic.h"
 
 void FunctionCall::Compile(CompileMap& Enviroment)
 {

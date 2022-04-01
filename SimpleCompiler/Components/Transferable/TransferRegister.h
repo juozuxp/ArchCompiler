@@ -2,7 +2,7 @@
 #include "Transferable.h"
 #include "../../GlobalInfo/RegisterTypes.h"
 
-class TransferRegister : Transferable
+class TransferRegister : public Transferable
 {
 public:
 	constexpr TransferRegister() : Transferable()

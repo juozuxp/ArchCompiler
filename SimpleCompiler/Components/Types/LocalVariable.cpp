@@ -400,6 +400,52 @@ void LocalVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source)
 	}
 }
 
+void LocalVariable::CompileRefrence(CompileMap& Enviroment, RegisterType Source)
+{
+	if (StackPosition < 0x7F)
+	{
+		if (Source.IsExtended())
+		{
+			unsigned char Shell[] =
+			{
+				PFX_REXWR, LEAD_R_M(R_MRSP_BO(Source, StackPosition))
+			};
+
+			Enviroment.AddCode(Shell, sizeof(Shell));
+		}
+		else
+		{
+			unsigned char Shell[] =
+			{
+				PFX_REXW, LEAD_R_M(R_MRSP_BO(Source, StackPosition))
+			};
+
+			Enviroment.AddCode(Shell, sizeof(Shell));
+		}
+	}
+	else
+	{
+		if (Source.IsExtended())
+		{
+			unsigned char Shell[] =
+			{
+				PFX_REXWR, LEAD_R_M(R_MRSP_DO(Source, StackPosition))
+			};
+
+			Enviroment.AddCode(Shell, sizeof(Shell));
+		}
+		else
+		{
+			unsigned char Shell[] =
+			{
+				PFX_REXW, LEAD_R_M(R_MRSP_DO(Source, StackPosition))
+			};
+
+			Enviroment.AddCode(Shell, sizeof(Shell));
+		}
+	}
+}
+
 void LocalVariable::PreCompile(CompileMap& Enviroment)
 {
 	if (Assigner)

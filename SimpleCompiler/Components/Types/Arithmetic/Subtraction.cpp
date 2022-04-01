@@ -7,6 +7,7 @@ void Subtraction::Compile(CompileMap& Enviroment, RegisterType Source)
 	Left->Compile(Enviroment, Source);
 	Right->Compile(Enviroment, TransitionSpace);
 
+	CompileArithmeticMultiplier(Enviroment, TransitionSpace);
 	if (TransitionSpace.IsExtended())
 	{
 		if (Source.IsExtended())

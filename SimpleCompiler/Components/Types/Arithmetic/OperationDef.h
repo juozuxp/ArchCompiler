@@ -7,6 +7,7 @@
 #include "Addition.h"
 #include "Subtraction.h"
 #include "Derefrence.h"
+#include "Refrence.h"
 
 class OperationDefinition
 {
@@ -125,5 +126,6 @@ private:
 												   DualOperation(0, CSL_PAIR(">")), DualOperation(0, CSL_PAIR("<=")), DualOperation(0, CSL_PAIR(">=")),
 												   DualOperation(Equal::CreateOperator, CSL_PAIR("==")), DualOperation(0, CSL_PAIR("!=")) };
 
-	static constexpr SingularOperation SingularOperations[] = { SingularOperation(0, CSL_PAIR("!")), SingularOperation(0, CSL_PAIR("~")), SingularOperation(Derefrence::CreateOperator, CSL_PAIR("*"))};
+	static constexpr SingularOperation SingularOperations[] = { SingularOperation(0, CSL_PAIR("!")), SingularOperation(0, CSL_PAIR("~")), SingularOperation(Derefrence::CreateOperator, CSL_PAIR("*")), 
+																SingularOperation(Refrence::CreateOperator, CSL_PAIR("&")) };
 };

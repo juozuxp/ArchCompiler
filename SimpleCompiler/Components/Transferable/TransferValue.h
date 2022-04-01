@@ -1,7 +1,7 @@
 #pragma once
 #include "Transferable.h"
 
-class TransferValue : Transferable
+class TransferValue : public Transferable
 {
 public:
 	constexpr TransferValue()
@@ -13,7 +13,7 @@ public:
 	}
 
 public:
-	void CompileRetrieve(class CompileMap& Enviroment, RegisterType Source);
+	void CompileRetrieve(class CompileMap& Enviroment, class RegisterType Source);
 
 private:
 	unsigned long long Value = 0;

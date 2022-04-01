@@ -9,6 +9,9 @@ public:
 	{
 	}
 
+public:
+	unsigned long GetArithmeticMultiplier(long long Reference);
+
 protected:
 	inline SOOperation(RefObject<Operand> Operand) : GivenOperand(Operand)
 	{

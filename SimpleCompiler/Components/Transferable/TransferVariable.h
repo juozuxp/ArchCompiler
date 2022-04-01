@@ -1,23 +1,25 @@
 #pragma once
 #include "Transferable.h"
 #include "../../Utilities/RefObject.h"
-#include "../Types/Variable.h"
 
-class TransferVariable : Transferable
+class TransferVariable : public Transferable
 {
 public:
 	constexpr TransferVariable()
 	{
 	}
 
-	inline TransferVariable(RefObject<Variable> Variable) : Variable(Variable)
+	inline TransferVariable(RefObject<class Variable> Variable) : Variable(Variable)
 	{
 	}
 
 public:
-	void CompileAssign(class CompileMap& Enviroment, RegisterType Source);
-	void CompileRetrieve(class CompileMap& Enviroment, RegisterType Source);
+	unsigned long GetArithmeticMultiplier(long long Reference);
+
+	void CompileAssign(class CompileMap& Enviroment, class RegisterType Source);
+	void CompileRetrieve(class CompileMap& Enviroment, class RegisterType Source);
+	void CompileRefrence(class CompileMap& Enviroment, class RegisterType Source);
 
 private:
-	RefObject<Variable> Variable;
+	RefObject<class Variable> Variable;
 };

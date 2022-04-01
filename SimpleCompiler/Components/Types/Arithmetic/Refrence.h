@@ -2,14 +2,14 @@
 #include "SOOperation.h"
 #include "../../../Utilities/RefObject.h"
 
-class Derefrence : public SOOperation
+class Refrence : public SOOperation
 {
 public:
-	constexpr Derefrence()
+	constexpr Refrence()
 	{
 	}
 
-	inline Derefrence(RefObject<Operand> Operand) : SOOperation(Operand)
+	inline Refrence(RefObject<Operand> Operand) : SOOperation(Operand)
 	{
 	}
 

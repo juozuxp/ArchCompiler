@@ -1,12 +1,13 @@
 #pragma once
+#include "../../Utilities/Deflatable.h"
 #include "../../Utilities/RefObject.h"
 #include "../../Utilities/HashMap.h"
-#include "../Types/Variable.h"
+#include "../../Utilities/List.h"
 
 class Enviroment
 {
 public:
-	inline Enviroment() : Variables(HashMap<char, RefObject<Variable>>(0)), ConstantValues(HashMap<char, unsigned long long>(0))
+	inline Enviroment() : Variables(HashMap<char, RefObject<class Variable>>(0)), ConstantValues(HashMap<char, unsigned long long>(0))
 	{
 	}
 
@@ -17,10 +18,10 @@ public:
 	
 	virtual void Parse(const char* Expression, RefObject<Enviroment> This);
 
-	virtual void AddVariable(RefObject<Variable> Element);
+	virtual void AddVariable(RefObject<class Variable> Element);
 	virtual void AddConstantValue(unsigned long long Value, const char* Name, unsigned long long Length = 0);
 
-	virtual RefObject<Variable> GetVariable(const char* Name, unsigned long long Length = 0) const;
+	virtual RefObject<class Variable> GetVariable(const char* Name, unsigned long long Length = 0) const;
 	virtual bool GetConstantValue(unsigned long long* Value, const char* Name, unsigned long long Length = 0) const;
 
 	virtual bool IsUnderlying();
@@ -30,7 +31,7 @@ public:
 	static List<char> ExtractSubEnviroment(const char* Enviroment, unsigned long long* Length);
 
 protected:
-	HashMap<char, RefObject<Variable>> Variables;
+	HashMap<char, RefObject<class Variable>> Variables;
 	HashMap<char, unsigned long long> ConstantValues;
 
 protected:

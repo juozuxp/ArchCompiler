@@ -1,6 +1,4 @@
 #pragma once
-#include "../../Utilities/List.h"
-#include "../../GlobalInfo/RegisterTypes.h"
 
 class Transferable
 {
@@ -10,11 +8,9 @@ public:
 	}
 
 public:
-	virtual void CompileAssign(class CompileMap& Enviroment, RegisterType Source)
-	{
-	}
+	virtual unsigned long GetArithmeticMultiplier(long long Reference);
 
-	virtual void CompileRetrieve(class CompileMap& Enviroment, RegisterType Source)
-	{
-	}
+	virtual void CompileAssign(class CompileMap& Enviroment, class RegisterType Source);
+	virtual void CompileRetrieve(class CompileMap& Enviroment, class RegisterType Source);
+	virtual void CompileRefrence(class CompileMap& Enviroment, class RegisterType Source);
 };

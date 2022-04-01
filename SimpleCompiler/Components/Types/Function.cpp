@@ -1,5 +1,6 @@
 #include "Function.h"
 #include "../../GlobalInfo/VariableTypes.h"
+#include "../../GlobalInfo/RegisterTypes.h"
 #include "../../Utilities/StrTok.h"
 #include "../Enviroments/EnviromentMap.h"
 #include "../../Compiler/CompileMap.h"

@@ -1,8 +1,8 @@
 #include "Variable.h"
 #include "../../Utilities/SimpleUtilities.h"
 #include "../Enviroments/EnviromentMap.h"
-#include "Arithmetic.h"
 #include "../../GlobalInfo/VariableTypes.h"
+#include "Arithmetic.h"
 
 void Variable::CompileCall(class CompileMap& Enviroment)
 {
@@ -14,6 +14,18 @@ void Variable::CompileAssign(class CompileMap& Enviroment, RegisterType Source)
 
 void Variable::CompileRetrieve(class CompileMap& Enviroment, RegisterType Source)
 {
+}
+
+void Variable::CompileRefrence(class CompileMap& Enviroment, RegisterType Source)
+{
+}
+
+unsigned long Variable::GetArithmeticMultiplier(long long Reference)
+{
+	if (Reference < 0)
+		return VariableSize;
+
+	return 1;
 }
 
 Variable::Variable(const char* Expression) : TypeElement()
