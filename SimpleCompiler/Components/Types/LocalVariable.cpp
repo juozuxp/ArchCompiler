@@ -64,7 +64,7 @@ void LocalVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source)
 
 				unsigned char Shell[] =
 				{
-					PFX_WORD, PFX_REXR, MOVD_RM_R(MRSP_BO_R(Source, StackPosition)),
+					PFX_REXR, PFX_WORD, MOVD_RM_R(MRSP_BO_R(Source, StackPosition)),
 				};
 
 				Enviroment.AddCode(Shell, sizeof(Shell));
@@ -86,7 +86,7 @@ void LocalVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source)
 
 				unsigned char Shell[] =
 				{
-					PFX_WORD, PFX_REXR, MOVD_RM_R(MRSP_DO_R(Source, StackPosition)),
+					PFX_REXR, PFX_WORD, MOVD_RM_R(MRSP_DO_R(Source, StackPosition)),
 				};
 
 				Enviroment.AddCode(Shell, sizeof(Shell));
@@ -211,7 +211,7 @@ void LocalVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source)
 			{
 				unsigned char Shell[] =
 				{
-					PFX_REXWBR, XORD_RM_R(LR_R(Source, Source)),
+					PFX_REXBR, XORD_RM_R(LR_R(Source, Source)),
 					PFX_REXR, MOVB_R_RM(R_MRSP_BO(Source, StackPosition)),
 				};
 
@@ -221,7 +221,7 @@ void LocalVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source)
 			{
 				unsigned char Shell[] =
 				{
-					PFX_REXW, XORD_RM_R(LR_R(Source, Source)),
+					XORD_RM_R(LR_R(Source, Source)),
 					MOVB_R_RM(R_MRSP_BO(Source, StackPosition)),
 				};
 
@@ -234,7 +234,7 @@ void LocalVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source)
 			{
 				unsigned char Shell[] =
 				{
-					PFX_REXWBR, XORD_RM_R(LR_R(Source, Source)),
+					PFX_REXBR, XORD_RM_R(LR_R(Source, Source)),
 					PFX_REXR, MOVB_R_RM(R_MRSP_DO(Source, StackPosition)),
 				};
 
@@ -244,7 +244,7 @@ void LocalVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source)
 			{
 				unsigned char Shell[] =
 				{
-					PFX_REXW, XORD_RM_R(LR_R(Source, Source)),
+					XORD_RM_R(LR_R(Source, Source)),
 					MOVB_R_RM(R_MRSP_DO(Source, StackPosition)),
 				};
 
@@ -261,8 +261,8 @@ void LocalVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source)
 
 				unsigned char Shell[] =
 				{
-					PFX_REXWBR, XORD_RM_R(LR_R(Source, Source)),
-					PFX_WORD, PFX_REXR, MOVD_R_RM(R_MRSP_BO(Source, StackPosition)),
+					PFX_REXBR, XORD_RM_R(LR_R(Source, Source)),
+					PFX_REXR, PFX_WORD, MOVD_R_RM(R_MRSP_BO(Source, StackPosition)),
 				};
 
 				Enviroment.AddCode(Shell, sizeof(Shell));
@@ -271,7 +271,7 @@ void LocalVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source)
 			{
 				unsigned char Shell[] =
 				{
-					PFX_REXW, XORD_RM_R(LR_R(Source, Source)),
+					XORD_RM_R(LR_R(Source, Source)),
 					PFX_WORD, MOVD_R_RM(R_MRSP_BO(Source, StackPosition)),
 				};
 
@@ -285,8 +285,8 @@ void LocalVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source)
 
 				unsigned char Shell[] =
 				{
-					PFX_REXWBR, XORD_RM_R(LR_R(Source, Source)),
-					PFX_WORD, PFX_REXR, MOVD_R_RM(R_MRSP_DO(Source, StackPosition)),
+					PFX_REXBR, XORD_RM_R(LR_R(Source, Source)),
+					PFX_REXR, PFX_WORD, MOVD_R_RM(R_MRSP_DO(Source, StackPosition)),
 				};
 
 				Enviroment.AddCode(Shell, sizeof(Shell));
@@ -295,7 +295,7 @@ void LocalVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source)
 			{
 				unsigned char Shell[] =
 				{
-					PFX_REXW, XORD_RM_R(LR_R(Source, Source)),
+					XORD_RM_R(LR_R(Source, Source)),
 					PFX_WORD, MOVD_R_RM(R_MRSP_DO(Source, StackPosition)),
 				};
 

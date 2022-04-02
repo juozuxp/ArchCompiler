@@ -18,13 +18,15 @@ void Derefrence::Compile(CompileMap& Enviroment, RegisterType Source)
 	GivenOperand->Compile(Enviroment, Source);
 	switch (GivenOperand->GetReferenceMultiplier(0))
 	{
-	/*case 1:
+	case 1:
+	{
 		if (Source.IsExtended())
 		{
 			unsigned char Shell[] =
 			{
-				PFX_REXBR, XORD_RM_R(LR_R(Source, Source)),
-				PFX_REXBR, MOVD_R_RM(R_MR(Source, Source))
+				PFX_REXBR, MOVB_R_RM(R_MR(Source, Source)),
+				SHLD_RM_B(LR(Source), 24),
+				SHRD_RM_B(LR(Source), 24)
 			};
 
 			Enviroment.AddCode(Shell, sizeof(Shell));
@@ -33,20 +35,23 @@ void Derefrence::Compile(CompileMap& Enviroment, RegisterType Source)
 		{
 			unsigned char Shell[] =
 			{
-				PFX_REXW, XORD_RM_R(LR_R(Source, Source)),
-				MOVD_R_RM(R_MR(Source, Source))
+				MOVB_R_RM(R_MR(Source, Source)),
+				SHLD_RM_B(LR(Source), 24),
+				SHRD_RM_B(LR(Source), 24)
 			};
 
 			Enviroment.AddCode(Shell, sizeof(Shell));
 		}
-
+	} break;
 	case 2:
+	{
 		if (Source.IsExtended())
 		{
 			unsigned char Shell[] =
 			{
-				PFX_REXBR, XORD_RM_R(LR_R(Source, Source)),
-				PFX_REXBR, MOVD_R_RM(R_MR(Source, Source))
+				PFX_REXBR, PFX_WORD, MOVD_R_RM(R_MR(Source, Source)),
+				SHLD_RM_B(LR(Source), 16),
+				SHRD_RM_B(LR(Source), 16)
 			};
 
 			Enviroment.AddCode(Shell, sizeof(Shell));
@@ -55,13 +60,14 @@ void Derefrence::Compile(CompileMap& Enviroment, RegisterType Source)
 		{
 			unsigned char Shell[] =
 			{
-				PFX_REXW, XORD_RM_R(LR_R(Source, Source)),
-				MOVD_R_RM(R_MR(Source, Source))
+				PFX_WORD, MOVD_R_RM(R_MR(Source, Source)),
+				SHLD_RM_B(LR(Source), 16),
+				SHRD_RM_B(LR(Source), 16)
 			};
 
 			Enviroment.AddCode(Shell, sizeof(Shell));
-		}*/
-
+		}
+	} break;
 	case 4:
 	{
 		if (Source.IsExtended())

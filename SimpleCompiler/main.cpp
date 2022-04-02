@@ -26,7 +26,7 @@ int main()
 							 //"	CallMe(0, 1, CallMe, 3, 1337);"
 							 "	ulong Type = ((80 + 1) + (80 + (90 + 100 + (100 + 80 + (70 + 90)))));\n"
 							 "	uint* Hello = &Type;\n"
-							 "	uint** Shlong = &Hello;"
+							 "	uchar** Shlong = &Hello;"
 							 "	ulong testin = **Shlong;"
 							 "	while (Type)"
 							 "		Type = Type - 1;"
