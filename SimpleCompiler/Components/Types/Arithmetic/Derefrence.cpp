@@ -13,7 +13,7 @@ RefObject<Operand> Derefrence::CreateOperator(RefObject<Operand> Operand)
 	return RefObject<Derefrence>(Derefrence(Operand)).Cast<::Operand>();
 }
 
-void Derefrence::Compile(CompileMap& Enviroment, RegisterType Source)
+void Derefrence::Compile(CompileMap& Enviroment, RegisterType Source) // A reminder to fix this to work with RBP, R12, R13, those will cuck this up pretty bad :P
 {
 	GivenOperand->Compile(Enviroment, Source);
 	switch (GivenOperand->GetReferenceMultiplier(0))

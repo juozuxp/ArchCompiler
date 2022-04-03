@@ -57,6 +57,7 @@
     <ClInclude Include="Components\Types\FunctionReturn.h" />
     <ClInclude Include="Components\Types\Arithmetic\SOOperation.h" />
     <ClInclude Include="Components\Types\Arithmetic\Refrence.h" />
+    <ClInclude Include="Compiler\PEBuilder.h" />
     <ClInclude Include="Utilities\Encapsulable.h" />
     <ClInclude Include="GlobalInfo\RegisterTypes.h" />
     <ClInclude Include="GlobalInfo\VariableTypes.h" />
@@ -115,6 +116,7 @@
     <ClCompile Include="Components\Types\FunctionReturn.cpp" />
     <ClCompile Include="Components\Types\Arithmetic\SOOperation.cpp" />
     <ClCompile Include="Components\Types\Arithmetic\Refrence.cpp" />
+    <ClCompile Include="Compiler\PEBuilder.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

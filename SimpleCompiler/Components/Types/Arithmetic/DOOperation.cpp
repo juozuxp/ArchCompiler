@@ -45,15 +45,36 @@ void DOOperation::CompileArithmeticMultiplier(CompileMap& Enviroment, RegisterTy
 
 			Enviroment.AddCode(Multiplication, sizeof(Multiplication));
 		} break;
-		/*default:
+		default:
 		{
-			unsigned char Multiplication[] =
+			if (Multiplier < 0xFF) // not sure if the multiplier is unsigned, if not, well we'll figure it out
 			{
-				MOV_R_D(EAX, Multiplier / 8),
-				PFX_REXWB, SHLD_RM_B(LR(EAX), 3)
-				PFX_REXWB
-			};
-		} break;*/ // not yet finished, will have to consider a few things before I can finish this
+				unsigned char Multiplication[] =
+				{
+					PFX_REXWBR, IMUL_R_RM_B(LR_R(Register, Register), Multiplier)
+				};
+
+				Enviroment.AddCode(Multiplication, sizeof(Multiplication));
+			}
+			else if (Multiplier < 0xFFFF)
+			{
+				unsigned char Multiplication[] =
+				{
+					PFX_REXWBR, IMUL_R_RM_W(LR_R(Register, Register), Multiplier)
+				};
+
+				Enviroment.AddCode(Multiplication, sizeof(Multiplication));
+			}
+			else if (Multiplier < 0xFFFFFFFF)
+			{
+				unsigned char Multiplication[] =
+				{
+					PFX_REXWBR, IMUL_R_RM_D(LR_R(Register, Register), Multiplier)
+				};
+
+				Enviroment.AddCode(Multiplication, sizeof(Multiplication));
+			}
+		} break;
 		}
 	}
 	else
@@ -91,15 +112,36 @@ void DOOperation::CompileArithmeticMultiplier(CompileMap& Enviroment, RegisterTy
 
 			Enviroment.AddCode(Multiplication, sizeof(Multiplication));
 		} break;
-		/*default:
+		default:
 		{
-			unsigned char Multiplication[] =
+			if (Multiplier < 0xFF) // not sure if the multiplier is unsigned, if not, well we'll figure it out
 			{
-				MOV_R_D(EAX, Multiplier / 8),
-				PFX_REXWB, SHLD_RM_B(LR(EAX), 3)
-				PFX_REXWB
-			};
-		} break;*/ // not yet finished, will have to consider a few things before I can finish this
+				unsigned char Multiplication[] =
+				{
+					PFX_REXW, IMUL_R_RM_B(LR_R(Register, Register), Multiplier)
+				};
+
+				Enviroment.AddCode(Multiplication, sizeof(Multiplication));
+			}
+			else if (Multiplier < 0xFFFF)
+			{
+				unsigned char Multiplication[] =
+				{
+					PFX_REXW, IMUL_R_RM_W(LR_R(Register, Register), Multiplier)
+				};
+
+				Enviroment.AddCode(Multiplication, sizeof(Multiplication));
+			}
+			else if (Multiplier < 0xFFFFFFFF)
+			{
+				unsigned char Multiplication[] =
+				{
+					PFX_REXW, IMUL_R_RM_D(LR_R(Register, Register), Multiplier)
+				};
+
+				Enviroment.AddCode(Multiplication, sizeof(Multiplication));
+			}
+		} break;
 		}
 	}
 }
