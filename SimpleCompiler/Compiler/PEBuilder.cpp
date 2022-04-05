@@ -1,31 +1,159 @@
 #include "PEBuilder.h"
-#include <Windows.h>
+#include "Compiler.h"
 
-void PEBuilder::TestBuild()
+PEBuilder::PEBuilder(const char* Code) : CompilerMap(Compiler(Code).Compile())
 {
-	unsigned char Header[sizeof(IMAGE_DOS_HEADER) + sizeof(IMAGE_NT_HEADERS64) + sizeof(IMAGE_SECTION_HEADER) * 2]; // 2 sections, 1 data, 1 code
+}
 
-	IMAGE_OPTIONAL_HEADER64* OptionalHeader;
-	IMAGE_SECTION_HEADER* SectionHeader;
-	IMAGE_NT_HEADERS64* NTHeaders;
-	IMAGE_FILE_HEADER* FileHeader;
-	IMAGE_DOS_HEADER* DosHeader;
+List<unsigned char> PEBuilder::BuildHeader()
+{
+	unsigned char Header[sizeof(IMAGE_DOS_HEADER) + sizeof(IMAGE_NT_HEADERS64)];
+	List<unsigned char> Result;
 
-	memset(Header, 0, sizeof(Header));
+	BuildDosHeader((IMAGE_DOS_HEADER*)Header);
+	BuildNTHeader((IMAGE_NT_HEADERS64*)(Header + sizeof(IMAGE_DOS_HEADER)));
 
-	DosHeader = (IMAGE_DOS_HEADER*)Header;
-	NTHeaders = (IMAGE_NT_HEADERS64*)(Header + sizeof(IMAGE_DOS_HEADER));
-	FileHeader = &NTHeaders->FileHeader;
-	OptionalHeader = &NTHeaders->OptionalHeader;
-	SectionHeader = (IMAGE_SECTION_HEADER*)(Header + sizeof(IMAGE_DOS_HEADER) + sizeof(IMAGE_NT_HEADERS64));
+	Result.Add(Header, sizeof(Header));
+	Result.Expand(sizeof(IMAGE_SECTION_HEADER) * CompilerMap.GetSectionCount());
+
+	BuildSectionHeaders((IMAGE_SECTION_HEADER*)(Result.operator unsigned char*() + sizeof(Header)));
+	
+	Result.Expand(FileAlignment - (Result.GetCount() & (FileAlignment - 1))); // Header alignment
+	return Result;
+}
+
+void PEBuilder::BuildDosHeader(IMAGE_DOS_HEADER* DosHeader)
+{
+	memset(DosHeader, 0, sizeof(IMAGE_DOS_HEADER));
 
 	DosHeader->e_magic = *(unsigned short*)"MZ";
 	DosHeader->e_lfanew = sizeof(IMAGE_DOS_HEADER);
+}
 
-	NTHeaders->Signature = *(unsigned long*)"PE\0\0";
+void PEBuilder::BuildNTHeader(IMAGE_NT_HEADERS64* NTHeader)
+{
+	memset(NTHeader, 0, sizeof(IMAGE_NT_HEADERS64));
+
+	NTHeader->Signature = *(unsigned long*)"PE\0\0";
+	BuildFileHeader(&NTHeader->FileHeader);
+	BuildOptionalHeader(&NTHeader->OptionalHeader);
+}
+
+void PEBuilder::BuildFileHeader(IMAGE_FILE_HEADER* FileHeader)
+{
+	memset(FileHeader, 0, sizeof(IMAGE_FILE_HEADER));
 
 	FileHeader->Machine = IMAGE_FILE_MACHINE_AMD64;
-	FileHeader->NumberOfSections = 2;
+	FileHeader->NumberOfSections = 1;
 	FileHeader->SizeOfOptionalHeader = sizeof(IMAGE_OPTIONAL_HEADER64);
 	FileHeader->Characteristics = IMAGE_FILE_EXECUTABLE_IMAGE | IMAGE_FILE_DEBUG_STRIPPED;
+}
+
+void PEBuilder::BuildSectionHeaders(IMAGE_SECTION_HEADER* SectionHeaders)
+{
+	unsigned long long HeaderSize;
+
+	memset(SectionHeaders, 0, sizeof(IMAGE_SECTION_HEADER) * CompilerMap.GetSectionCount());
+
+	HeaderSize = sizeof(IMAGE_DOS_HEADER) + sizeof(IMAGE_NT_HEADERS64) + sizeof(IMAGE_SECTION_HEADER) * CompilerMap.GetSectionCount();
+
+	SectionHeaders->Misc.VirtualSize = 0;
+	SectionHeaders->VirtualAddress = (HeaderSize + MemoryAlignment) & ~(MemoryAlignment - 1); // start
+	SectionHeaders->SizeOfRawData = (CompilerMap.GetByteCode().GetCount() + FileAlignment) & ~(FileAlignment - 1);
+	SectionHeaders->PointerToRawData = (HeaderSize + FileAlignment) & ~(FileAlignment - 1);
+	SectionHeaders->Characteristics = IMAGE_SCN_CNT_CODE | IMAGE_SCN_MEM_EXECUTE | IMAGE_SCN_MEM_READ;
+
+	strcpy((char*)SectionHeaders->Name, ".carch");
+}
+
+void PEBuilder::BuildOptionalHeader(IMAGE_OPTIONAL_HEADER64* OptionalHeader)
+{
+	unsigned long long HeaderSize;
+
+	HeaderSize = sizeof(IMAGE_DOS_HEADER) + sizeof(IMAGE_NT_HEADERS64) + sizeof(IMAGE_SECTION_HEADER) * CompilerMap.GetSectionCount();
+
+	memset(OptionalHeader, 0, sizeof(IMAGE_OPTIONAL_HEADER64));
+
+	OptionalHeader->Magic = IMAGE_NT_OPTIONAL_HDR64_MAGIC;
+	OptionalHeader->SizeOfCode = (CompilerMap.GetByteCode().GetCount() + MemoryAlignment) & ~(MemoryAlignment - 1);
+	OptionalHeader->SizeOfInitializedData = 0;
+	OptionalHeader->AddressOfEntryPoint = MemoryAlignment + CompilerMap.GetFunction("main")->GetRelativeLocation();
+	OptionalHeader->BaseOfCode = MemoryAlignment; // text section va, it'll always be MemoryAlignment
+	OptionalHeader->ImageBase = 0;
+	OptionalHeader->FileAlignment = FileAlignment;
+	OptionalHeader->SectionAlignment = MemoryAlignment;
+	OptionalHeader->MajorOperatingSystemVersion = 6; // Windows vista version
+	OptionalHeader->MinorOperatingSystemVersion = 0;
+	OptionalHeader->MajorSubsystemVersion = 6; // Default subsystem
+	OptionalHeader->MinorSubsystemVersion = 0;
+	OptionalHeader->SizeOfImage = OptionalHeader->SizeOfCode + OptionalHeader->SizeOfInitializedData + (HeaderSize + MemoryAlignment) & ~(MemoryAlignment - 1); // Sum of the entiere image
+	OptionalHeader->SizeOfHeaders = (HeaderSize + FileAlignment) & ~(FileAlignment - 1);
+	OptionalHeader->Subsystem = IMAGE_SUBSYSTEM_WINDOWS_CUI; // Console subsystem
+	OptionalHeader->DllCharacteristics = IMAGE_DLLCHARACTERISTICS_NO_SEH /*(Remove if try and except will be done)*/ | IMAGE_DLLCHARACTERISTICS_NX_COMPAT | IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE;
+	OptionalHeader->SizeOfStackReserve = StackReserve;
+	OptionalHeader->SizeOfStackCommit = StackCommit;
+	OptionalHeader->SizeOfHeapReserve = HeapReserve;
+	OptionalHeader->SizeOfHeapCommit = HeapCommit;
+	OptionalHeader->NumberOfRvaAndSizes = 0; // Number of DataDirectory objects
+}
+
+//void PEBuilder::TestBuild()
+//{
+//
+//	IMAGE_OPTIONAL_HEADER64* OptionalHeader;
+//	IMAGE_SECTION_HEADER* SectionHeader;
+//	IMAGE_NT_HEADERS64* NTHeaders;
+//	IMAGE_FILE_HEADER* FileHeader;
+//	IMAGE_DOS_HEADER* DosHeader;
+//
+//	memset(Header, 0, sizeof(Header));
+//
+//	DosHeader = (IMAGE_DOS_HEADER*)Header;
+//	NTHeaders = ;
+//	FileHeader = &NTHeaders->FileHeader;
+//	OptionalHeader = &NTHeaders->OptionalHeader;
+//	SectionHeader = (IMAGE_SECTION_HEADER*)(Header + sizeof(IMAGE_DOS_HEADER) + sizeof(IMAGE_NT_HEADERS64));
+//
+//
+//
+//	HANDLE FileHandle = CreateFileA("test.exe", GENERIC_WRITE, FILE_SHARE_READ, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+//	if (!FileHandle)
+//		return;
+//
+//	unsigned char Exe[0x800];
+//
+//	memcpy(Exe, Header, sizeof(Header));
+//	WriteFile(FileHandle, Exe, sizeof(Exe), 0, 0);
+//
+//	CloseHandle(FileHandle);
+//}
+
+void PEBuilder::BuildExecutable(const char* Path)
+{
+	List<unsigned char> FileBuffer;
+	List<char> DynPath;
+	HANDLE FileHandle;
+
+	DynPath.Add(Path, strlen(Path));
+	if (!strstr(Path, ".exe"))
+		DynPath.Add(".exe", sizeof(".exe") - 1);
+
+	DynPath.Add('\0');
+
+	FileBuffer.Add(BuildHeader());
+
+	FileBuffer.Add(CompilerMap.GetByteCode());
+	FileBuffer.Expand(MemoryAlignment - (CompilerMap.GetByteCode().GetCount() & (MemoryAlignment - 1))); // SectionAlignment
+
+	FileHandle = CreateFileA(DynPath, GENERIC_WRITE, FILE_SHARE_READ, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+	if (FileHandle == INVALID_HANDLE_VALUE)
+		return;
+
+	if (!WriteFile(FileHandle, FileBuffer, FileBuffer.GetCount(), 0, 0))
+	{
+		CloseHandle(FileHandle);
+		return;
+	}
+
+	CloseHandle(FileHandle);
 }

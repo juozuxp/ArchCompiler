@@ -1,5 +1,6 @@
 #pragma once
 #include "../Utilities/List.h"
+#include "../Utilities/RefObject.h"
 #include "../GlobalInfo/RegisterTypes.h"
 
 class CompileMap
@@ -16,6 +17,9 @@ public:
 	constexpr CompileMap()
 	{
 	}
+
+public:
+	class CompilerProduct CreateProduct(RefObject<class FileEnviromentMap> Enviroment);
 
 public:
 	inline void AddCode(unsigned char Code)

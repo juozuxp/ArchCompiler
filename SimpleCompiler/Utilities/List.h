@@ -59,7 +59,7 @@ public:
 
 		Type* RunArray = this->Array;
 		const Type* CopyArray = Copy.Array;
-		for (unsigned long long i = 0; i < this->ArrayNum; i++)
+		for (unsigned long long i = 0; i < this->ArrayNum; i++, RunArray++, CopyArray++)
 			*RunArray = *CopyArray;
 
 		return *this;
@@ -133,24 +133,23 @@ public:
 		return ~0;
 	}
 
+	inline void Expand(unsigned long long Size)
+	{
+		if (this->ArrayNum + Size <= this->ArrayMax)
+		{
+			this->ArrayNum += Size;
+			return;
+		}
+
+		this->ArrayNum += Size;
+		this->ArrayMax = this->ArrayNum;
+		this->Array = (Type*)realloc(this->Array, this->ArrayNum * sizeof(Type));
+	}
+
 public:
 	constexpr unsigned long long GetMaxCount() const
 	{
 		return this->ArrayMax;
-	}
-
-private:
-	inline void Expand(unsigned long long Space)
-	{
-		if (this->ArrayNum + Space <= this->ArrayMax)
-		{
-			this->ArrayNum += Space;
-			return;
-		}
-
-		this->ArrayNum += Space;
-		this->ArrayMax = this->ArrayNum;
-		this->Array = (Type*)realloc(this->Array, this->ArrayNum * sizeof(Type));
 	}
 
 private:

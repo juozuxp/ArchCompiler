@@ -5,12 +5,18 @@
 class Compiler
 {
 public:
+	constexpr Compiler()
+	{
+	}
+
 	inline Compiler(RefObject<FileEnviromentMap> Enviroment) : BaseEnviroment(Enviroment)
 	{
 	}
 
+	Compiler(const char* Code);
+
 public:
-	List<unsigned char> Compile();
+	class CompilerProduct Compile();
 
 private:
 	RefObject<FileEnviromentMap> BaseEnviroment;

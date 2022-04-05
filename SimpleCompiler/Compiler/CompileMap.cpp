@@ -1,4 +1,6 @@
 #include "CompileMap.h"
+#include "CompilerProduct.h"
+#include "../Components/Enviroments/FileEnviromentMap.h"
 
 void CompileMap::ReassesStack()
 {
@@ -19,4 +21,9 @@ void CompileMap::ReassesStack()
 		AllocatedStack |= (1 << 3); // Stack alignment, making sure the 16 byte missalignment is fixed
 
 	CollectiveCompileStack = AllocatedStack + BackupSize;
+}
+
+CompilerProduct CompileMap::CreateProduct(RefObject<FileEnviromentMap> Enviroment)
+{
+	return CompilerProduct(Enviroment, CompiledCode);
 }

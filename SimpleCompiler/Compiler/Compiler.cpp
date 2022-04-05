@@ -1,11 +1,17 @@
 #include "Compiler.h"
 #include "CompileMap.h"
+#include "CompilerProduct.h"
+#include "../Parser/SyntaxParser.h"
 
-List<unsigned char> Compiler::Compile()
+Compiler::Compiler(const char* Code) : Compiler(SyntaxParser::Parse(Code))
 {
-	CompileMap CompileEnviroment;
+}
 
-	BaseEnviroment->Compile(CompileEnviroment);
+CompilerProduct Compiler::Compile()
+{
+	CompileMap CompiledEnviroment;
 
-	return CompileEnviroment.GetCode();
+	BaseEnviroment->Compile(CompiledEnviroment);
+
+	return CompiledEnviroment.CreateProduct(BaseEnviroment);
 }

@@ -16,6 +16,12 @@ public:
 	Function(const char* Expression);
 
 public:
+	constexpr unsigned long long GetRelativeLocation()
+	{
+		return RelativeLocation;
+	}
+
+public:
 	void ExtractArguments(const char* Expression);
 	void BindEnviroment(RefObject<class EnviromentMap> Enviroment);
 

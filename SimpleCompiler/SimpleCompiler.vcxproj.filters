@@ -177,6 +177,9 @@
     <ClInclude Include="Compiler\PEBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Compiler\CompilerProduct.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Compiler\CompileMap.cpp">
@@ -303,6 +306,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Compiler\PEBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Compiler\CompilerProduct.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

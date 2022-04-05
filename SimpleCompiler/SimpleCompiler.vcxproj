@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Compiler\CompilerProduct.h" />
     <ClInclude Include="Components\Types\Arithmetic\Addition.h" />
     <ClInclude Include="Compiler\CompileMap.h" />
     <ClInclude Include="Compiler\Compiler.h" />
@@ -75,6 +76,7 @@
     <ClInclude Include="Components\Types\WhileLoop.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Compiler\CompilerProduct.cpp" />
     <ClCompile Include="Components\Types\Arithmetic\Addition.cpp" />
     <ClCompile Include="Compiler\CompileMap.cpp" />
     <ClCompile Include="Compiler\Compiler.cpp" />
