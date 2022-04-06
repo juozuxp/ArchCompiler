@@ -7,21 +7,30 @@
 
 #include "Arithmetic/OperationDef.h"
 #include "Arithmetic/TranferOperator.h"
+#include "../Types/String.h"
 
 unsigned long long Arithmetic::Parse(RefObject<EnviromentMap> Enviroment, const char* Expression)
 {
-	List<char> Deflate = Deflater.Deflate(Expression);
+	const char* VariableName;
 
-	unsigned long long EqualsIdx = 0;
-	for (; EqualsIdx < Deflate.GetCount(); EqualsIdx++)
+	Expression = Skipper.Skip(Expression);
+
+	VariableName = Expression;
+	for (; *Expression; Expression++)
 	{
-		if (Deflate[EqualsIdx] == '=')
+		if (*Expression == '=' || Skipper.IsSkippable(*Expression))
 			break;
 	}
 
-	AssignTo = RefObject<TransferVariable>(TransferVariable(Enviroment->GetVariable(Deflate, EqualsIdx))).Cast<Transferable>();
+	AssignTo = RefObject<TransferVariable>(TransferVariable(Enviroment->GetVariable(VariableName, Expression - VariableName))).Cast<Transferable>();
 
-	Origin = EvaluateArthmetic(*Enviroment, Deflate + EqualsIdx + 1);
+	for (; *Expression; Expression++)
+	{
+		if (*Expression == '=')
+			break;
+	}
+
+	Origin = EvaluateArthmetic(*Enviroment, Expression + 1);
 
 	return 0;
 }
@@ -29,7 +38,7 @@ unsigned long long Arithmetic::Parse(RefObject<EnviromentMap> Enviroment, const 
 unsigned long long Arithmetic::Parse(RefObject<EnviromentMap> Enviroment, const char* Expression, RefObject<Transferable> AssignTo)
 {
 	this->AssignTo = AssignTo;
-	this->Origin = EvaluateArthmetic(*Enviroment, Deflater.Deflate(Expression));
+	this->Origin = EvaluateArthmetic(*Enviroment, Expression);
 
 	return 0;
 }
@@ -64,6 +73,7 @@ RefObject<Operand> Arithmetic::EvaluateOperand(EnviromentMap& Enviroment, const 
 {
 	const SingularOperation* Singular;
 
+	*Expression = Skipper.Skip(*Expression);
 	Singular = OperationDefs::LocateSingularOperation(*Expression);
 	if (Singular)
 	{
@@ -86,17 +96,37 @@ RefObject<Operand> Arithmetic::EvaluateOperand(EnviromentMap& Enviroment, const 
 	const char* LocOperation;
 	const char* Expresive;
 
-	Expresive = *Expression;
+	Expresive = Skipper.Skip(*Expression);
 
 	LocOperation = OperationDefs::LocateDualOperation(Expresive, ResultingOperation);
 	*Expression = LocOperation;
 
 	if (IS_NUMBER(Expresive))
 		return RefObject<TranferOperator>(RefObject<TransferValue>(TransferValue(strtoull(Expresive, 0, 10))).Cast<Transferable>()).Cast<Operand>();
+	else if (*Expresive == '\"')
+		return RefObject<TranferOperator>(RefObject<TransferVariable>(TransferVariable(Enviroment.GetString(Expresive + 1, StringEncap.GetEncapEnd(Expresive) - (Expresive + 1)).Cast<Variable>())).Cast<Transferable>()).Cast<Operand>();
 
 	unsigned long long Length = 0;
 	if (LocOperation)
-		Length = LocOperation - Expresive;
+	{
+		for (LocOperation--;; LocOperation--)
+		{
+			if (!Skipper.IsSkippable(*LocOperation))
+				break;
+		}
+
+		Length = LocOperation - Expresive + 1;
+	}
+	else
+	{
+		Length = strlen(Expresive);
+		LocOperation = Expresive + Length;
+		for (LocOperation--;; LocOperation--, Length--)
+		{
+			if (!Skipper.IsSkippable(*LocOperation))
+				break;
+		}
+	}
 
 	unsigned long long ConstantValue;
 	if (Enviroment.GetConstantValue(&ConstantValue, Expresive, Length))

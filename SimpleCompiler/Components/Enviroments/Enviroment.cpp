@@ -1,5 +1,6 @@
 #include "Enviroment.h"
 #include "../Types/Variable.h"
+#include "../Types/String.h"
 
 void Enviroment::PreCompile(class CompileMap& Enviroment)
 {
@@ -36,6 +37,11 @@ void Enviroment::AddVariable(RefObject<Variable> Element)
 
 	VarName = Element->GetVariableName();
 	Variables.Add(VarName, strlen(VarName), Element);
+}
+
+RefObject<String> Enviroment::GetString(const char* String, unsigned long long Length)
+{
+	return RefObject<::String>();
 }
 
 void Enviroment::AddConstantValue(unsigned long long Value, const char* Name, unsigned long long Length)

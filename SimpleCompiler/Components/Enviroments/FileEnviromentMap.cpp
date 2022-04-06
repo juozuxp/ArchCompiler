@@ -1,6 +1,7 @@
 #include "FileEnviromentMap.h"
 #include "../../Compiler/CompileMap.h"
 #include "../../GlobalInfo/GlobalConstants.h"
+#include "../Types/String.h"
 
 FileEnviromentMap::FileEnviromentMap() : Enviroment()
 {
@@ -61,4 +62,24 @@ void FileEnviromentMap::Parse(const char* Expression, RefObject<Enviroment> Curr
 bool FileEnviromentMap::IsUnderlying()
 {
 	return true;
+}
+
+RefObject<String> FileEnviromentMap::GetString(const char* String, unsigned long long Length)
+{
+	if (!Length)
+		Length = strlen(String);
+
+	unsigned long long Index;
+
+	Index = Strings.GetIndex(String, Length);
+	if (Index == ~0ull)
+	{
+		RefObject<::String> Result = RefObject<::String>(::String(String, Length));
+
+		Strings.Add(String, Length, Result);
+
+		return Result;
+	}
+
+	return Strings.GetByIndex(Index);
 }

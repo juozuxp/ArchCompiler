@@ -6,6 +6,7 @@
 #include "../Types/Conditional.h"
 #include "../Types/WhileLoop.h"
 #include "../Types/FunctionReturn.h"
+#include "../Types/String.h"
 
 void EnviromentMap::AddVariable(RefObject<Variable> Element)
 {
@@ -20,6 +21,11 @@ void EnviromentMap::AddVariableNoCompile(RefObject<Variable> Element)
 	VarName = Element->GetVariableName();
 
 	Variables.Add(VarName, strlen(VarName), Element);
+}
+
+RefObject<String> EnviromentMap::GetString(const char* String, unsigned long long Length)
+{
+	return Parent->GetString(String, Length);
 }
 
 bool EnviromentMap::GetConstantValue(unsigned long long* Value, const char* Name, unsigned long long Length) const

@@ -2,6 +2,7 @@
 #include "TypeElement.h"
 #include "../../Utilities/RefObject.h"
 #include "../../Utilities/Deflatable.h"
+#include "../../Utilities/Skippable.h"
 #include "../Transferable/Transferable.h"
 #include "../../Compiler/TempVariableMap.h"
 #include "../../Utilities/SimpleUtilities.h"
@@ -37,6 +38,7 @@ private:
 	RefObject<Transferable> AssignTo;
 
 private:
-	static constexpr Deflatable Deflater = Deflatable(" \t");
-	static constexpr Encapsulable Encapsule = Encapsulable('(', ')');
+	static constexpr Skippable Skipper = Skippable(" \t");
+	static constexpr Encapsulable StringEncap = Encapsulable('\"', '\"', '\\');
+	static constexpr Encapsulable Encapsule = Encapsulable('(', ')', 0, &StringEncap);
 };

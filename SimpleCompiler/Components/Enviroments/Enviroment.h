@@ -21,6 +21,7 @@ public:
 	virtual void AddVariable(RefObject<class Variable> Element);
 	virtual void AddConstantValue(unsigned long long Value, const char* Name, unsigned long long Length = 0);
 
+	virtual RefObject<class String> GetString(const char* String, unsigned long long Length);
 	virtual RefObject<class Variable> GetVariable(const char* Name, unsigned long long Length = 0) const;
 	virtual bool GetConstantValue(unsigned long long* Value, const char* Name, unsigned long long Length = 0) const;
 
@@ -31,8 +32,8 @@ public:
 	static List<char> ExtractSubEnviroment(const char* Enviroment, unsigned long long* Length);
 
 protected:
-	HashMap<char, RefObject<class Variable>> Variables;
 	HashMap<char, unsigned long long> ConstantValues;
+	HashMap<char, RefObject<class Variable>> Variables;
 
 protected:
 	static constexpr Deflatable Deflater = Deflatable("\r\n");

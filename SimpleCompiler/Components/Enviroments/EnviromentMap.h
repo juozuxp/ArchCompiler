@@ -23,6 +23,7 @@ public:
 	void AddParsed(RefObject<TypeElement> Element);
 	void AddVariableNoCompile(RefObject<Variable> Element);
 
+	RefObject<class String> GetString(const char* String, unsigned long long Length);
 	RefObject<Variable> GetVariable(const char* Name, unsigned long long Length = 0) const;
 	bool GetConstantValue(unsigned long long* Value, const char* Name, unsigned long long Length = 0) const;
 

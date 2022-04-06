@@ -71,6 +71,21 @@ public:
 	}
 
 public:
+	constexpr unsigned long long AllocStaticSpace(unsigned long long Size)
+	{
+		Size = (Size + ((1ull << 3) - 1)) & ~((1ull << 3) - 1);
+		if (State == CompileState_Compile)
+		{
+			StaticSpace += Size;
+			return StaticSpace - Size;
+		}
+
+		else if (State == CompileState_PreCompile)
+			AllocatedStaticSpace += Size;
+
+		return 0;
+	}
+
 	constexpr unsigned long long AllocConstStack(unsigned long long Size)
 	{
 		Size = (Size + ((1ull << 3) - 1)) & ~((1ull << 3) - 1);
@@ -146,6 +161,11 @@ public:
 		return CompiledCode.GetCount();
 	}
 
+	constexpr unsigned long long GetStaticSpaceSize()
+	{
+		return AllocatedStaticSpace;
+	}
+
 	constexpr List<unsigned char>& GetCode()
 	{
 		return CompiledCode;
@@ -192,4 +212,7 @@ private:
 	unsigned long long AllocatedTempStack = 0;
 
 	unsigned long long CollectiveCompileStack = 0;
+
+	unsigned long long StaticSpace = 0;
+	unsigned long long AllocatedStaticSpace = 0;
 };

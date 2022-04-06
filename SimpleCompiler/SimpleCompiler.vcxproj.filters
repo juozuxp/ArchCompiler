@@ -180,6 +180,12 @@
     <ClInclude Include="Compiler\CompilerProduct.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Components\Types\String.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Types\StaticVariable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Compiler\CompileMap.cpp">
@@ -309,6 +315,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Compiler\CompilerProduct.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Types\String.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Types\StaticVariable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

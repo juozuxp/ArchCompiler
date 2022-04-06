@@ -2,6 +2,7 @@
 #include "EnviromentMap.h"
 #include "Enviroment.h"
 #include "../Types/Function.h"
+#include "../Types/String.h"
 
 class FileEnviromentMap : public Enviroment
 {
@@ -17,6 +18,9 @@ public:
 
 	bool IsUnderlying();
 
+	RefObject<String> GetString(const char* String, unsigned long long Length = 0);
+
 public:
 	List<RefObject<Function>> Functions;
+	HashMap<char, RefObject<String>> Strings;
 };
