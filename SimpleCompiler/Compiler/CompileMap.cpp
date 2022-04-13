@@ -25,5 +25,5 @@ void CompileMap::ReassesStack()
 
 CompilerProduct CompileMap::CreateProduct(RefObject<FileEnviromentMap> Enviroment)
 {
-	return CompilerProduct(Enviroment, CompiledCode);
+	return CompilerProduct(Enviroment, CompiledCode, StaticSpace);
 }

@@ -1,5 +1,6 @@
 #include "PEBuilder.h"
 #include "Compiler.h"
+#include "../GlobalInfo/GlobalCompileInfo.h"
 
 PEBuilder::PEBuilder(const char* Code) : CompilerMap(Compiler(Code).Compile())
 {
@@ -18,7 +19,7 @@ List<unsigned char> PEBuilder::BuildHeader()
 
 	BuildSectionHeaders((IMAGE_SECTION_HEADER*)(Result.operator unsigned char*() + sizeof(Header)));
 	
-	Result.Expand(FileAlignment - (Result.GetCount() & (FileAlignment - 1))); // Header alignment
+	Result.Expand(GlobalCompileInfo::FileAlignment - (Result.GetCount() & (GlobalCompileInfo::FileAlignment - 1))); // Header alignment
 	return Result;
 }
 
@@ -44,7 +45,7 @@ void PEBuilder::BuildFileHeader(IMAGE_FILE_HEADER* FileHeader)
 	memset(FileHeader, 0, sizeof(IMAGE_FILE_HEADER));
 
 	FileHeader->Machine = IMAGE_FILE_MACHINE_AMD64;
-	FileHeader->NumberOfSections = 1;
+	FileHeader->NumberOfSections = CompilerMap.GetSectionCount();
 	FileHeader->SizeOfOptionalHeader = sizeof(IMAGE_OPTIONAL_HEADER64);
 	FileHeader->Characteristics = IMAGE_FILE_EXECUTABLE_IMAGE | IMAGE_FILE_DEBUG_STRIPPED;
 }
@@ -57,13 +58,21 @@ void PEBuilder::BuildSectionHeaders(IMAGE_SECTION_HEADER* SectionHeaders)
 
 	HeaderSize = sizeof(IMAGE_DOS_HEADER) + sizeof(IMAGE_NT_HEADERS64) + sizeof(IMAGE_SECTION_HEADER) * CompilerMap.GetSectionCount();
 
-	SectionHeaders->Misc.VirtualSize = 0;
-	SectionHeaders->VirtualAddress = (HeaderSize + MemoryAlignment) & ~(MemoryAlignment - 1); // start
-	SectionHeaders->SizeOfRawData = (CompilerMap.GetByteCode().GetCount() + FileAlignment) & ~(FileAlignment - 1);
-	SectionHeaders->PointerToRawData = (HeaderSize + FileAlignment) & ~(FileAlignment - 1);
-	SectionHeaders->Characteristics = IMAGE_SCN_CNT_CODE | IMAGE_SCN_MEM_EXECUTE | IMAGE_SCN_MEM_READ;
+	SectionHeaders[0].Misc.VirtualSize = CompilerMap.GetStaticData().GetCount();
+	SectionHeaders[0].VirtualAddress = (HeaderSize + GlobalCompileInfo::MemoryAlignment) & ~(GlobalCompileInfo::MemoryAlignment - 1); // start
+	SectionHeaders[0].SizeOfRawData = (CompilerMap.GetStaticData().GetCount() + GlobalCompileInfo::FileAlignment) & ~(GlobalCompileInfo::FileAlignment - 1);
+	SectionHeaders[0].PointerToRawData = (HeaderSize + GlobalCompileInfo::FileAlignment) & ~(GlobalCompileInfo::FileAlignment - 1);
+	SectionHeaders[0].Characteristics = IMAGE_SCN_CNT_INITIALIZED_DATA | IMAGE_SCN_MEM_WRITE | IMAGE_SCN_MEM_READ;
 
-	strcpy((char*)SectionHeaders->Name, ".carch");
+	strcpy((char*)SectionHeaders[0].Name, ".darch");
+
+	SectionHeaders[1].Misc.VirtualSize = CompilerMap.GetByteCode().GetCount();
+	SectionHeaders[1].VirtualAddress = SectionHeaders[0].VirtualAddress + ((SectionHeaders[0].SizeOfRawData + GlobalCompileInfo::MemoryAlignment) & ~(GlobalCompileInfo::MemoryAlignment - 1));
+	SectionHeaders[1].SizeOfRawData = (CompilerMap.GetByteCode().GetCount() + GlobalCompileInfo::FileAlignment) & ~(GlobalCompileInfo::FileAlignment - 1);
+	SectionHeaders[1].PointerToRawData = SectionHeaders[0].PointerToRawData + SectionHeaders[1].SizeOfRawData;
+	SectionHeaders[1].Characteristics = IMAGE_SCN_CNT_CODE | IMAGE_SCN_MEM_EXECUTE | IMAGE_SCN_MEM_READ;
+
+	strcpy((char*)SectionHeaders[1].Name, ".carch");
 }
 
 void PEBuilder::BuildOptionalHeader(IMAGE_OPTIONAL_HEADER64* OptionalHeader)
@@ -75,25 +84,25 @@ void PEBuilder::BuildOptionalHeader(IMAGE_OPTIONAL_HEADER64* OptionalHeader)
 	memset(OptionalHeader, 0, sizeof(IMAGE_OPTIONAL_HEADER64));
 
 	OptionalHeader->Magic = IMAGE_NT_OPTIONAL_HDR64_MAGIC;
-	OptionalHeader->SizeOfCode = (CompilerMap.GetByteCode().GetCount() + MemoryAlignment) & ~(MemoryAlignment - 1);
-	OptionalHeader->SizeOfInitializedData = 0;
-	OptionalHeader->AddressOfEntryPoint = MemoryAlignment + CompilerMap.GetFunction("main")->GetRelativeLocation();
-	OptionalHeader->BaseOfCode = MemoryAlignment; // text section va, it'll always be MemoryAlignment
+	OptionalHeader->SizeOfCode = (CompilerMap.GetByteCode().GetCount() + GlobalCompileInfo::MemoryAlignment) & ~(GlobalCompileInfo::MemoryAlignment - 1);
+	OptionalHeader->SizeOfInitializedData = (CompilerMap.GetStaticData().GetCount() + GlobalCompileInfo::MemoryAlignment) & ~(GlobalCompileInfo::MemoryAlignment - 1);
+	OptionalHeader->AddressOfEntryPoint = GlobalCompileInfo::MemoryAlignment + OptionalHeader->SizeOfInitializedData + CompilerMap.GetFunction("main")->GetRelativeLocation();
+	OptionalHeader->BaseOfCode = GlobalCompileInfo::MemoryAlignment + OptionalHeader->SizeOfInitializedData;
 	OptionalHeader->ImageBase = 0;
-	OptionalHeader->FileAlignment = FileAlignment;
-	OptionalHeader->SectionAlignment = MemoryAlignment;
+	OptionalHeader->FileAlignment = GlobalCompileInfo::FileAlignment;
+	OptionalHeader->SectionAlignment = GlobalCompileInfo::MemoryAlignment;
 	OptionalHeader->MajorOperatingSystemVersion = 6; // Windows vista version
 	OptionalHeader->MinorOperatingSystemVersion = 0;
 	OptionalHeader->MajorSubsystemVersion = 6; // Default subsystem
 	OptionalHeader->MinorSubsystemVersion = 0;
-	OptionalHeader->SizeOfImage = OptionalHeader->SizeOfCode + OptionalHeader->SizeOfInitializedData + (HeaderSize + MemoryAlignment) & ~(MemoryAlignment - 1); // Sum of the entiere image
-	OptionalHeader->SizeOfHeaders = (HeaderSize + FileAlignment) & ~(FileAlignment - 1);
+	OptionalHeader->SizeOfImage = OptionalHeader->SizeOfCode + OptionalHeader->SizeOfInitializedData + (HeaderSize + GlobalCompileInfo::MemoryAlignment) & ~(GlobalCompileInfo::MemoryAlignment - 1); // Sum of the entiere image
+	OptionalHeader->SizeOfHeaders = (HeaderSize + GlobalCompileInfo::FileAlignment) & ~(GlobalCompileInfo::FileAlignment - 1);
 	OptionalHeader->Subsystem = IMAGE_SUBSYSTEM_WINDOWS_CUI; // Console subsystem
 	OptionalHeader->DllCharacteristics = IMAGE_DLLCHARACTERISTICS_NO_SEH /*(Remove if try and except will be done)*/ | IMAGE_DLLCHARACTERISTICS_NX_COMPAT | IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE;
-	OptionalHeader->SizeOfStackReserve = StackReserve;
-	OptionalHeader->SizeOfStackCommit = StackCommit;
-	OptionalHeader->SizeOfHeapReserve = HeapReserve;
-	OptionalHeader->SizeOfHeapCommit = HeapCommit;
+	OptionalHeader->SizeOfStackReserve = GlobalCompileInfo::StackReserve;
+	OptionalHeader->SizeOfStackCommit = GlobalCompileInfo::StackCommit;
+	OptionalHeader->SizeOfHeapReserve = GlobalCompileInfo::HeapReserve;
+	OptionalHeader->SizeOfHeapCommit = GlobalCompileInfo::HeapCommit;
 	OptionalHeader->NumberOfRvaAndSizes = 0; // Number of DataDirectory objects
 }
 
@@ -142,8 +151,11 @@ void PEBuilder::BuildExecutable(const char* Path)
 
 	FileBuffer.Add(BuildHeader());
 
+	FileBuffer.Add(CompilerMap.GetStaticData());
+	FileBuffer.Expand(GlobalCompileInfo::FileAlignment - (CompilerMap.GetStaticData().GetCount() & (GlobalCompileInfo::FileAlignment - 1))); // SectionAlignment
+
 	FileBuffer.Add(CompilerMap.GetByteCode());
-	FileBuffer.Expand(MemoryAlignment - (CompilerMap.GetByteCode().GetCount() & (MemoryAlignment - 1))); // SectionAlignment
+	FileBuffer.Expand(GlobalCompileInfo::FileAlignment - (CompilerMap.GetByteCode().GetCount() & (GlobalCompileInfo::FileAlignment - 1))); // SectionAlignment
 
 	FileHandle = CreateFileA(DynPath, GENERIC_WRITE, FILE_SHARE_READ, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 	if (FileHandle == INVALID_HANDLE_VALUE)

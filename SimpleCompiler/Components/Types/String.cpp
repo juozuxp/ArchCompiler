@@ -24,6 +24,7 @@ void String::PreCompile(CompileMap& Enviroment)
 void String::Compile(CompileMap& Enviroment)
 {
 	DataPosition = Enviroment.AllocStaticSpace(VariableSize * VariableName.GetCount());
+	Enviroment.PatchStaticSpace(DataPosition, (const unsigned char*)VariableName.operator char*(), VariableSize * VariableName.GetCount());
 }
 
 void String::CompileCall(CompileMap& Enviroment)
@@ -33,7 +34,7 @@ void String::CompileCall(CompileMap& Enviroment)
 	MainRelativity = 0;
 	unsigned char Shell[] =
 	{
-		CALL_RD(DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSize()))
+		CALL_RD(DataPosition - (MainRelativity + Enviroment.GetCodeLocation() - Enviroment.GetStaticSpaceSizeAlligned()))
 	};
 
 	Enviroment.AddCode(Shell, sizeof(Shell));
@@ -53,7 +54,7 @@ void String::CompileRetrieve(CompileMap& Enviroment, RegisterType Source)
 	{
 		unsigned char Shell[] =
 		{
-			PFX_REXWR, LEAD_R_M(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSize())))
+			PFX_REXWR, LEAD_R_M(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSizeAlligned())))
 		};
 
 		Enviroment.AddCode(Shell, sizeof(Shell));
@@ -62,7 +63,7 @@ void String::CompileRetrieve(CompileMap& Enviroment, RegisterType Source)
 	{
 		unsigned char Shell[] =
 		{
-			PFX_REXW, LEAD_R_M(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSize())))
+			PFX_REXW, LEAD_R_M(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSizeAlligned())))
 		};
 
 		Enviroment.AddCode(Shell, sizeof(Shell));

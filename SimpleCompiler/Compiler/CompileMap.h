@@ -2,6 +2,7 @@
 #include "../Utilities/List.h"
 #include "../Utilities/RefObject.h"
 #include "../GlobalInfo/RegisterTypes.h"
+#include "../GlobalInfo/GlobalCompileInfo.h"
 
 class CompileMap
 {
@@ -70,14 +71,22 @@ public:
 		CompiledCode.Set(Location, Code, Size);
 	}
 
+	inline void PatchStaticSpace(unsigned long long Location, const unsigned char* Data, unsigned long long Size)
+	{
+		if ((State != CompileState_Compile) && (State != CompileState_PostCompile))
+			return;
+
+		StaticSpace.Set(Location, Data, Size);
+	}
+
 public:
 	constexpr unsigned long long AllocStaticSpace(unsigned long long Size)
 	{
 		Size = (Size + ((1ull << 3) - 1)) & ~((1ull << 3) - 1);
 		if (State == CompileState_Compile)
 		{
-			StaticSpace += Size;
-			return StaticSpace - Size;
+			CurrentStaticSpace += Size;
+			return CurrentStaticSpace - Size;
 		}
 
 		else if (State == CompileState_PreCompile)
@@ -165,6 +174,11 @@ public:
 	{
 		return AllocatedStaticSpace;
 	}
+	
+	constexpr unsigned long long GetStaticSpaceSizeAlligned()
+	{
+		return (AllocatedStaticSpace + (GlobalCompileInfo::MemoryAlignment - 1)) & ~(GlobalCompileInfo::MemoryAlignment - 1);
+	}
 
 	constexpr List<unsigned char>& GetCode()
 	{
@@ -176,6 +190,9 @@ public:
 		State = CompileState_Compile;
 
 		ReassesStack();
+
+		if (StaticSpace.GetCount() != AllocatedStaticSpace)
+			StaticSpace.Expand(AllocatedStaticSpace);
 
 		TempStack = AllocatedTempStack;
 		ConstStack = AllocatedStack - AllocatedTempStack;
@@ -200,7 +217,9 @@ private:
 	void ReassesStack();
 
 private:
+	List<unsigned char> StaticSpace;
 	List<unsigned char> CompiledCode;
+
 	CompileState State = CompileState_PreCompile;
 
 	unsigned short RegisterMask = 0;
@@ -213,6 +232,6 @@ private:
 
 	unsigned long long CollectiveCompileStack = 0;
 
-	unsigned long long StaticSpace = 0;
+	unsigned long long CurrentStaticSpace = 0;
 	unsigned long long AllocatedStaticSpace = 0;
 };

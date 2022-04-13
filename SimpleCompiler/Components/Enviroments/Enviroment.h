@@ -28,6 +28,8 @@ public:
 	virtual bool IsUnderlying();
 
 public:
+	static unsigned long GetTermDefintionSize(const char* Expression);
+
 	static unsigned long EstimateSubEnviromentSize(const char* Expression);
 	static List<char> ExtractSubEnviroment(const char* Enviroment, unsigned long long* Length);
 
@@ -36,6 +38,7 @@ protected:
 	HashMap<char, RefObject<class Variable>> Variables;
 
 protected:
+	static constexpr unsigned char Terminator = ';';
 	static constexpr Deflatable Deflater = Deflatable("\r\n");
 };
 

@@ -23,10 +23,11 @@ void AttemptExecution(List<unsigned char> ShellCode)
 
 int main()
 {
-	const char* Enviroment = "uint notsomain()"
+	const char* Enviroment = "import(\"Hello\", \"Hey\");"
+							 "uint notsomain()"
 							 "	uint HelloMain = 10;"
 							 "uint main()"
-							 "	ulong Type = \"Hi\" + ((80 + 1) + (80 + (90 + 100 + (100 + 80 + (70 + 90)))));\n"
+							 "	ulong Type = \"test\" + \"testing\" + ((80 + 1) + (80 + (90 + 100 + (100 + 80 + (70 + 90)))));\n"
 							 "	uint* Hello = &Type;\n"
 							 "	uchar** Shlong = &Hello;"
 							 "	ulong testin = **Shlong;"
@@ -42,7 +43,6 @@ int main()
 							 "	uint This_was_a_test = 10;"
 							 "	main(This_was_a_test, 10, 50, 80, 100, Yes);"
 							 "uint FuckOff()";
-
 
 	PEBuilder(Enviroment).BuildExecutable("Test.exe");
 }

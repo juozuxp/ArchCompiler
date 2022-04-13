@@ -68,6 +68,17 @@ bool Enviroment::GetConstantValue(unsigned long long* Value, const char* Name, u
 	return true;
 }
 
+unsigned long Enviroment::GetTermDefintionSize(const char* Expression)
+{
+	for (unsigned long i = 0; *Expression; i++, Expression++)
+	{
+		if (*Expression == ';')
+			return i + 1;
+	}
+
+	return 0;
+}
+
 unsigned long Enviroment::EstimateSubEnviromentSize(const char* Expression)
 {
 	const char* RunEnviroment = Expression;

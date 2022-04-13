@@ -54,6 +54,7 @@
     <ClInclude Include="Components\Types\Arithmetic\Subtraction.h" />
     <ClInclude Include="Components\Types\Arithmetic\Equal.h" />
     <ClInclude Include="Components\Types\Arithmetic\Derefrence.h" />
+    <ClInclude Include="GlobalInfo\GlobalCompileInfo.h" />
     <ClInclude Include="GlobalInfo\GlobalConstants.h" />
     <ClInclude Include="Components\Types\FunctionReturn.h" />
     <ClInclude Include="Components\Types\Arithmetic\SOOperation.h" />
@@ -61,6 +62,7 @@
     <ClInclude Include="Compiler\PEBuilder.h" />
     <ClInclude Include="Components\Types\String.h" />
     <ClInclude Include="Components\Types\StaticVariable.h" />
+    <ClInclude Include="Components\Types\Import.h" />
     <ClInclude Include="Utilities\Encapsulable.h" />
     <ClInclude Include="GlobalInfo\RegisterTypes.h" />
     <ClInclude Include="GlobalInfo\VariableTypes.h" />
@@ -109,6 +111,7 @@
     <ClCompile Include="Components\Types\Arithmetic\Equal.cpp" />
     <ClCompile Include="Components\Types\Arithmetic\Derefrence.cpp" />
     <ClCompile Include="GlobalInfo\VariableTypes.cpp" />
+    <ClCompile Include="Components\Types\Import.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Components\Types\Arithmetic\OperationDef.cpp" />
     <ClCompile Include="Components\Types\Arithmetic\Operand.cpp" />

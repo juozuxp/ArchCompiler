@@ -2,6 +2,7 @@
 #include "../../Compiler/CompileMap.h"
 #include "../../GlobalInfo/GlobalConstants.h"
 #include "../Types/String.h"
+#include "../Types/Import.h"
 
 FileEnviromentMap::FileEnviromentMap() : Enviroment()
 {
@@ -17,6 +18,24 @@ void FileEnviromentMap::AddFunction(RefObject<Function> Function)
 
 void FileEnviromentMap::Compile(CompileMap& Enviroment)
 {
+	/*for (RefObject<String> String : Strings.GetIterator())
+	{
+		Enviroment.SwitchToPreCompile();
+		String->
+	}*/
+
+	Enviroment.SwitchToPreCompile();
+	for (RefObject<String> String : Strings.GetIterator())
+		String->PreCompile(Enviroment);
+
+	Enviroment.SwitchToCompile();
+	for (RefObject<String> String : Strings.GetIterator())
+		String->Compile(Enviroment);
+
+	Enviroment.SwitchToPostCompile();
+	for (RefObject<String> String : Strings.GetIterator())
+		String->PostCompile(Enviroment);
+
 	for (RefObject<Function> Function : Functions)
 	{
 		Enviroment.SwitchToPreCompile();
@@ -35,7 +54,11 @@ void FileEnviromentMap::Parse(const char* Expression, RefObject<Enviroment> Curr
 	List<char> Deflate = Deflater.Deflate(Expression);
 	for (const char* RunDeflate = Deflate; *RunDeflate;)
 	{
-		if (Function::IsFunctionDefinition(RunDeflate))
+		if (Import::IsExpression(RunDeflate))
+		{
+			RunDeflate += GetTermDefintionSize(RunDeflate);
+		}
+		else if (Function::IsFunctionDefinition(RunDeflate))
 		{
 			RefObject<EnviromentMap> SubEnviroment;
 			RefObject<Function> Function;
@@ -53,6 +76,10 @@ void FileEnviromentMap::Parse(const char* Expression, RefObject<Enviroment> Curr
 			SubEnviroment->Parse(ExtractSubEnviroment(RunDeflate, &SubLength), SubEnviroment.Cast<Enviroment>());
 
 			RunDeflate += SubLength;
+		}
+		else if (Variable::IsVariable(RunDeflate))
+		{
+			RunDeflate += GetTermDefintionSize(RunDeflate);
 		}
 		else
 			break;
