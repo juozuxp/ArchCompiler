@@ -8,17 +8,27 @@ CompilerProduct::CompilerProduct(RefObject<FileEnviromentMap> Enviroment, const 
 	this->Enviroment = Enviroment;
 }
 
-const List<unsigned char>& CompilerProduct::GetByteCode()
+unsigned long CompilerProduct::GetImportCount() const
+{
+	return Enviroment->GetImportCount();
+}
+
+const List<unsigned char>& CompilerProduct::GetByteCode() const
 {
 	return ByteCode;
 }
 
-const List<unsigned char>& CompilerProduct::GetStaticData()
+const List<unsigned char>& CompilerProduct::GetStaticData() const
 {
 	return StaticData;
 }
 
-RefObject<Function> CompilerProduct::GetFunction(const char* Function)
+RefObject<Function> CompilerProduct::GetFunction(const char* Function) const
 {
 	return Enviroment->GetVariable(Function).Cast<::Function>();
+}
+
+HashMap<char, List<RefObject<Import>>>::ValueIterator CompilerProduct::GetImportIterator() const
+{
+	return Enviroment->GetImportIterator();
 }

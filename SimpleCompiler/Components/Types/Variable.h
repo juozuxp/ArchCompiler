@@ -41,6 +41,12 @@ protected:
 	static unsigned long long CountReferences(const char* Expression);
 
 protected:
+	constexpr unsigned long long GetVariableSize()
+	{
+		return VariableReference ? 8 : VariableSize;
+	}
+
+protected:
 	List<char> VariableName;
 	RefObject<Arithmetic> Assigner;
 

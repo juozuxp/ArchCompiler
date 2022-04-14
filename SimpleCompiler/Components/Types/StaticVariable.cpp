@@ -12,7 +12,7 @@ void StaticVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source)
 	unsigned long MainRelativity;
 
 	MainRelativity = 0;
-	switch (VariableReference ? 8 : VariableSize)
+	switch (GetVariableSize())
 	{
 	case 1:
 	{
@@ -20,7 +20,7 @@ void StaticVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source)
 		{
 			unsigned char Shell[] =
 			{
-				PFX_REXR, MOVB_RM_R(REL_DO_R(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSize())))
+				PFX_REXR, MOVB_RM_R(REL_DO_R(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSizeAlligned())))
 			};
 
 			Enviroment.AddCode(Shell, sizeof(Shell));
@@ -29,7 +29,7 @@ void StaticVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source)
 		{
 			unsigned char Shell[] =
 			{
-				MOVB_RM_R(REL_DO_R(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSize())))
+				MOVB_RM_R(REL_DO_R(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSizeAlligned())))
 			};
 
 			Enviroment.AddCode(Shell, sizeof(Shell));
@@ -41,7 +41,7 @@ void StaticVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source)
 		{
 			unsigned char Shell[] =
 			{
-				PFX_REXR, PFX_WORD, MOVD_RM_R(REL_DO_R(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSize())))
+				PFX_REXR, PFX_WORD, MOVD_RM_R(REL_DO_R(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSizeAlligned())))
 			};
 
 			Enviroment.AddCode(Shell, sizeof(Shell));
@@ -50,7 +50,7 @@ void StaticVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source)
 		{
 			unsigned char Shell[] =
 			{
-				PFX_WORD, MOVD_RM_R(REL_DO_R(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSize())))
+				PFX_WORD, MOVD_RM_R(REL_DO_R(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSizeAlligned())))
 			};
 
 			Enviroment.AddCode(Shell, sizeof(Shell));
@@ -62,7 +62,7 @@ void StaticVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source)
 		{
 			unsigned char Shell[] =
 			{
-				PFX_REXR, MOVD_RM_R(REL_DO_R(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSize())))
+				PFX_REXR, MOVD_RM_R(REL_DO_R(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSizeAlligned())))
 			};
 
 			Enviroment.AddCode(Shell, sizeof(Shell));
@@ -71,7 +71,7 @@ void StaticVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source)
 		{
 			unsigned char Shell[] =
 			{
-				MOVD_RM_R(REL_DO_R(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSize())))
+				MOVD_RM_R(REL_DO_R(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSizeAlligned())))
 			};
 
 			Enviroment.AddCode(Shell, sizeof(Shell));
@@ -83,7 +83,7 @@ void StaticVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source)
 		{
 			unsigned char Shell[] =
 			{
-				PFX_REXRW, PFX_WORD, MOVD_RM_R(REL_DO_R(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSize())))
+				PFX_REXRW, PFX_WORD, MOVD_RM_R(REL_DO_R(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSizeAlligned())))
 			};
 
 			Enviroment.AddCode(Shell, sizeof(Shell));
@@ -92,7 +92,7 @@ void StaticVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source)
 		{
 			unsigned char Shell[] =
 			{
-				PFX_REXW, MOVD_RM_R(REL_DO_R(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSize())))
+				PFX_REXW, MOVD_RM_R(REL_DO_R(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSizeAlligned())))
 			};
 
 			Enviroment.AddCode(Shell, sizeof(Shell));
@@ -106,7 +106,7 @@ void StaticVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source
 	unsigned long MainRelativity;
 
 	MainRelativity = 0;
-	switch (VariableReference ? 8 : VariableSize)
+	switch (GetVariableSize())
 	{
 	case 1:
 	{
@@ -114,7 +114,7 @@ void StaticVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source
 		{
 			unsigned char Shell[] =
 			{
-				PFX_REXR, MOVB_RM_R(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSize())))
+				PFX_REXR, MOVB_RM_R(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSizeAlligned())))
 			};
 
 			Enviroment.AddCode(Shell, sizeof(Shell));
@@ -123,7 +123,7 @@ void StaticVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source
 		{
 			unsigned char Shell[] =
 			{
-				MOVB_RM_R(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSize())))
+				MOVB_RM_R(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSizeAlligned())))
 			};
 
 			Enviroment.AddCode(Shell, sizeof(Shell));
@@ -135,7 +135,7 @@ void StaticVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source
 		{
 			unsigned char Shell[] =
 			{
-				PFX_REXR, PFX_WORD, MOVD_RM_R(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSize())))
+				PFX_REXR, PFX_WORD, MOVD_RM_R(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSizeAlligned())))
 			};
 
 			Enviroment.AddCode(Shell, sizeof(Shell));
@@ -144,7 +144,7 @@ void StaticVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source
 		{
 			unsigned char Shell[] =
 			{
-				PFX_WORD, MOVD_RM_R(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSize())))
+				PFX_WORD, MOVD_RM_R(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSizeAlligned())))
 			};
 
 			Enviroment.AddCode(Shell, sizeof(Shell));
@@ -156,7 +156,7 @@ void StaticVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source
 		{
 			unsigned char Shell[] =
 			{
-				PFX_REXR, MOVD_RM_R(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSize())))
+				PFX_REXR, MOVD_RM_R(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSizeAlligned())))
 			};
 
 			Enviroment.AddCode(Shell, sizeof(Shell));
@@ -165,7 +165,7 @@ void StaticVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source
 		{
 			unsigned char Shell[] =
 			{
-				MOVD_RM_R(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSize())))
+				MOVD_RM_R(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSizeAlligned())))
 			};
 
 			Enviroment.AddCode(Shell, sizeof(Shell));
@@ -177,7 +177,7 @@ void StaticVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source
 		{
 			unsigned char Shell[] =
 			{
-				PFX_REXRW, PFX_WORD, MOVD_RM_R(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSize())))
+				PFX_REXRW, PFX_WORD, MOVD_RM_R(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSizeAlligned())))
 			};
 
 			Enviroment.AddCode(Shell, sizeof(Shell));
@@ -186,7 +186,7 @@ void StaticVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source
 		{
 			unsigned char Shell[] =
 			{
-				PFX_REXW, MOVD_RM_R(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSize())))
+				PFX_REXW, MOVD_RM_R(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSizeAlligned())))
 			};
 
 			Enviroment.AddCode(Shell, sizeof(Shell));
@@ -204,7 +204,7 @@ void StaticVariable::CompileRefrence(CompileMap& Enviroment, RegisterType Source
 	{
 		unsigned char Shell[] =
 		{
-			PFX_REXWR, LEAD_R_M(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSize())))
+			PFX_REXWR, LEAD_R_M(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSizeAlligned())))
 		};
 
 		Enviroment.AddCode(Shell, sizeof(Shell));
@@ -213,7 +213,7 @@ void StaticVariable::CompileRefrence(CompileMap& Enviroment, RegisterType Source
 	{
 		unsigned char Shell[] =
 		{
-			PFX_REXW, LEAD_R_M(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSize())))
+			PFX_REXW, LEAD_R_M(R_REL_DO(Source, DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSizeAlligned())))
 		};
 
 		Enviroment.AddCode(Shell, sizeof(Shell));
@@ -225,12 +225,12 @@ void StaticVariable::PreCompile(CompileMap& Enviroment)
 	if (Assigner)
 		Assigner->PreCompile(Enviroment);
 
-	Enviroment.AllocStaticSpace(VariableSize);
+	Enviroment.AllocStaticSpace(GetVariableSize());
 }
 
 void StaticVariable::Compile(CompileMap& Enviroment)
 {
-	DataPosition = Enviroment.AllocStaticSpace(VariableSize);
+	DataPosition = Enviroment.AllocStaticSpace(GetVariableSize());
 	if (Assigner)
 		Assigner->Compile(Enviroment);
 }
@@ -242,7 +242,7 @@ void StaticVariable::CompileCall(CompileMap& Enviroment)
 	MainRelativity = 0;
 	unsigned char Shell[] =
 	{
-		CALLQ_RM(REL_DO(DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSize())))
+		CALLQ_RM(REL_DO(DataPosition - (MainRelativity + Enviroment.GetCodeLocation() + Enviroment.GetStaticSpaceSizeAlligned())))
 	};
 
 	Enviroment.AddCode(Shell, sizeof(Shell));

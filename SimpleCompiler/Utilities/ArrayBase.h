@@ -248,6 +248,12 @@ public:
 			this->Array[Index + i] = Array[i];
 	}
 
+	inline void SetAll(unsigned long long Index, Type Element, unsigned long long Count)
+	{
+		for (unsigned long long i = 0; i < Count; i++)
+			Array[Index + i] = Element;
+	}
+
 protected:
 	Type* Array = 0;
 	unsigned long long ArrayNum = 0;

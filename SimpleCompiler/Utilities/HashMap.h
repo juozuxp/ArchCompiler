@@ -661,6 +661,12 @@ public:
 		return KeyIterator(&BaseLink);
 	}
 
+	constexpr unsigned long GetEntryCount() const
+	{
+		return EntryCount;
+	}
+
+public:
 	inline void Add(const Key& Key, const Type& Element)
 	{
 		Add(&Key, 1, Element);

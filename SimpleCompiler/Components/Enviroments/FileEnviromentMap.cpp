@@ -4,7 +4,7 @@
 #include "../Types/String.h"
 #include "../Types/Import.h"
 
-FileEnviromentMap::FileEnviromentMap() : Enviroment()
+FileEnviromentMap::FileEnviromentMap() : Enviroment(), Strings(HashMap<char, RefObject<String>>(0)), Imports(HashMap<char, List<RefObject<Import>>>(0))
 {
 	for (unsigned long long i = 0; i < ARRAY_COUNT(GlobalConstants::Constants); i++)
 		AddConstantValue(GlobalConstants::Constants[i].GetValue(), GlobalConstants::Constants[i].GetName(), GlobalConstants::Constants[i].GetNameLength());
@@ -16,6 +16,27 @@ void FileEnviromentMap::AddFunction(RefObject<Function> Function)
 	AddVariable(Function.Cast<Variable>());
 }
 
+void FileEnviromentMap::AddImport(RefObject<Import> Import)
+{
+	unsigned long long SourceLength;
+	unsigned long long SourceIndex;
+
+	SourceLength = strlen(Import->GetSourceName());
+
+	SourceIndex = Imports.GetIndex(Import->GetSourceName(), SourceLength);
+	if (SourceIndex == ~0)
+	{
+		List<RefObject<::Import>> Functions;
+
+		Functions.Add(Import);
+		Imports.Add(Import->GetSourceName(), SourceLength, Functions);
+	}
+	else
+		Imports.GetByIndex(SourceIndex).Add(Import);
+
+	AddVariable(Import.Cast<Variable>());
+}
+
 void FileEnviromentMap::Compile(CompileMap& Enviroment)
 {
 	/*for (RefObject<String> String : Strings.GetIterator())
@@ -25,14 +46,32 @@ void FileEnviromentMap::Compile(CompileMap& Enviroment)
 	}*/
 
 	Enviroment.SwitchToPreCompile();
+	for (const List<RefObject<Import>>& Imports : Imports.GetIterator())
+	{
+		for (RefObject<Import> Import : Imports)
+			Import->PreCompile(Enviroment);
+	}
+
 	for (RefObject<String> String : Strings.GetIterator())
 		String->PreCompile(Enviroment);
 
 	Enviroment.SwitchToCompile();
+	for (const List<RefObject<Import>>& Imports : Imports.GetIterator())
+	{
+		for (RefObject<Import> Import : Imports)
+			Import->Compile(Enviroment);
+	}
+
 	for (RefObject<String> String : Strings.GetIterator())
 		String->Compile(Enviroment);
 
 	Enviroment.SwitchToPostCompile();
+	for (const List<RefObject<Import>>& Imports : Imports.GetIterator())
+	{
+		for (RefObject<Import> Import : Imports)
+			Import->PostCompile(Enviroment);
+	}
+
 	for (RefObject<String> String : Strings.GetIterator())
 		String->PostCompile(Enviroment);
 
@@ -56,6 +95,8 @@ void FileEnviromentMap::Parse(const char* Expression, RefObject<Enviroment> Curr
 	{
 		if (Import::IsExpression(RunDeflate))
 		{
+			AddImport(RefObject<::Import>(::Import(RunDeflate)));
+
 			RunDeflate += GetTermDefintionSize(RunDeflate);
 		}
 		else if (Function::IsFunctionDefinition(RunDeflate))

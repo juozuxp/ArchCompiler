@@ -3,6 +3,7 @@
 #include "Enviroment.h"
 #include "../Types/Function.h"
 #include "../Types/String.h"
+#include "../Types/Import.h"
 
 class FileEnviromentMap : public Enviroment
 {
@@ -14,6 +15,7 @@ public:
 
 	void Parse(const char* Expression, RefObject<Enviroment> Current);
 
+	void AddImport(RefObject<Import> Import);
 	void AddFunction(RefObject<Function> Function);
 
 	bool IsUnderlying();
@@ -21,6 +23,19 @@ public:
 	RefObject<String> GetString(const char* String, unsigned long long Length = 0);
 
 public:
+	constexpr HashMap<char, List<RefObject<Import>>>::ValueIterator GetImportIterator() const
+	{
+		return Imports.GetIterator();
+	}
+	
+	constexpr unsigned long GetImportCount() const
+	{
+		return Imports.GetEntryCount();
+	}
+
+public:
 	List<RefObject<Function>> Functions;
+
 	HashMap<char, RefObject<String>> Strings;
+	HashMap<char, List<RefObject<Import>>> Imports;
 };

@@ -13,13 +13,17 @@ public:
 	CompilerProduct(RefObject<FileEnviromentMap> Enviroment, const List<unsigned char>& Code, const List<unsigned char>& StaticData);
 	
 public:
-	const List<unsigned char>& GetByteCode();
-	const List<unsigned char>& GetStaticData();
+	unsigned long GetImportCount() const;
 
-	RefObject<class Function> GetFunction(const char* Function);
+	const List<unsigned char>& GetByteCode() const;
+	const List<unsigned char>& GetStaticData() const;
+
+	RefObject<class Function> GetFunction(const char* Function) const;
+
+	HashMap<char, List<RefObject<Import>>>::ValueIterator GetImportIterator() const;
 
 public:
-	constexpr unsigned long GetSectionCount()
+	constexpr unsigned long GetSectionCount() const
 	{
 		return 2;
 	}

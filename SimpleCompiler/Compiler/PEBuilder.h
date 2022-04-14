@@ -20,6 +20,7 @@ public:
 
 private:
 	List<unsigned char> BuildHeader();
+	List<unsigned char> BuildImportLookupTable();
 
 	void BuildDosHeader(IMAGE_DOS_HEADER* DosHeader);
 	void BuildNTHeader(IMAGE_NT_HEADERS64* NTHeader);

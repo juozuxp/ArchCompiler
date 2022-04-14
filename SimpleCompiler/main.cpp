@@ -23,10 +23,11 @@ void AttemptExecution(List<unsigned char> ShellCode)
 
 int main()
 {
-	const char* Enviroment = "import(\"Hello\", \"Hey\");"
+	const char* Enviroment = "import HelloWorld(\"KERNEL32.dll\", \"GetProcAddress\");"
 							 "uint notsomain()"
 							 "	uint HelloMain = 10;"
 							 "uint main()"
+							 "	HelloWorld();"
 							 "	ulong Type = \"test\" + \"testing\" + ((80 + 1) + (80 + (90 + 100 + (100 + 80 + (70 + 90)))));\n"
 							 "	uint* Hello = &Type;\n"
 							 "	uchar** Shlong = &Hello;"

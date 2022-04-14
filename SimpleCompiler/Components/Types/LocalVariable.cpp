@@ -7,7 +7,7 @@
 
 void LocalVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source)
 {
-	switch (VariableReference ? 8 : VariableSize)
+	switch (GetVariableSize())
 	{
 	case 1:
 	{
@@ -201,7 +201,7 @@ void LocalVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source)
 
 void LocalVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source)
 {
-	switch (VariableReference ? 8 : VariableSize)
+	switch (GetVariableSize())
 	{
 	case 1:
 	{
@@ -451,12 +451,12 @@ void LocalVariable::PreCompile(CompileMap& Enviroment)
 	if (Assigner)
 		Assigner->PreCompile(Enviroment);
 	
-	Enviroment.AllocConstStack(VariableSize);
+	Enviroment.AllocConstStack(GetVariableSize());
 }
 
 void LocalVariable::Compile(CompileMap& Enviroment)
 {
-	StackPosition = Enviroment.AllocConstStack(VariableSize);
+	StackPosition = Enviroment.AllocConstStack(GetVariableSize());
 	if (Assigner)
 		Assigner->Compile(Enviroment);
 }
