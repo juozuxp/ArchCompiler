@@ -129,10 +129,7 @@ public:
 			return TempStack -= Size;
 
 		else if (State == CompileState_PreCompile)
-		{
-			AllocatedTempStack += Size;
-			AllocatedStack += Size;
-		}
+			TempStack += Size;
 
 		return 0;
 	}
@@ -140,7 +137,12 @@ public:
 	constexpr void ResetTempStack()
 	{
 		if (State == CompileState_PreCompile)
+		{
+			if (AllocatedTempStack < TempStack)
+				AllocatedTempStack = TempStack;
+
 			TempStack = 0;
+		}
 
 		else if (State == CompileState_Compile)
 			TempStack = AllocatedTempStack;
@@ -216,10 +218,10 @@ public:
 			StaticSpace.Expand(AllocatedStaticSpace);
 
 		if (AllocatedImportSpace)
+		{
 			memset(&StaticSpace[AllocatedImportSpace], 0, 8);
-
-		TempStack = AllocatedTempStack;
-		ConstStack = AllocatedStack - AllocatedTempStack;
+			AllocatedImportSpace = 0;
+		}
 	}
 
 	constexpr void SwitchToPreCompile()

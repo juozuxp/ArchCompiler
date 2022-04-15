@@ -7,6 +7,10 @@ void CompileMap::ReassesStack()
 	unsigned long long BackupSize;
 	bool ShouldAlign;
 
+	ConstStack = AllocatedStack;
+	TempStack = AllocatedTempStack;
+	AllocatedStack += AllocatedTempStack;
+
 	AllocatedStack = (AllocatedStack + ((1 << 3) - 1)) & ~((1 << 3) - 1); // Stack alignment, making sure that it's 8 byte alligned
 
 	BackupSize = 0;
