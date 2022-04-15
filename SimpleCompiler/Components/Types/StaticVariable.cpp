@@ -230,9 +230,13 @@ void StaticVariable::PreCompile(CompileMap& Enviroment)
 
 void StaticVariable::Compile(CompileMap& Enviroment)
 {
+	constexpr unsigned long long Default = 0;
+
 	DataPosition = Enviroment.AllocStaticSpace(GetVariableSize());
 	if (Assigner)
 		Assigner->Compile(Enviroment);
+	else
+		Enviroment.PatchStaticSpace(DataPosition, (unsigned char*)&Default, GetVariableSize());
 }
 
 void StaticVariable::CompileCall(CompileMap& Enviroment)

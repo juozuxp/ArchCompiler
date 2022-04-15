@@ -23,12 +23,14 @@ void AttemptExecution(List<unsigned char> ShellCode)
 
 int main()
 {
-	const char* Enviroment = "import HelloWorld(\"KERNEL32.dll\", \"GetProcAddress\");"
+	const char* Enviroment = "import Printer(\"msvcrt.dll\", \"printf\");"
+							 "import System(\"msvcrt.dll\", \"system\");"
 							 "uint notsomain()"
 							 "	uint HelloMain = 10;"
 							 "uint main()"
-							 "	HelloWorld();"
-							 "	ulong Type = \"test\" + \"testing\" + ((80 + 1) + (80 + (90 + 100 + (100 + 80 + (70 + 90)))));\n"
+							 "	ulong Type = ((80 + 1) + (80 + (90 + 100 + (100 + 80 + (70 + 90)))));\n"
+							 "	Printer(\"First time printing :P\\nHere's a number to spice it up: %d\\n\", Type);"
+							 "	System(\"pause\");"
 							 "	uint* Hello = &Type;\n"
 							 "	uchar** Shlong = &Hello;"
 							 "	ulong testin = **Shlong;"

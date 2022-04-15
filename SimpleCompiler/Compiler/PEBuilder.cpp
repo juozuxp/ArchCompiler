@@ -61,7 +61,7 @@ List<unsigned char> PEBuilder::BuildImportLookupTable()
 		memset(ImportDescriptor, 0, sizeof(IMAGE_IMPORT_DESCRIPTOR));
 
 		ImportDescriptor->Name = DataLocation;
-		ImportDescriptor->ForwarderChain = ~0;
+		ImportDescriptor->ForwarderChain = 0;
 		ImportDescriptor->FirstThunk = GlobalCompileInfo::MemoryAlignment + Imports[0]->GetDataLocation();
 		ImportDescriptor->OriginalFirstThunk = DataLocation + (NameLength + (8 - 1)) & ~(8 - 1);
 
@@ -85,6 +85,7 @@ List<unsigned char> PEBuilder::BuildImportLookupTable()
 
 			Result.Expand(((GET_ELEMENT(IMAGE_IMPORT_BY_NAME, Name) + NameLength) + (8 - 1)) & ~(8 - 1));
 			ByName = (IMAGE_IMPORT_BY_NAME*)&Result[DynamicData];
+
 
 			ByName->Hint = 0;
 			memcpy(ByName->Name, Name, NameLength);
@@ -137,7 +138,7 @@ void PEBuilder::BuildSectionHeaders(IMAGE_SECTION_HEADER* SectionHeaders)
 	SectionHeaders[0].VirtualAddress = (HeaderSize + (GlobalCompileInfo::MemoryAlignment - 1)) & ~(GlobalCompileInfo::MemoryAlignment - 1); // start
 	SectionHeaders[0].SizeOfRawData = (CompilerMap.GetStaticData().GetCount() + GlobalCompileInfo::FileAlignment) & ~(GlobalCompileInfo::FileAlignment - 1);
 	SectionHeaders[0].PointerToRawData = (HeaderSize + (GlobalCompileInfo::FileAlignment - 1)) & ~(GlobalCompileInfo::FileAlignment - 1);
-	SectionHeaders[0].Characteristics = IMAGE_SCN_CNT_INITIALIZED_DATA | IMAGE_SCN_MEM_WRITE | IMAGE_SCN_MEM_READ;
+	SectionHeaders[0].Characteristics = IMAGE_SCN_CNT_UNINITIALIZED_DATA | IMAGE_SCN_MEM_WRITE | IMAGE_SCN_MEM_READ;
 
 	strcpy((char*)SectionHeaders[0].Name, ".darch");
 
@@ -181,13 +182,13 @@ void PEBuilder::BuildOptionalHeader(IMAGE_OPTIONAL_HEADER64* OptionalHeader)
 
 	if (CompilerMap.GetImportCount())
 	{
-		OptionalHeader->NumberOfRvaAndSizes = 1; // Number of DataDirectory objects
+		OptionalHeader->NumberOfRvaAndSizes = 2; // Max number of DataDirectory [Very missleading documentation, thx msdn, you're the worst]
 
 		OptionalHeader->DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].Size = (CompilerMap.GetImportCount() + 1) * sizeof(IMAGE_IMPORT_DESCRIPTOR);
 		OptionalHeader->DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress = GlobalCompileInfo::MemoryAlignment + CompilerMap.GetStaticData().GetCount();
 	}
 	else
-		OptionalHeader->NumberOfRvaAndSizes = 0; // Number of DataDirectory objects
+		OptionalHeader->NumberOfRvaAndSizes = 0; // Max number of DataDirectory
 }
 
 //void PEBuilder::TestBuild()

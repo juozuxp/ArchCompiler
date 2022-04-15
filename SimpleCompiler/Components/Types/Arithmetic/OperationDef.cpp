@@ -6,6 +6,9 @@ const char* OperationDefs::LocateDualOperation(const char* Expression, const Dua
 {
 	for (; *Expression; Expression++)
 	{
+		if (*Expression == '\"')
+			Expression = StringEncap.GetEncapEnd(Expression) + 1;
+
 		for (unsigned long long i = 0; i < ARRAY_COUNT(DualOperations); i++)
 		{
 			if (DualOperations[i].IsOperation(Expression))

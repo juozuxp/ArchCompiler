@@ -12,8 +12,42 @@ String::String(const char* Expression, unsigned long long Length)
 	VariableSize = 1;
 	VariableReference = 1;
 
-	VariableName.Add(Expression, Length);
-	VariableName.Add('\0');
+	VariableName = FormatString(Expression, Length);
+}
+
+List<char> String::FormatString(const char* Expression, unsigned long long Length)
+{
+	if (!Length)
+		Length = strlen(Expression);
+
+	List<char> Result = List<char>(Length + 1);
+	for (unsigned long long i = 0; i < Length; i++, Expression++)
+	{
+		if (*Expression == '\\')
+		{
+			switch (*(Expression + 1))
+			{
+			case '\\':
+			{
+				Result.Add('\\');
+				Expression++;
+				i++;
+			} break;
+			case 'n':
+			{
+				Result.Add('\n');
+				Expression++;
+				i++;
+			} break;
+			}
+		}
+		else
+			Result.Add(*Expression);
+	}
+
+	Result.Add('\0');
+
+	return Result;
 }
 
 void String::PreCompile(CompileMap& Enviroment)

@@ -19,4 +19,6 @@ public:
 	void CompileAssign(class CompileMap& Enviroment, class RegisterType Source);
 	void CompileRetrieve(class CompileMap& Enviroment, class RegisterType Source);
 	void CompileRefrence(class CompileMap& Enviroment, class RegisterType Source);
+
+	List<char> FormatString(const char* Expression, unsigned long long Length = 0);
 };

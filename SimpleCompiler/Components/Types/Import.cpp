@@ -1,4 +1,5 @@
 #include "Import.h"
+#include "../../Compiler/CompileMap.h"
 #include <string.h>
 
 Import::Import(const char* Expression)
@@ -40,4 +41,17 @@ bool Import::IsExpression(const char* Expression)
 		return false;
 
 	return true;
+}
+
+void Import::PreCompile(CompileMap& Enviroment)
+{
+	Enviroment.AllocImportStaticSpace(GetVariableSize());
+}
+
+void Import::Compile(CompileMap& Enviroment)
+{
+	constexpr unsigned long long Default = 0xDEADBEEFDEADBEEF; // FUCKING STUPID DESCISION AFTER STUPID DECISION, MFS MAKE NEED THE FIRST THUNK NOT TO BE ZERO FUCK SAKES
+
+	DataPosition = Enviroment.AllocImportStaticSpace(GetVariableSize());
+	Enviroment.PatchStaticSpace(DataPosition, (unsigned char*)&Default, GetVariableSize());
 }

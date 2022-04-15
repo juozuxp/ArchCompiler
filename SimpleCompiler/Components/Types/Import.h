@@ -8,6 +8,10 @@ public:
 	Import(const char* Expression);
 
 public:
+	void Compile(class CompileMap& Enviroment);
+	void PreCompile(class CompileMap& Enviroment);
+
+public:
 	constexpr const char* GetSourceName()
 	{
 		return SourceName;

@@ -95,6 +95,21 @@ public:
 		return 0;
 	}
 
+	constexpr unsigned long long AllocImportStaticSpace(unsigned long long Size)
+	{
+		Size = (Size + ((1ull << 3) - 1)) & ~((1ull << 3) - 1);
+		if (State == CompileState_Compile)
+		{
+			CurrentImportSpace += Size;
+			return CurrentImportSpace - Size;
+		}
+
+		else if (State == CompileState_PreCompile)
+			AllocatedImportSpace += Size;
+
+		return 0;
+	}
+
 	constexpr unsigned long long AllocConstStack(unsigned long long Size)
 	{
 		Size = (Size + ((1ull << 3) - 1)) & ~((1ull << 3) - 1);
@@ -191,8 +206,17 @@ public:
 
 		ReassesStack();
 
+		if (AllocatedImportSpace)
+		{
+			AllocatedStaticSpace += AllocatedImportSpace + 8;
+			CurrentStaticSpace = AllocatedImportSpace + 8;
+		}
+
 		if (StaticSpace.GetCount() != AllocatedStaticSpace)
 			StaticSpace.Expand(AllocatedStaticSpace);
+
+		if (AllocatedImportSpace)
+			memset(&StaticSpace[AllocatedImportSpace], 0, 8);
 
 		TempStack = AllocatedTempStack;
 		ConstStack = AllocatedStack - AllocatedTempStack;
@@ -233,5 +257,7 @@ private:
 	unsigned long long CollectiveCompileStack = 0;
 
 	unsigned long long CurrentStaticSpace = 0;
+	unsigned long long CurrentImportSpace = 0;
 	unsigned long long AllocatedStaticSpace = 0;
+	unsigned long long AllocatedImportSpace = 0;
 };

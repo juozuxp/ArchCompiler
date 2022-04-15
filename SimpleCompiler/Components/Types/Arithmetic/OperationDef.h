@@ -8,6 +8,7 @@
 #include "Subtraction.h"
 #include "Derefrence.h"
 #include "Refrence.h"
+#include "../../../Utilities/Encapsulable.h"
 
 class OperationDefinition
 {
@@ -128,4 +129,6 @@ private:
 
 	static constexpr SingularOperation SingularOperations[] = { SingularOperation(0, CSL_PAIR("!")), SingularOperation(0, CSL_PAIR("~")), SingularOperation(Derefrence::CreateOperator, CSL_PAIR("*")), 
 																SingularOperation(Refrence::CreateOperator, CSL_PAIR("&")) };
+
+	static constexpr Encapsulable StringEncap = Encapsulable('\"', '\"', '\\');
 };
