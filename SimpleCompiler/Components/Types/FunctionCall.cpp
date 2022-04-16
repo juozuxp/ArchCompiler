@@ -38,7 +38,7 @@ unsigned long long FunctionCall::Parse(RefObject<EnviromentMap> Enviroment, cons
 	Expression = Ignorables.Skip(Expression);
 
 	Opening = strchr(Expression, '(');
-	Closing = strrchr(Opening, ')');
+	Closing = Encapsule.GetEncapEnd(Opening);
 
 	Function = Enviroment->GetVariable(Expression, Opening - Expression);
 	for (char* Token : StrTok(Opening + 1, Closing - (Opening + 1), ","))
@@ -75,7 +75,7 @@ RefObject<Transferable> FunctionCall::GetTranferable(unsigned long long Argument
 {
 	if (Argument < 4)
 	{
-		constexpr RegisterType Registers[] = { RegisterType::RCX, RegisterType::RDX, RegisterType::R8, RegisterType::R9 };
+		constexpr RegisterType Registers[] = { RegisterType::Type_RCX, RegisterType::Type_RDX, RegisterType::Type_R8, RegisterType::Type_R9 };
 		return RefObject<TransferRegister>(TransferRegister(Registers[Argument])).Cast<Transferable>();
 	}
 

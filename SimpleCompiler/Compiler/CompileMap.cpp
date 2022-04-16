@@ -21,8 +21,8 @@ void CompileMap::ReassesStack()
 			BackupSize += 8;
 	}
 
-	if (!(BackupSize & (1 << 3)))
-		AllocatedStack |= (1 << 3); // Stack alignment, making sure the 16 byte missalignment is fixed
+	if (!((AllocatedStack + BackupSize) & (1 << 3)))
+		AllocatedStack += (1 << 3); // Stack alignment, making sure the 16 byte missalignment is fixed
 
 	CollectiveCompileStack = AllocatedStack + BackupSize;
 }

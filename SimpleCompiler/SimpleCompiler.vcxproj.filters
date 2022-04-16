@@ -192,6 +192,15 @@
     <ClInclude Include="Components\Types\Import.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Components\Transferable\TransferFunction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Pair.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Types\Arithmetic\LessOrEqual.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Compiler\CompileMap.cpp">
@@ -330,6 +339,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Components\Types\Import.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Transferable\TransferFunction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Types\Arithmetic\LessOrEqual.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

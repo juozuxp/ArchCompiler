@@ -12,6 +12,9 @@ public:
 public:
 	unsigned long GetReferenceMultiplier(long long Reference);
 
+	void PreCompile(class CompileMap& Enviroment, class RegisterType Source);
+	void PostCompile(class CompileMap& Enviroment, class RegisterType Source);
+
 protected:
 	inline SOOperation(RefObject<Operand> Operand) : GivenOperand(Operand)
 	{

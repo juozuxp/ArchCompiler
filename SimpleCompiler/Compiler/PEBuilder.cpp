@@ -2,8 +2,8 @@
 #include "Compiler.h"
 #include "../GlobalInfo/GlobalCompileInfo.h"
 
-PEBuilder::PEBuilder(const char* Code) : CompilerMap(Compiler(Code).Compile())
-{
+PEBuilder::PEBuilder(const char* Buffer, bool FilePath) : CompilerMap(Compiler(Buffer, FilePath).Compile())
+{	
 }
 
 List<unsigned char> PEBuilder::BuildHeader()

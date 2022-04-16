@@ -4,6 +4,8 @@
 #include "Variable.h"
 #include "../Transferable/TransferVariable.h"
 #include "../Transferable/TransferValue.h"
+#include "../Transferable/TransferDynStack.h"
+#include "../Transferable/TransferFunction.h"
 
 #include "Arithmetic/OperationDef.h"
 #include "Arithmetic/TranferOperator.h"
@@ -57,19 +59,42 @@ bool Arithmetic::IsArtimetic(const char* Expression)
 void Arithmetic::PreCompile(CompileMap& Enviroment)
 {
 	Enviroment.AddRegisterMask(TemporarySpace.RetrieveRegisterMask());
+
+	Origin->PreCompile(Enviroment, RegisterType::Type_RAX);
+	AssignTo->PreCompile(Enviroment, RegisterType::Type_RAX);
+
+	for (Pair<RefObject<Transferable>, RefObject<Transferable>>& Transfer : PriorityTransfers)
+	{
+		Transfer.First->PreCompile(Enviroment, RegisterType::Type_RAX);
+		Transfer.Second->PreCompile(Enviroment, RegisterType::Type_RAX);
+	}
 }
 
 void Arithmetic::Compile(CompileMap& Enviroment)
 {
-	Origin->Compile(Enviroment, RegisterType::RAX);
-	AssignTo->CompileAssign(Enviroment, RegisterType::RAX);
+	for (Pair<RefObject<Transferable>, RefObject<Transferable>>& Transfer : PriorityTransfers)
+	{
+		Transfer.First->CompileRetrieve(Enviroment, RegisterType::Type_RAX);
+		Transfer.Second->CompileAssign(Enviroment, RegisterType::Type_RAX);
+	}
+
+	Origin->Compile(Enviroment, RegisterType::Type_RAX);
+	AssignTo->CompileAssign(Enviroment, RegisterType::Type_RAX);
 }
 
 void Arithmetic::PostCompile(CompileMap& Enviroment)
 {
+	Origin->PostCompile(Enviroment, RegisterType::Type_RAX);
+	AssignTo->PostCompile(Enviroment, RegisterType::Type_RAX);
+
+	for (Pair<RefObject<Transferable>, RefObject<Transferable>>& Transfer : PriorityTransfers)
+	{
+		Transfer.First->PostCompile(Enviroment, RegisterType::Type_RAX);
+		Transfer.Second->PostCompile(Enviroment, RegisterType::Type_RAX);
+	}
 }
 
-RefObject<Operand> Arithmetic::EvaluateOperand(EnviromentMap& Enviroment, const char** Expression, const DualOperation** ResultingOperation)
+RefObject<Operand> Arithmetic::EvaluateOperand(RefObject<EnviromentMap> Enviroment, const char** Expression, const DualOperation** ResultingOperation)
 {
 	const SingularOperation* Singular;
 
@@ -104,7 +129,7 @@ RefObject<Operand> Arithmetic::EvaluateOperand(EnviromentMap& Enviroment, const 
 	if (IS_NUMBER(Expresive))
 		return RefObject<TranferOperator>(RefObject<TransferValue>(TransferValue(strtoull(Expresive, 0, 10))).Cast<Transferable>()).Cast<Operand>();
 	else if (*Expresive == '\"')
-		return RefObject<TranferOperator>(RefObject<TransferVariable>(TransferVariable(Enviroment.GetString(Expresive + 1, StringEncap.GetEncapEnd(Expresive) - (Expresive + 1)).Cast<Variable>())).Cast<Transferable>()).Cast<Operand>();
+		return RefObject<TranferOperator>(RefObject<TransferVariable>(TransferVariable(Enviroment->GetString(Expresive + 1, StringEncap.GetEncapEnd(Expresive) - (Expresive + 1)).Cast<Variable>())).Cast<Transferable>()).Cast<Operand>();
 
 	unsigned long long Length = 0;
 	if (LocOperation)
@@ -129,13 +154,52 @@ RefObject<Operand> Arithmetic::EvaluateOperand(EnviromentMap& Enviroment, const 
 	}
 
 	unsigned long long ConstantValue;
-	if (Enviroment.GetConstantValue(&ConstantValue, Expresive, Length))
+	if (Enviroment->GetConstantValue(&ConstantValue, Expresive, Length))
 		return RefObject<TranferOperator>(RefObject<TransferValue>(TransferValue(ConstantValue)).Cast<Transferable>()).Cast<Operand>();
 
-	return RefObject<TranferOperator>(RefObject<TransferVariable>(TransferVariable(Enviroment.GetVariable(Expresive, Length))).Cast<Transferable>()).Cast<Operand>();
+	bool IsFunctionCall = false;
+
+	for (unsigned long long i = 0; i < Length; i++)
+	{
+		if (Expresive[i] == '(')
+		{
+			IsFunctionCall = true;
+			break;
+		}
+	}
+
+	if (!IsFunctionCall)
+	{
+		for (const char* RunExpression = Expresive + Length; *RunExpression; RunExpression++)
+		{
+			if (!Skipper.IsSkippable(*RunExpression))
+			{
+				if (*RunExpression != '(')
+					break;
+
+				IsFunctionCall = true;
+				break;
+			}
+		}
+	}
+
+	if (IsFunctionCall)
+	{
+		RefObject<Transferable> TransitionSpace;
+		RefObject<Transferable> TransferValue;
+
+		TransitionSpace = RefObject<TransferDynStack>(TransferDynStack()).Cast<Transferable>();
+		TransferValue = RefObject<TransferFunction>(TransferFunction(Enviroment, Expresive)).Cast<Transferable>();
+
+		PriorityTransfers.Add(Pair<RefObject<Transferable>, RefObject<Transferable>>(TransferValue, TransitionSpace));
+
+		return RefObject<TranferOperator>(TranferOperator(TransitionSpace)).Cast<Operand>();
+	}
+
+	return RefObject<TranferOperator>(RefObject<TransferVariable>(TransferVariable(Enviroment->GetVariable(Expresive, Length))).Cast<Transferable>()).Cast<Operand>();
 }
 
-RefObject<Operand> Arithmetic::EvaluateArthmetic(EnviromentMap& Enviroment, const char* Expression)
+RefObject<Operand> Arithmetic::EvaluateArthmetic(RefObject<EnviromentMap> Enviroment, const char* Expression)
 {
 	const DualOperation* OperationType;
 

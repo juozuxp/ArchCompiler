@@ -13,7 +13,7 @@ public:
 	{
 	}
 
-	PEBuilder(const char* Code);
+	PEBuilder(const char* Buffer, bool FilePath = false);
 
 public:
 	void BuildExecutable(const char* Path);

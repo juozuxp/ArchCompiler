@@ -1,0 +1,19 @@
+import print("msvcrt.dll", "printf");
+import system("msvcrt.dll", "system");
+
+void FiboRec(uint To)
+	if (To <= 1)
+		return 1;
+
+	uint First = FiboRec(To - 1);
+	uint Second = FiboRec(To - 2);
+
+	print("%d %d\n", First, Second);
+	
+	return First + Second;
+
+void main()
+	FiboRec(5);
+
+	print("\n");
+	system("pause");

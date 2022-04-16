@@ -13,6 +13,9 @@ public:
 public:
 	unsigned long GetReferenceMultiplier(long long Reference);
 
+	void PreCompile(class CompileMap& Enviroment, class RegisterType Source);
+	void PostCompile(class CompileMap& Enviroment, class RegisterType Source);
+
 protected:
 	inline DOOperation(RefObject<Operand> Left, RefObject<Operand> Right, RegisterType TransitionSpace) : Left(Left), Right(Right), TransitionSpace(TransitionSpace)
 	{

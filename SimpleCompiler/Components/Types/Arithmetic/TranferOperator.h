@@ -16,7 +16,10 @@ public:
 public:
 	unsigned long GetReferenceMultiplier(long long Reference);
 
-	void Compile(class CompileMap& Enviroment, RegisterType Source);
+	void Compile(class CompileMap& Enviroment, class RegisterType Source);
+	void PreCompile(class CompileMap& Enviroment, class RegisterType Source);
+	void PostCompile(class CompileMap& Enviroment, class RegisterType Source);
+
 	void CompileRefrence(class CompileMap& Enviroment, class RegisterType Source);
 
 private:

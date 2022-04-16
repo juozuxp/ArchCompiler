@@ -12,6 +12,12 @@ const char* OperationDefs::LocateDualOperation(const char* Expression, const Dua
 			continue;
 		}
 
+		if (*Expression == '(')
+		{
+			Expression = Encapsule.GetEncapEnd(Expression);
+			continue;
+		}
+
 		for (unsigned long long i = 0; i < ARRAY_COUNT(DualOperations); i++)
 		{
 			if (DualOperations[i].IsOperation(Expression))
@@ -26,7 +32,7 @@ const char* OperationDefs::LocateDualOperation(const char* Expression, const Dua
 						*OperationDescription = CuurentFit;
 						for (unsigned long long ii = 0; ii < ARRAY_COUNT(DualOperations); ii++)
 						{
-							if (DualOperations[i].IsBetterFit(CuurentFit, Expression))
+							if (DualOperations[ii].IsBetterFit(CuurentFit, Expression))
 							{
 								CuurentFit = &DualOperations[ii];
 								break;

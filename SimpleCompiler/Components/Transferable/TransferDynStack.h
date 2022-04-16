@@ -9,6 +9,8 @@ public:
 	}
 
 public:
+	void PreCompile(class CompileMap& Enviroment, class RegisterType Source);
+
 	void CompileAssign(class CompileMap& Enviroment, class RegisterType Source);
 	void CompileRetrieve(class CompileMap& Enviroment, class RegisterType Source);
 

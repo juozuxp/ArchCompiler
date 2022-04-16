@@ -3,7 +3,7 @@
 #include "CompilerProduct.h"
 #include "../Parser/SyntaxParser.h"
 
-Compiler::Compiler(const char* Code) : Compiler(SyntaxParser::Parse(Code))
+Compiler::Compiler(const char* Buffer, bool FilePath) : Compiler(FilePath ? SyntaxParser::ParseFile(Buffer) : SyntaxParser::Parse(Buffer))
 {
 }
 

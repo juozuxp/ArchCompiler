@@ -7,6 +7,18 @@ unsigned long DOOperation::GetReferenceMultiplier(long long Reference)
 	return Left->GetReferenceMultiplier(Reference) < Right->GetReferenceMultiplier(Reference) ? Right->GetReferenceMultiplier(Reference) : Left->GetReferenceMultiplier(Reference);
 }
 
+void DOOperation::PreCompile(CompileMap& Enviroment, RegisterType Source)
+{
+	Left->PreCompile(Enviroment, Source);
+	Right->PreCompile(Enviroment, TransitionSpace);
+}
+
+void DOOperation::PostCompile(CompileMap& Enviroment, RegisterType Source)
+{
+	Left->PostCompile(Enviroment, Source);
+	Right->PostCompile(Enviroment, TransitionSpace);
+}
+
 void DOOperation::CompileArithmeticMultiplier(CompileMap& Enviroment, RegisterType Register)
 {
 	unsigned long Multiplier = Left->GetReferenceMultiplier(0);

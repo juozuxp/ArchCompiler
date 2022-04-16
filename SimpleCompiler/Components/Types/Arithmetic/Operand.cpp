@@ -7,7 +7,16 @@ unsigned long Operand::GetReferenceMultiplier(long long Reference)
 	return 0;
 }
 
-void Operand::Compile(CompileMap & Enviroment, RegisterType Source)
+
+void Operand::PreCompile(CompileMap& Enviroment, RegisterType Source)
+{
+}
+
+void Operand::Compile(CompileMap& Enviroment, RegisterType Source)
+{
+}
+
+void Operand::PostCompile(CompileMap& Enviroment, RegisterType Source)
 {
 }
 

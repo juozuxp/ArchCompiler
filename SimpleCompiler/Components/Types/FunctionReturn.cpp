@@ -66,7 +66,7 @@ unsigned long long FunctionReturn::Parse(RefObject<EnviromentMap> Enviroment, co
 	if (*Expression)
 	{
 		Return = RefObject<Arithmetic>(Arithmetic());
-		Return->Parse(Enviroment, Expression, RefObject<TransferRegister>(TransferRegister(RegisterType::RAX)).Cast<Transferable>());
+		Return->Parse(Enviroment, Expression, RefObject<TransferRegister>(TransferRegister(RegisterType::Type_RAX)).Cast<Transferable>());
 	}
 
 	return 0;

@@ -63,6 +63,8 @@
     <ClInclude Include="Components\Types\String.h" />
     <ClInclude Include="Components\Types\StaticVariable.h" />
     <ClInclude Include="Components\Types\Import.h" />
+    <ClInclude Include="Components\Transferable\TransferFunction.h" />
+    <ClInclude Include="Components\Types\Arithmetic\LessOrEqual.h" />
     <ClInclude Include="Utilities\Encapsulable.h" />
     <ClInclude Include="GlobalInfo\RegisterTypes.h" />
     <ClInclude Include="GlobalInfo\VariableTypes.h" />
@@ -72,6 +74,7 @@
     <ClInclude Include="Utilities\HashMap.h" />
     <ClInclude Include="Utilities\List.h" />
     <ClInclude Include="Utilities\ManObject.h" />
+    <ClInclude Include="Utilities\Pair.h" />
     <ClInclude Include="Utilities\RefObject.h" />
     <ClInclude Include="Utilities\SimpleUtilities.h" />
     <ClInclude Include="Utilities\Skippable.h" />
@@ -112,6 +115,7 @@
     <ClCompile Include="Components\Types\Arithmetic\Derefrence.cpp" />
     <ClCompile Include="GlobalInfo\VariableTypes.cpp" />
     <ClCompile Include="Components\Types\Import.cpp" />
+    <ClCompile Include="Components\Types\Arithmetic\LessOrEqual.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Components\Types\Arithmetic\OperationDef.cpp" />
     <ClCompile Include="Components\Types\Arithmetic\Operand.cpp" />
@@ -126,6 +130,7 @@
     <ClCompile Include="Compiler\PEBuilder.cpp" />
     <ClCompile Include="Components\Types\String.cpp" />
     <ClCompile Include="Components\Types\StaticVariable.cpp" />
+    <ClCompile Include="Components\Transferable\TransferFunction.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -7,6 +7,7 @@
 #include "../../Compiler/TempVariableMap.h"
 #include "../../Utilities/SimpleUtilities.h"
 #include "../../Utilities/Encapsulable.h"
+#include "../../Utilities/Pair.h"
 
 #include "Arithmetic/Operand.h"
 
@@ -25,17 +26,19 @@ public:
 	void Compile(class CompileMap& Enviroment);
 	void PostCompile(class CompileMap& Enviroment);
 
-	unsigned long long Parse(RefObject<EnviromentMap> Enviroment, const char* Expression);
-	unsigned long long Parse(RefObject<EnviromentMap> Enviroment, const char* Expression, RefObject<Transferable> AssignTo);
+	unsigned long long Parse(RefObject<class EnviromentMap> Enviroment, const char* Expression);
+	unsigned long long Parse(RefObject<class EnviromentMap> Enviroment, const char* Expression, RefObject<Transferable> AssignTo);
 
 private:
-	RefObject<class Operand> EvaluateArthmetic(class EnviromentMap& Enviroment, const char* Expression);
-	RefObject<class Operand> EvaluateOperand(class EnviromentMap& Enviroment, const char** Expression, const class DualOperation** ResultingOperation);
+	RefObject<class Operand> EvaluateArthmetic(RefObject<class EnviromentMap> Enviroment, const char* Expression);
+	RefObject<class Operand> EvaluateOperand(RefObject<class EnviromentMap> Enviroment, const char** Expression, const class DualOperation** ResultingOperation);
 
 private:
 	RefObject<Operand> Origin;
 	TempVariableMap TemporarySpace;
 	RefObject<Transferable> AssignTo;
+
+	List<Pair<RefObject<Transferable>, RefObject<Transferable>>> PriorityTransfers;
 
 private:
 	static constexpr Skippable Skipper = Skippable(" \t");

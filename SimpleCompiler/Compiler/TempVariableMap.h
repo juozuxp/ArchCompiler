@@ -34,7 +34,7 @@ private:
 	unsigned char RegisterUseMask = 0;
 
 private:
-	static constexpr RegisterType VolatileRegisters[] = { RegisterType::RBX, RegisterType::RSI, RegisterType::RDI, RegisterType::RBP, RegisterType::R10, RegisterType::R11, RegisterType::R12, RegisterType::R13, RegisterType::R14, RegisterType::R15 };
+	static constexpr RegisterType VolatileRegisters[] = { RegisterType::Type_RBX, RegisterType::Type_RSI, RegisterType::Type_RDI, RegisterType::Type_RBP, RegisterType::Type_R10, RegisterType::Type_R11, RegisterType::Type_R12, RegisterType::Type_R13, RegisterType::Type_R14, RegisterType::Type_R15 };
 	static constexpr unsigned short VolatileRegisterMasks[] = { RegisterMask_RBX, 
 																RegisterMask_RBX | RegisterMask_RSI, 
 																RegisterMask_RBX | RegisterMask_RSI | RegisterMask_RDI,

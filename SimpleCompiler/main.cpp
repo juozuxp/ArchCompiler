@@ -65,5 +65,5 @@ int main()
 							"	system(\"pause\");";
 
 
-	PEBuilder(Fibonacci).BuildExecutable("Fibonacci.exe");
+	PEBuilder("Main.AC", true).BuildExecutable("Compiled.exe");
 }

@@ -19,7 +19,7 @@ public:
 		unsigned long long Length = 0;
 		for (; *(String + Offset); String++)
 		{
-			if (ShouldDeflate(*(String + Offset)))
+			while (ShouldDeflate(*(String + Offset)))
 				Offset++;
 
 			Length++;

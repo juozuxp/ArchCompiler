@@ -13,7 +13,7 @@ public:
 	{
 	}
 
-	Compiler(const char* Code);
+	Compiler(const char* Buffer, bool FilePath = false);
 
 public:
 	class CompilerProduct Compile();

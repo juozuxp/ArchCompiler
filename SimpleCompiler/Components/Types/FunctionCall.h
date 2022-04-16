@@ -3,6 +3,8 @@
 #include "../../Utilities/Skippable.h"
 #include "../../Utilities/RefObject.h"
 #include "../../Utilities/List.h"
+#include "Arithmetic.h"
+#include "Variable.h"
 
 class FunctionCall : public TypeElement
 {
@@ -25,9 +27,11 @@ private:
 	static RefObject<class Transferable> GetTranferable(unsigned long long Argument);
 
 private:
-	RefObject<class Variable> Function;
-	List<RefObject<class Arithmetic>> Arguments;
+	RefObject<Variable> Function;
+	List<RefObject<Arithmetic>> Arguments;
 
 private:
 	static constexpr Skippable Ignorables = Skippable("\t ");
+	static constexpr Encapsulable StringEncap = Encapsulable('\"', '\"', '\\');
+	static constexpr Encapsulable Encapsule = Encapsulable('(', ')', 0, &StringEncap);
 };

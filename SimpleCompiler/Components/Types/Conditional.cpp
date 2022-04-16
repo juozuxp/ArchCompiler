@@ -103,7 +103,7 @@ unsigned long long Conditional::Parse(RefObject<EnviromentMap> Enviroment, const
 	SubString.Add('\0');
 
 	Condition = RefObject<Arithmetic>(Arithmetic());
-	Condition->Parse(Enviroment, SubString, RefObject<TransferRegister>(TransferRegister(RegisterType::RAX)).Cast<Transferable>());
+	Condition->Parse(Enviroment, SubString, RefObject<TransferRegister>(TransferRegister(RegisterType::Type_RAX)).Cast<Transferable>());
 
 	ConditionEnviroment = RefObject<EnviromentMap>(EnviromentMap(Enviroment.Cast<::Enviroment>()));
 	ConditionEnviroment->Parse(Enviroment::ExtractSubEnviroment(EndIf, &Length), ConditionEnviroment.Cast<::Enviroment>());

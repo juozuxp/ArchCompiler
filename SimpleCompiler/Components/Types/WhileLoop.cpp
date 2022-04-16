@@ -76,7 +76,7 @@ unsigned long long WhileLoop::Parse(RefObject<EnviromentMap> Enviroment, const c
 	SubString.Add('\0');
 
 	Condition = RefObject<Arithmetic>(Arithmetic());
-	Condition->Parse(Enviroment, SubString, RefObject<TransferRegister>(TransferRegister(RegisterType::RAX)).Cast<Transferable>());
+	Condition->Parse(Enviroment, SubString, RefObject<TransferRegister>(TransferRegister(RegisterType::Type_RAX)).Cast<Transferable>());
 
 	LoopEnviroment = RefObject<EnviromentMap>(EnviromentMap(Enviroment.Cast<::Enviroment>()));
 	LoopEnviroment->Parse(Enviroment::ExtractSubEnviroment(EndIf, &Length), LoopEnviroment.Cast<::Enviroment>());

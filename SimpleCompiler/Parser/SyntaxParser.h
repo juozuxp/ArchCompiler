@@ -6,4 +6,5 @@ class SyntaxParser
 {
 public:
 	static RefObject<FileEnviromentMap> Parse(const char* Expression);
+	static RefObject<FileEnviromentMap> ParseFile(const char* FilePath);
 };
