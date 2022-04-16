@@ -62,7 +62,14 @@ void Variable::PostCompile(CompileMap& Enviroment)
 
 unsigned long long Variable::Parse(RefObject<EnviromentMap> Enviroment, const char* Expression)
 {
-	const char* PostDefExpression = strstr(Expression, VariableName);
+	const char* PostDefExpression = NonNameChar.Skip(Expression);
+	for (; *PostDefExpression; PostDefExpression++)
+	{
+		if (NonNameChar.IsSkippable(*PostDefExpression))
+			break;
+	}
+
+	PostDefExpression = NonNameChar.Skip(PostDefExpression);
 	if (!Arithmetic::IsArtimetic(Expression))
 		return 0;
 
