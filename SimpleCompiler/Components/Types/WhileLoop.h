@@ -18,11 +18,11 @@ public:
 public:
 	static bool IsWhileLoop(const char* Expression);
 
-private:
+protected:
 	RefObject<Arithmetic> Condition;
 	RefObject<EnviromentMap> LoopEnviroment;
 
-private:
+protected:
 	static constexpr Skippable Ignorable = Skippable(" \t");
 	static constexpr Deflatable Deflatable = Deflatable(" \t");
 	static constexpr Encapsulable Encapsulable = Encapsulable('(', ')');

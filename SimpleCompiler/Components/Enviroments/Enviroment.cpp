@@ -1,6 +1,7 @@
 #include "Enviroment.h"
 #include "../Types/Variable.h"
 #include "../Types/String.h"
+#include "../Types/ForLoop.h"
 
 void Enviroment::PreCompile(class CompileMap& Enviroment)
 {
@@ -125,13 +126,23 @@ List<char> Enviroment::ExtractSubEnviroment(const char* Enviroment, unsigned lon
 				break;
 		}
 
-		for (; *RunEnviroment && *RunEnviroment != '\t'; RunEnviroment++, Length++)
+		if (ForLoop::IsExpression(RunEnviroment))
 		{
-			if (*RunEnviroment == ';')
+			unsigned long long ExpressionLength = ForLoop::ExpressionLength(RunEnviroment);
+
+			RunEnviroment += ExpressionLength;
+			Length += ExpressionLength;
+		}
+		else
+		{
+			for (; *RunEnviroment && *RunEnviroment != '\t'; RunEnviroment++, Length++)
 			{
-				RunEnviroment++;
-				Length++;
-				break;
+				if (*RunEnviroment == ';')
+				{
+					RunEnviroment++;
+					Length++;
+					break;
+				}
 			}
 		}
 

@@ -7,6 +7,7 @@
 #include "../Types/WhileLoop.h"
 #include "../Types/FunctionReturn.h"
 #include "../Types/String.h"
+#include "../Types/ForLoop.h"
 
 void EnviromentMap::AddVariable(RefObject<Variable> Element)
 {
@@ -78,6 +79,15 @@ void EnviromentMap::Parse(const char* Expression, RefObject<Enviroment> This)
 		else if (WhileLoop::IsWhileLoop(Token.GetToken()))
 		{
 			RefObject<WhileLoop> Loop = RefObject<WhileLoop>(WhileLoop());
+
+			AddParsed(Loop.Cast<TypeElement>());
+
+			Token.SkipFor(Loop->Parse(This.Cast<EnviromentMap>(), Token.GetToken()));
+			continue;
+		}
+		else if (ForLoop::IsExpression(Token.GetToken()))
+		{
+			RefObject<ForLoop> Loop = RefObject<ForLoop>(ForLoop());
 
 			AddParsed(Loop.Cast<TypeElement>());
 

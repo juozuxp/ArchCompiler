@@ -54,6 +54,7 @@
     <ClInclude Include="Components\Types\Arithmetic\Subtraction.h" />
     <ClInclude Include="Components\Types\Arithmetic\Equal.h" />
     <ClInclude Include="Components\Types\Arithmetic\Derefrence.h" />
+    <ClInclude Include="Components\Types\ForLoop.h" />
     <ClInclude Include="GlobalInfo\GlobalCompileInfo.h" />
     <ClInclude Include="GlobalInfo\GlobalConstants.h" />
     <ClInclude Include="Components\Types\FunctionReturn.h" />
@@ -113,6 +114,7 @@
     <ClCompile Include="Components\Types\Variable.cpp" />
     <ClCompile Include="Components\Types\Arithmetic\Equal.cpp" />
     <ClCompile Include="Components\Types\Arithmetic\Derefrence.cpp" />
+    <ClCompile Include="Components\Types\ForLoop.cpp" />
     <ClCompile Include="GlobalInfo\VariableTypes.cpp" />
     <ClCompile Include="Components\Types\Import.cpp" />
     <ClCompile Include="Components\Types\Arithmetic\LessOrEqual.cpp" />
