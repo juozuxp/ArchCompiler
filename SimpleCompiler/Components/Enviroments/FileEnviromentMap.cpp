@@ -90,7 +90,7 @@ void FileEnviromentMap::Compile(CompileMap& Enviroment)
 
 void FileEnviromentMap::Parse(const char* Expression, RefObject<Enviroment> Current)
 {
-	List<char> Deflate = Deflater.Deflate(Expression);
+	List<char> Deflate = SmartDeflate(Expression);
 	for (const char* RunDeflate = Deflate; *RunDeflate;)
 	{
 		if (Import::IsExpression(RunDeflate))
@@ -125,6 +125,41 @@ void FileEnviromentMap::Parse(const char* Expression, RefObject<Enviroment> Curr
 		else
 			break;
 	}
+}
+
+List<char> FileEnviromentMap::SmartDeflate(const char* Expression)
+{
+	unsigned long long Offset = 0;
+	unsigned long long Length = 0;
+
+	const char* SubstanceCheck;
+	char* String;
+
+	List<char> Result;
+
+	Result.Add(Expression, strlen(Expression) + 1);
+
+	String = Result;
+	while (*(String + Offset))
+	{
+		while (*(String + Offset) == '\n' || *(String + Offset) == '\r')
+			Offset++;
+
+		for (SubstanceCheck = String + Offset; *SubstanceCheck == '\t'; SubstanceCheck++);
+
+		if (*SubstanceCheck == '\n' || *SubstanceCheck == '\r')
+		{
+			Offset = SubstanceCheck - String;
+			continue;
+		}
+
+		Length++;
+		*String = String[Offset];
+		String++;
+	}
+
+	*String = '\0';
+	return Result;
 }
 
 bool FileEnviromentMap::IsUnderlying()

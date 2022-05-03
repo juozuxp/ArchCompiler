@@ -33,6 +33,9 @@ public:
 		return Imports.GetEntryCount();
 	}
 
+private:
+	static List<char> SmartDeflate(const char* Expression);
+
 public:
 	List<RefObject<Function>> Functions;
 
