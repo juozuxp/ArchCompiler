@@ -7,6 +7,9 @@ void CompileMap::ReassesStack()
 	unsigned long long BackupSize;
 	bool ShouldAlign;
 
+	if (AllocatedTempStack < TempStack)
+		AllocatedTempStack = TempStack;
+
 	ConstStack = AllocatedStack;
 	TempStack = AllocatedTempStack;
 	AllocatedStack += AllocatedTempStack;

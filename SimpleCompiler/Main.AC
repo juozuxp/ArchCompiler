@@ -13,8 +13,15 @@ uint FiboRec(uint To)
 	
 	return First + Second;
 
+void test()
+	print("Hello world\n");
+
 uint main()
 	ulong File = fopen("test.txt", "w");
+	
+	ulong Fib = test;
+	
+	Fib();
 
 	for (uint i = 0; i <= 10; i = i + 1)
 		uint fib = FiboRec(i);
