@@ -13,6 +13,8 @@
 
 unsigned long long Arithmetic::Parse(RefObject<EnviromentMap> Enviroment, const char* Expression)
 {
+	RefObject<Variable> Variable;
+
 	const char* VariableName;
 
 	Expression = Skipper.Skip(Expression);
@@ -24,7 +26,10 @@ unsigned long long Arithmetic::Parse(RefObject<EnviromentMap> Enviroment, const 
 			break;
 	}
 
-	AssignTo = RefObject<TransferVariable>(TransferVariable(Enviroment->GetVariable(VariableName, Expression - VariableName))).Cast<Transferable>();
+	Variable = Enviroment->GetVariable(VariableName, Expression - VariableName);
+
+	Signed = Variable->GetSigniage() | (1 << 1);
+	AssignTo = RefObject<TransferVariable>(TransferVariable(Variable)).Cast<Transferable>();
 
 	for (; *Expression; Expression++)
 	{
@@ -78,7 +83,11 @@ void Arithmetic::Compile(CompileMap& Enviroment)
 		Transfer.Second->CompileAssign(Enviroment, RegisterType::Type_RAX);
 	}
 
-	Origin->Compile(Enviroment, RegisterType::Type_RAX);
+	if (Signed & 1)
+		Origin->CompileSigned(Enviroment, RegisterType::Type_RAX);
+	else
+		Origin->Compile(Enviroment, RegisterType::Type_RAX);
+
 	AssignTo->CompileAssign(Enviroment, RegisterType::Type_RAX);
 }
 
@@ -117,6 +126,8 @@ RefObject<Operand> Arithmetic::EvaluateOperand(RefObject<EnviromentMap> Envirome
 
 		return Result;
 	}
+
+	RefObject<Variable> ResultVariable;
 
 	const char* LocOperation;
 	const char* Expresive;
@@ -196,7 +207,11 @@ RefObject<Operand> Arithmetic::EvaluateOperand(RefObject<EnviromentMap> Envirome
 		return RefObject<TranferOperator>(TranferOperator(TransitionSpace)).Cast<Operand>();
 	}
 
-	return RefObject<TranferOperator>(RefObject<TransferVariable>(TransferVariable(Enviroment->GetVariable(Expresive, Length))).Cast<Transferable>()).Cast<Operand>();
+	ResultVariable = Enviroment->GetVariable(Expresive, Length);
+	if (!(Signed & (1 << 1)))
+		Signed = ResultVariable->GetSigniage() | (1 << 1);
+
+	return RefObject<TranferOperator>(RefObject<TransferVariable>(TransferVariable(ResultVariable)).Cast<Transferable>()).Cast<Operand>();
 }
 
 RefObject<Operand> Arithmetic::EvaluateArthmetic(RefObject<EnviromentMap> Enviroment, const char* Expression)

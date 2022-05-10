@@ -44,6 +44,8 @@ Variable::Variable(const char* Expression) : TypeElement()
 	Expression += strlen(Variable->GetName());
 
 	VariableSize = Variable->GetSize();
+	VariableSigniage = Variable->GetSigend();
+
 	VariableName = ExtractName(Expression);
 	VariableReference = CountReferences(Expression);
 }

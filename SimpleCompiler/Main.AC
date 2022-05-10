@@ -4,12 +4,12 @@ import fopen("msvcrt.dll", "fopen");
 import fprint("msvcrt.dll", "fprintf");
 import fclose("msvcrt.dll", "fclose");
 
-uint FiboRec(uint To)
+int FiboRec(int To)
 	if (To <= 1)
 		return To;
 
-	uint First = FiboRec(To - 1);
-	uint Second = FiboRec(To - 2);
+	int First = FiboRec(To - 1);
+	int Second = FiboRec(To - 2);
 	
 	return First + Second;
 
@@ -18,29 +18,25 @@ void test()
 
 uint main()
 	ulong File = fopen("test.txt", "w");
-	
-	ulong Fib = test;
-	
-	Fib();
 
-	for (uint i = 0; i <= 10; i = i + 1)
+	for (int i = 0; i <= 10; i = i + 1)
 		uint fib = FiboRec(i);
 
-		fprint(File, "%d\n", fib);
-		print("%d\n", fib);
+		fprint(File, "%u\n", fib);
+		print("%u\n", fib);
 
 	uint First = 0;
 	uint Second = 1;
 
-	print("%d\n", First);
-	print("%d\n", Second);
+	print("%u\n", First);
+	print("%u\n", Second);
 
 	fprint(File, "%d\n", First);
 	fprint(File, "%d\n", Second);
 
-	for (uint i = 0; i <= 10; i = i + 1)
-		print("%d\n", Second + First);
-		fprint(File, "%d\n", Second + First);
+	for (int i = 0; i <= 50; i = i + 1)
+		print("%u\n", Second + First);
+		fprint(File, "%u\n", Second + First);
 
 		ulong Temp = Second + First;
 		First = Second;
@@ -50,5 +46,5 @@ uint main()
 	fclose(File);
 
 	system("pause");
-
+	
 	return 0;

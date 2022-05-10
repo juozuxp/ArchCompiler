@@ -34,6 +34,8 @@ private:
 	RefObject<class Operand> EvaluateOperand(RefObject<class EnviromentMap> Enviroment, const char** Expression, const class DualOperation** ResultingOperation);
 
 private:
+	unsigned char Signed = 1; // if second bit is set, it's valid, otherwise it isn't
+
 	RefObject<Operand> Origin;
 	TempVariableMap TemporarySpace;
 	RefObject<Transferable> AssignTo;

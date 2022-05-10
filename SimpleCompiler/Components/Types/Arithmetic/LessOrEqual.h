@@ -17,5 +17,6 @@ public:
 
 public:
 	void Compile(class CompileMap& Enviroment, RegisterType Source);
+	void CompileSigned(class CompileMap& Enviroment, class RegisterType Source);
 };
 

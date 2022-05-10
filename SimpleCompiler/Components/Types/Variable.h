@@ -19,6 +19,11 @@ public:
 		return VariableName;
 	}
 
+	constexpr bool GetSigniage()
+	{
+		return VariableSigniage;
+	}
+
 public:
 	void PreCompile(class CompileMap& Enviroment);
 	void PostCompile(class CompileMap& Enviroment);
@@ -50,6 +55,7 @@ protected:
 	List<char> VariableName;
 	RefObject<Arithmetic> Assigner;
 
+	bool VariableSigniage = false;
 	unsigned long long VariableSize = 0;
 	unsigned long long VariableReference = 0;
 

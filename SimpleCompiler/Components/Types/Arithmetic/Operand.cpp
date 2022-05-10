@@ -16,6 +16,11 @@ void Operand::Compile(CompileMap& Enviroment, RegisterType Source)
 {
 }
 
+void Operand::CompileSigned(CompileMap& Enviroment, RegisterType Source)
+{
+	Compile(Enviroment, Source);
+}
+
 void Operand::PostCompile(CompileMap& Enviroment, RegisterType Source)
 {
 }
