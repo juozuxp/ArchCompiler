@@ -23,6 +23,7 @@ Import::Import(const char* Expression)
 
 	VariableSize = 8;
 	VariableReference = 1;
+	VariabelDimension = 1;
 }
 
 bool Import::IsExpression(const char* Expression)
@@ -45,13 +46,13 @@ bool Import::IsExpression(const char* Expression)
 
 void Import::PreCompile(CompileMap& Enviroment)
 {
-	Enviroment.AllocImportStaticSpace(GetVariableSize());
+	Enviroment.AllocImportStaticSpace(GetVariableAllocationSize());
 }
 
 void Import::Compile(CompileMap& Enviroment)
 {
 	constexpr unsigned long long Default = 0xDEADBEEFDEADBEEF; // FUCKING STUPID DESCISION AFTER STUPID DECISION, MFS MAKE NEED THE FIRST THUNK NOT TO BE ZERO FUCK SAKES
 
-	DataPosition = Enviroment.AllocImportStaticSpace(GetVariableSize());
-	Enviroment.PatchStaticSpace(DataPosition, (unsigned char*)&Default, GetVariableSize());
+	DataPosition = Enviroment.AllocImportStaticSpace(GetVariableAllocationSize());
+	Enviroment.PatchStaticSpace(DataPosition, (unsigned char*)&Default, GetVariableAllocationSize());
 }

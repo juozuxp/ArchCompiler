@@ -9,7 +9,7 @@ public:
 	{
 	}
 
-	inline TransferVariable(RefObject<class Variable> Variable) : Variable(Variable)
+	inline TransferVariable(RefObject<class Variable> Variable, long long Dimension = 0) : Variable(Variable), Dimension(Dimension)
 	{
 	}
 
@@ -21,5 +21,7 @@ public:
 	void CompileRefrence(class CompileMap& Enviroment, class RegisterType Source);
 
 private:
+	long long Dimension = 0;
+
 	RefObject<class Variable> Variable;
 };

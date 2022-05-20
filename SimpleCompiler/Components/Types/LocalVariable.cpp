@@ -5,19 +5,213 @@
 #include "Arithmetic.h"
 #include "../../Utilities/x86_x64Shell.h"
 
-void LocalVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source)
+void LocalVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source, long long Dimension)
 {
-	switch (GetVariableSize())
+	if (!Dimension)
 	{
-	case 1:
+		switch (GetVariableAssignSize())
+		{
+		case 1:
+		{
+			if (StackPosition < 0x7F)
+			{
+				if (Source.IsExtended())
+				{
+					unsigned char Shell[] =
+					{
+						PFX_REXR, MOVB_RM_R(MRSP_BO_R(Source, StackPosition)),
+					};
+
+					Enviroment.AddCode(Shell, sizeof(Shell));
+				}
+				else
+				{
+					unsigned char Shell[] =
+					{
+						MOVB_RM_R(MRSP_BO_R(Source, StackPosition)),
+					};
+
+					Enviroment.AddCode(Shell, sizeof(Shell));
+				}
+			}
+			else
+			{
+				if (Source.IsExtended())
+				{
+
+					unsigned char Shell[] =
+					{
+						PFX_REXR, MOVB_RM_R(MRSP_DO_R(Source, StackPosition)),
+					};
+
+					Enviroment.AddCode(Shell, sizeof(Shell));
+				}
+				else
+				{
+					unsigned char Shell[] =
+					{
+						MOVB_RM_R(MRSP_DO_R(Source, StackPosition)),
+					};
+
+					Enviroment.AddCode(Shell, sizeof(Shell));
+				}
+			}
+		} break;
+		case 2:
+		{
+			if (StackPosition < 0x7F)
+			{
+				if (Source.IsExtended())
+				{
+
+					unsigned char Shell[] =
+					{
+						PFX_REXR, PFX_WORD, MOVD_RM_R(MRSP_BO_R(Source, StackPosition)),
+					};
+
+					Enviroment.AddCode(Shell, sizeof(Shell));
+				}
+				else
+				{
+					unsigned char Shell[] =
+					{
+						PFX_WORD, MOVD_RM_R(MRSP_BO_R(Source, StackPosition)),
+					};
+
+					Enviroment.AddCode(Shell, sizeof(Shell));
+				}
+			}
+			else
+			{
+				if (Source.IsExtended())
+				{
+
+					unsigned char Shell[] =
+					{
+						PFX_REXR, PFX_WORD, MOVD_RM_R(MRSP_DO_R(Source, StackPosition)),
+					};
+
+					Enviroment.AddCode(Shell, sizeof(Shell));
+				}
+				else
+				{
+					unsigned char Shell[] =
+					{
+						PFX_WORD, MOVD_RM_R(MRSP_DO_R(Source, StackPosition)),
+					};
+
+					Enviroment.AddCode(Shell, sizeof(Shell));
+				}
+			}
+		} break;
+		case 4:
+		{
+			if (StackPosition < 0x7F)
+			{
+				if (Source.IsExtended())
+				{
+
+					unsigned char Shell[] =
+					{
+						PFX_REXR, MOVD_RM_R(MRSP_BO_R(Source, StackPosition)),
+					};
+
+					Enviroment.AddCode(Shell, sizeof(Shell));
+				}
+				else
+				{
+					unsigned char Shell[] =
+					{
+						MOVD_RM_R(MRSP_BO_R(Source, StackPosition)),
+					};
+
+					Enviroment.AddCode(Shell, sizeof(Shell));
+				}
+			}
+			else
+			{
+				if (Source.IsExtended())
+				{
+
+					unsigned char Shell[] =
+					{
+						PFX_REXR, MOVD_RM_R(MRSP_DO_R(Source, StackPosition)),
+					};
+
+					Enviroment.AddCode(Shell, sizeof(Shell));
+				}
+				else
+				{
+					unsigned char Shell[] =
+					{
+						MOVD_RM_R(MRSP_DO_R(Source, StackPosition)),
+					};
+
+					Enviroment.AddCode(Shell, sizeof(Shell));
+				}
+			}
+		} break;
+		case 8:
+		{
+			if (StackPosition < 0x7F)
+			{
+				if (Source.IsExtended())
+				{
+
+					unsigned char Shell[] =
+					{
+						PFX_REXWR, MOVD_RM_R(MRSP_BO_R(Source, StackPosition)),
+					};
+
+					Enviroment.AddCode(Shell, sizeof(Shell));
+				}
+				else
+				{
+					unsigned char Shell[] =
+					{
+						PFX_REXW, MOVD_RM_R(MRSP_BO_R(Source, StackPosition)),
+					};
+
+					Enviroment.AddCode(Shell, sizeof(Shell));
+				}
+			}
+			else
+			{
+				if (Source.IsExtended())
+				{
+
+					unsigned char Shell[] =
+					{
+						PFX_REXWR, MOVD_RM_R(MRSP_DO_R(Source, StackPosition)),
+					};
+
+					Enviroment.AddCode(Shell, sizeof(Shell));
+				}
+				else
+				{
+					unsigned char Shell[] =
+					{
+						PFX_REXW, MOVD_RM_R(MRSP_DO_R(Source, StackPosition)),
+					};
+
+					Enviroment.AddCode(Shell, sizeof(Shell));
+				}
+			}
+		} break;
+		}
+	}
+	else
 	{
-		if (StackPosition < 0x7F)
+		CompileRetrieve(Enviroment, RegisterType::Type_RCX);
+		switch (GetReferenceMultiplier(0))
+		{
+		case 1:
 		{
 			if (Source.IsExtended())
 			{
 				unsigned char Shell[] =
 				{
-					PFX_REXR, MOVB_RM_R(MRSP_BO_R(Source, StackPosition)),
+					PFX_REXR, MOVB_RM_R(MR_DO_R(RCX, Source, GetReferenceMultiplier(0) * Dimension))
 				};
 
 				Enviroment.AddCode(Shell, sizeof(Shell));
@@ -26,20 +220,19 @@ void LocalVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source)
 			{
 				unsigned char Shell[] =
 				{
-					MOVB_RM_R(MRSP_BO_R(Source, StackPosition)),
+					MOVB_RM_R(MR_DO_R(RCX, Source, GetReferenceMultiplier(0) * Dimension))
 				};
 
 				Enviroment.AddCode(Shell, sizeof(Shell));
 			}
-		}
-		else
+		} break;
+		case 2:
 		{
 			if (Source.IsExtended())
 			{
-
 				unsigned char Shell[] =
 				{
-					PFX_REXR, MOVB_RM_R(MRSP_DO_R(Source, StackPosition)),
+					PFX_REXR, PFX_WORD, MOVD_RM_R(MR_DO_R(RCX, Source, GetReferenceMultiplier(0) * Dimension))
 				};
 
 				Enviroment.AddCode(Shell, sizeof(Shell));
@@ -48,23 +241,19 @@ void LocalVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source)
 			{
 				unsigned char Shell[] =
 				{
-					MOVB_RM_R(MRSP_DO_R(Source, StackPosition)),
+					PFX_WORD, MOVD_RM_R(MR_DO_R(RCX, Source, GetReferenceMultiplier(0) * Dimension))
 				};
 
 				Enviroment.AddCode(Shell, sizeof(Shell));
 			}
-		}
-	} break;
-	case 2:
-	{
-		if (StackPosition < 0x7F)
+		} break;
+		case 4:
 		{
 			if (Source.IsExtended())
 			{
-
 				unsigned char Shell[] =
 				{
-					PFX_REXR, PFX_WORD, MOVD_RM_R(MRSP_BO_R(Source, StackPosition)),
+					PFX_REXR, MOVD_RM_R(MR_DO_R(RCX, Source, GetReferenceMultiplier(0) * Dimension))
 				};
 
 				Enviroment.AddCode(Shell, sizeof(Shell));
@@ -73,20 +262,19 @@ void LocalVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source)
 			{
 				unsigned char Shell[] =
 				{
-					PFX_WORD, MOVD_RM_R(MRSP_BO_R(Source, StackPosition)),
+					MOVD_RM_R(MR_DO_R(RCX, Source, GetReferenceMultiplier(0) * Dimension))
 				};
 
 				Enviroment.AddCode(Shell, sizeof(Shell));
 			}
-		}
-		else
+		} break;
+		default:
 		{
 			if (Source.IsExtended())
 			{
-
 				unsigned char Shell[] =
 				{
-					PFX_REXR, PFX_WORD, MOVD_RM_R(MRSP_DO_R(Source, StackPosition)),
+					PFX_REXWR, MOVD_RM_R(MR_DO_R(RCX, Source, GetReferenceMultiplier(0) * Dimension))
 				};
 
 				Enviroment.AddCode(Shell, sizeof(Shell));
@@ -95,113 +283,25 @@ void LocalVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source)
 			{
 				unsigned char Shell[] =
 				{
-					PFX_WORD, MOVD_RM_R(MRSP_DO_R(Source, StackPosition)),
+					PFX_REXW, MOVD_RM_R(MR_DO_R(RCX, Source, GetReferenceMultiplier(0) * Dimension))
 				};
 
 				Enviroment.AddCode(Shell, sizeof(Shell));
 			}
+		} break;
 		}
-	} break;
-	case 4:
-	{
-		if (StackPosition < 0x7F)
-		{
-			if (Source.IsExtended())
-			{
-
-				unsigned char Shell[] =
-				{
-					PFX_REXR, MOVD_RM_R(MRSP_BO_R(Source, StackPosition)),
-				};
-
-				Enviroment.AddCode(Shell, sizeof(Shell));
-			}
-			else
-			{
-				unsigned char Shell[] =
-				{
-					MOVD_RM_R(MRSP_BO_R(Source, StackPosition)),
-				};
-
-				Enviroment.AddCode(Shell, sizeof(Shell));
-			}
-		}
-		else
-		{
-			if (Source.IsExtended())
-			{
-
-				unsigned char Shell[] =
-				{
-					PFX_REXR, MOVD_RM_R(MRSP_DO_R(Source, StackPosition)),
-				};
-
-				Enviroment.AddCode(Shell, sizeof(Shell));
-			}
-			else
-			{
-				unsigned char Shell[] =
-				{
-					MOVD_RM_R(MRSP_DO_R(Source, StackPosition)),
-				};
-
-				Enviroment.AddCode(Shell, sizeof(Shell));
-			}
-		}
-	} break;
-	case 8:
-	{
-		if (StackPosition < 0x7F)
-		{
-			if (Source.IsExtended())
-			{
-
-				unsigned char Shell[] =
-				{
-					PFX_REXWR, MOVD_RM_R(MRSP_BO_R(Source, StackPosition)),
-				};
-
-				Enviroment.AddCode(Shell, sizeof(Shell));
-			}
-			else
-			{
-				unsigned char Shell[] =
-				{
-					PFX_REXW, MOVD_RM_R(MRSP_BO_R(Source, StackPosition)),
-				};
-
-				Enviroment.AddCode(Shell, sizeof(Shell));
-			}
-		}
-		else
-		{
-			if (Source.IsExtended())
-			{
-
-				unsigned char Shell[] =
-				{
-					PFX_REXWR, MOVD_RM_R(MRSP_DO_R(Source, StackPosition)),
-				};
-
-				Enviroment.AddCode(Shell, sizeof(Shell));
-			}
-			else
-			{
-				unsigned char Shell[] =
-				{
-					PFX_REXW, MOVD_RM_R(MRSP_DO_R(Source, StackPosition)),
-				};
-
-				Enviroment.AddCode(Shell, sizeof(Shell));
-			}
-		}
-	} break;
 	}
 }
 
 void LocalVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source)
 {
-	switch (GetVariableSize())
+	if (VariabelDimension != 1)
+	{
+		CompileRefrence(Enviroment, Source);
+		return;
+	}
+
+	switch (GetVariableRetrieveSize())
 	{
 	case 1:
 	{
@@ -450,13 +550,13 @@ void LocalVariable::PreCompile(CompileMap& Enviroment)
 {
 	if (Assigner)
 		Assigner->PreCompile(Enviroment);
-	
-	Enviroment.AllocConstStack(GetVariableSize());
+
+	Enviroment.AllocConstStack(GetVariableAllocationSize());
 }
 
 void LocalVariable::Compile(CompileMap& Enviroment)
 {
-	StackPosition = Enviroment.AllocConstStack(GetVariableSize());
+	StackPosition = Enviroment.AllocConstStack(GetVariableAllocationSize());
 	if (Assigner)
 		Assigner->Compile(Enviroment);
 }

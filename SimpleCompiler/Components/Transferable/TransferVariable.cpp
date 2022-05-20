@@ -9,7 +9,7 @@ unsigned long TransferVariable::GetReferenceMultiplier(long long Reference)
 
 void TransferVariable::CompileAssign(CompileMap& Enviroment, RegisterType Source)
 {
-	Variable->CompileAssign(Enviroment, Source);
+	Variable->CompileAssign(Enviroment, Source, Dimension);
 }
 
 void TransferVariable::CompileRetrieve(CompileMap& Enviroment, RegisterType Source)

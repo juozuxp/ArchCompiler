@@ -17,9 +17,9 @@ public:
 	void PreCompile(class CompileMap& Enviroment);
 
 	void CompileCall(class CompileMap& Enviroment);
-	void CompileAssign(class CompileMap& Enviroment, class RegisterType Source);
 	void CompileRetrieve(class CompileMap& Enviroment, class RegisterType Source);
 	void CompileRefrence(class CompileMap& Enviroment, class RegisterType Source);
+	void CompileAssign(class CompileMap& Enviroment, class RegisterType Source, long long Dimension);
 
 protected:
 	unsigned long long StackPosition = 0;

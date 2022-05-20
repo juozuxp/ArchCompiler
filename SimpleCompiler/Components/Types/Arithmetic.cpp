@@ -16,34 +16,38 @@ unsigned long long Arithmetic::Parse(RefObject<EnviromentMap> Enviroment, const 
 	RefObject<Variable> Variable;
 
 	const char* VariableName;
+	long long Dimension;
 
-	Expression = Skipper.Skip(Expression);
-
+	Expression = NameSkipper.Skip(Expression);
 	VariableName = Expression;
-	for (; *Expression; Expression++)
-	{
-		if (*Expression == '=' || Skipper.IsSkippable(*Expression))
-			break;
-	}
+	Expression = NameSkipper.InverseSkip(Expression);
 
 	Variable = Enviroment->GetVariable(VariableName, Expression - VariableName);
 
 	Signed = Variable->GetSigniage() | (1 << 1);
-	AssignTo = RefObject<TransferVariable>(TransferVariable(Variable)).Cast<Transferable>();
 
+	Dimension = 0;
 	for (; *Expression; Expression++)
 	{
-		if (*Expression == '=')
+		if (*Expression == '[')
+			Dimension = strtoll(Expression + 1, 0, 10);
+
+		else if (*Expression == '=')
 			break;
 	}
+
+	AssignTo = RefObject<TransferVariable>(TransferVariable(Variable, Dimension)).Cast<Transferable>();
 
 	Origin = EvaluateArthmetic(*Enviroment, Expression + 1);
 
 	return 0;
 }
 
-unsigned long long Arithmetic::Parse(RefObject<EnviromentMap> Enviroment, const char* Expression, RefObject<Transferable> AssignTo)
+unsigned long long Arithmetic::Parse(RefObject<EnviromentMap> Enviroment, const char* Expression, RefObject<Transferable> AssignTo, unsigned char Signed)
 {
+	if (!(Signed & (1 << 1)))
+		this->Signed = Signed | (1 << 1);
+
 	this->AssignTo = AssignTo;
 	this->Origin = EvaluateArthmetic(*Enviroment, Expression);
 

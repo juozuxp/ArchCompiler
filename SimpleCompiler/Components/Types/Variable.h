@@ -32,9 +32,9 @@ public:
 
 public:
 	virtual void CompileCall(class CompileMap& Enviroment);
-	virtual void CompileAssign(class CompileMap& Enviroment, class RegisterType Source);
 	virtual void CompileRetrieve(class CompileMap& Enviroment, class RegisterType Source);
 	virtual void CompileRefrence(class CompileMap& Enviroment, class RegisterType Source);
+	virtual void CompileAssign(class CompileMap& Enviroment, class RegisterType Source, long long Dimension);
 
 	virtual unsigned long GetReferenceMultiplier(long long Reference);
 
@@ -43,12 +43,23 @@ public:
 	
 protected:
 	static List<char> ExtractName(const char* Expression);
+	static unsigned long long GetDimensions(const char* Expression);
 	static unsigned long long CountReferences(const char* Expression);
 
 protected:
-	constexpr unsigned long long GetVariableSize()
+	constexpr unsigned long long GetVariableAssignSize()
 	{
 		return VariableReference ? 8 : VariableSize;
+	}
+
+	constexpr unsigned long long GetVariableRetrieveSize()
+	{
+		return (VariableReference || VariabelDimension != 1) ? 8 : VariableSize;
+	}
+
+	constexpr unsigned long long GetVariableAllocationSize()
+	{
+		return GetVariableAssignSize() * VariabelDimension;
 	}
 
 protected:
@@ -56,10 +67,12 @@ protected:
 	RefObject<Arithmetic> Assigner;
 
 	bool VariableSigniage = false;
+
 	unsigned long long VariableSize = 0;
+	unsigned long long VariabelDimension = 0;
 	unsigned long long VariableReference = 0;
 
 private:
-	static constexpr Skippable NonNameChar = Skippable(" \t*=()");
+	static constexpr Skippable NonNameChar = Skippable(" \t*=()[]");
 	static constexpr Skippable Ignorables = Skippable(" \t");
 };

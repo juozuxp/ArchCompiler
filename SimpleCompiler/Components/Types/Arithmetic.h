@@ -27,7 +27,7 @@ public:
 	void PostCompile(class CompileMap& Enviroment);
 
 	unsigned long long Parse(RefObject<class EnviromentMap> Enviroment, const char* Expression);
-	unsigned long long Parse(RefObject<class EnviromentMap> Enviroment, const char* Expression, RefObject<Transferable> AssignTo);
+	unsigned long long Parse(RefObject<class EnviromentMap> Enviroment, const char* Expression, RefObject<Transferable> AssignTo, unsigned char Signed = (1 << 1));
 
 private:
 	RefObject<class Operand> EvaluateArthmetic(RefObject<class EnviromentMap> Enviroment, const char* Expression);
@@ -44,6 +44,7 @@ private:
 
 private:
 	static constexpr Skippable Skipper = Skippable(" \t");
+	static constexpr Skippable NameSkipper = Skippable(" \t=*()[]=");
 	static constexpr Encapsulable StringEncap = Encapsulable('\"', '\"', '\\');
 	static constexpr Encapsulable Encapsule = Encapsulable('(', ')', 0, &StringEncap);
 };

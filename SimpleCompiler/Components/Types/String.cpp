@@ -11,6 +11,7 @@ String::String(const char* Expression, unsigned long long Length)
 
 	VariableSize = 1;
 	VariableReference = 1;
+	VariabelDimension = 1;
 
 	VariableName = FormatString(Expression, Length);
 }
@@ -36,6 +37,12 @@ List<char> String::FormatString(const char* Expression, unsigned long long Lengt
 			case 'n':
 			{
 				Result.Add('\n');
+				Expression++;
+				i++;
+			} break;
+			case 'r':
+			{
+				Result.Add('\r');
 				Expression++;
 				i++;
 			} break;

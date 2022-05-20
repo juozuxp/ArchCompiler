@@ -34,6 +34,17 @@ public:
 		return String;
 	}
 
+	constexpr const char* InverseSkip(const char* String) const
+	{
+		for (; *String; String++)
+		{
+			if (IsSkippable(*String))
+				break;
+		}
+
+		return String;
+	}
+
 private:
 	const char* Tokens = 0;
 };

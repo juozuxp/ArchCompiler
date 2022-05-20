@@ -3,12 +3,13 @@
 #include "../Enviroments/EnviromentMap.h"
 #include "../../GlobalInfo/VariableTypes.h"
 #include "Arithmetic.h"
+#include "../Transferable/TransferVariable.h"
 
 void Variable::CompileCall(class CompileMap& Enviroment)
 {
 }
 
-void Variable::CompileAssign(class CompileMap& Enviroment, RegisterType Source)
+void Variable::CompileAssign(class CompileMap& Enviroment, RegisterType Source, long long Dimension)
 {
 }
 
@@ -23,12 +24,12 @@ void Variable::CompileRefrence(class CompileMap& Enviroment, RegisterType Source
 unsigned long Variable::GetReferenceMultiplier(long long Reference)
 {
 	if (Reference < 0)
-		return VariableReference ? 8 : VariableSize;
+		return (VariableReference + (VariabelDimension != 1)) ? 8 : VariableSize;
 
-	if (((long long)VariableReference) - Reference == 1)
+	if (((long long)(VariableReference + (VariabelDimension != 1))) - Reference == 1)
 		return VariableSize;
 
-	if (((long long)VariableReference) - Reference > 1)
+	if (((long long)(VariableReference + (VariabelDimension != 1))) - Reference > 1)
 		return 8;
 
 	return 0;
@@ -47,6 +48,7 @@ Variable::Variable(const char* Expression) : TypeElement()
 	VariableSigniage = Variable->GetSigend();
 
 	VariableName = ExtractName(Expression);
+	VariabelDimension = GetDimensions(Expression);
 	VariableReference = CountReferences(Expression);
 }
 
@@ -64,19 +66,21 @@ void Variable::PostCompile(CompileMap& Enviroment)
 
 unsigned long long Variable::Parse(RefObject<EnviromentMap> Enviroment, const char* Expression)
 {
-	const char* PostDefExpression = NonNameChar.Skip(Expression);
-	for (; *PostDefExpression; PostDefExpression++)
-	{
-		if (NonNameChar.IsSkippable(*PostDefExpression))
-			break;
-	}
+	Expression = NonNameChar.Skip(Expression);
+	Expression = NonNameChar.InverseSkip(Expression);
+	Expression = NonNameChar.Skip(Expression);
 
-	PostDefExpression = NonNameChar.Skip(PostDefExpression);
 	if (!Arithmetic::IsArtimetic(Expression))
 		return 0;
 
+	for (; *Expression; Expression++)
+	{
+		if (*Expression == '=')
+			break;
+	}
+
 	Assigner = RefObject<Arithmetic>(Arithmetic());
-	Assigner->Parse(Enviroment, PostDefExpression);
+	Assigner->Parse(Enviroment, Expression + 1, RefObject<TransferVariable>(TransferVariable(Enviroment->GetVariable(VariableName, VariableName.GetCount() - 1))).Cast<Transferable>(), VariableSigniage);
 
 	return 0;
 }
@@ -106,6 +110,22 @@ unsigned long long Variable::CountReferences(const char* Expression)
 	}
 
 	return References;
+}
+
+unsigned long long Variable::GetDimensions(const char* Expression)
+{
+	Expression = NonNameChar.Skip(Expression);
+	Expression = NonNameChar.InverseSkip(Expression);
+	Expression = Ignorables.Skip(Expression);
+
+	if (*Expression == '[')
+	{
+		Expression = NonNameChar.Skip(Expression);
+		if (IS_NUMBER(Expression))
+			return strtoull(Expression, 0, 10);
+	}
+
+	return 1;
 }
 
 bool Variable::IsVariable(const char* Expression)
