@@ -55,6 +55,9 @@
     <ClInclude Include="Components\Types\Arithmetic\Equal.h" />
     <ClInclude Include="Components\Types\Arithmetic\Derefrence.h" />
     <ClInclude Include="Components\Types\ForLoop.h" />
+    <ClInclude Include="Utilities\Mutex.h" />
+    <ClInclude Include="Utilities\ThreadQueue.h" />
+    <ClInclude Include="Utilities\DebugInterface.h" />
     <ClInclude Include="GlobalInfo\GlobalCompileInfo.h" />
     <ClInclude Include="GlobalInfo\GlobalConstants.h" />
     <ClInclude Include="Components\Types\FunctionReturn.h" />
@@ -115,6 +118,8 @@
     <ClCompile Include="Components\Types\Arithmetic\Equal.cpp" />
     <ClCompile Include="Components\Types\Arithmetic\Derefrence.cpp" />
     <ClCompile Include="Components\Types\ForLoop.cpp" />
+    <ClCompile Include="Utilities\ThreadQueue.cpp" />
+    <ClCompile Include="Utilities\DebugInterface.cpp" />
     <ClCompile Include="GlobalInfo\VariableTypes.cpp" />
     <ClCompile Include="Components\Types\Import.cpp" />
     <ClCompile Include="Components\Types\Arithmetic\LessOrEqual.cpp" />

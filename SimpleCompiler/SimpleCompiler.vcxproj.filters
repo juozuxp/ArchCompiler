@@ -204,6 +204,15 @@
     <ClInclude Include="Components\Types\ForLoop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Utilities\DebugInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\ThreadQueue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Mutex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Compiler\CompileMap.cpp">
@@ -351,6 +360,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Components\Types\ForLoop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\DebugInterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\ThreadQueue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
